@@ -11,6 +11,10 @@ jobs:
     name: Deploy to Vercel
     runs-on: ubuntu-latest
 
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
     steps:
       - uses: actions/checkout@v4
 
@@ -44,5 +48,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '🍞 **ToastyBudget Preview Deployed!**\n\n${{ steps.deploy.outputs.url }}'
+              body: '**ToastyBudget Preview Deployed!**\n\n${{ steps.deploy.outputs.url }}'
             })
