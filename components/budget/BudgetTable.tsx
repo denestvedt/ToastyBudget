@@ -3,16 +3,18 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { GroupWithCategories } from "@/lib/types";
-import { updateMonthlyBudget } from "@/lib/actions";
+import { updateMonthlyBudget, updateMonthlySpent } from "@/lib/actions";
 import AmountDisplay from "@/components/ui/AmountDisplay";
 
 interface Props {
   groups: GroupWithCategories[];
 }
 
+type EditTarget = { id: string; field: "budget" | "spent" };
+
 export default function BudgetTable({ groups }: Props) {
   const router = useRouter();
-  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editing, setEditing] = useState<EditTarget | null>(null);
   const [editValue, setEditValue] = useState("");
   const [, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -26,23 +28,68 @@ export default function BudgetTable({ groups }: Props) {
     0
   );
 
-  function startEdit(monthlyId: string, currentAmount: number) {
-    setEditingId(monthlyId);
-    setEditValue(String(currentAmount));
+  function startEdit(id: string, field: "budget" | "spent", current: number) {
+    setEditing({ id, field });
+    setEditValue(String(current));
   }
 
-  function saveEdit(monthlyId: string) {
+  function saveEdit(monthlyId: string, field: "budget" | "spent") {
     const newAmount = parseFloat(editValue);
-    setEditingId(null);
+    setEditing(null);
     if (isNaN(newAmount)) return;
     startTransition(async () => {
       try {
-        await updateMonthlyBudget(monthlyId, newAmount);
+        if (field === "budget") {
+          await updateMonthlyBudget(monthlyId, newAmount);
+        } else {
+          await updateMonthlySpent(monthlyId, newAmount);
+        }
         router.refresh();
       } catch (e) {
-        setError(e instanceof Error ? e.message : "Failed to update budget");
+        setError(e instanceof Error ? e.message : "Failed to update");
       }
     });
+  }
+
+  function EditableCell({
+    monthlyId,
+    field,
+    value,
+    className,
+  }: {
+    monthlyId: string;
+    field: "budget" | "spent";
+    value: number;
+    className?: string;
+  }) {
+    const isEditing = editing?.id === monthlyId && editing?.field === field;
+    if (isEditing) {
+      return (
+        <input
+          type="number"
+          step="0.01"
+          min="0"
+          value={editValue}
+          onChange={(e) => setEditValue(e.target.value)}
+          onBlur={() => saveEdit(monthlyId, field)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") saveEdit(monthlyId, field);
+            if (e.key === "Escape") setEditing(null);
+          }}
+          className="w-28 rounded border border-orange-400 px-1.5 py-0.5 text-right text-sm focus:outline-none focus:ring-1 focus:ring-orange-500 dark:bg-gray-800"
+          autoFocus
+        />
+      );
+    }
+    return (
+      <button
+        onClick={() => startEdit(monthlyId, field, value)}
+        title="Click to edit"
+        className={`tabular-nums hover:underline decoration-dashed ${className ?? ""}`}
+      >
+        <AmountDisplay amount={value} />
+      </button>
+    );
   }
 
   const colClass = "py-2 text-right tabular-nums";
@@ -60,7 +107,10 @@ export default function BudgetTable({ groups }: Props) {
           <tr className="border-b text-xs text-gray-400">
             <th className="text-left py-2 font-normal">Category</th>
             <th className="text-right py-2 font-normal pr-2">Budgeted</th>
-            <th className="text-right py-2 font-normal pr-2">Spent</th>
+            <th className="text-right py-2 font-normal pr-2">
+              Spent
+              <span className="ml-1 text-gray-300 font-normal">/ Actual</span>
+            </th>
             <th className="text-right py-2 font-normal">Remaining</th>
           </tr>
         </thead>
@@ -110,45 +160,43 @@ export default function BudgetTable({ groups }: Props) {
                       }`}
                     >
                       <td className="py-2 pl-4 pr-2">
-                        {cat.name}
+                        <span>{cat.name}</span>
                         {cat.is_fixed && (
                           <span className="ml-1.5 text-xs text-gray-400">fixed</span>
                         )}
                         {cat.is_offledger && (
-                          <span className="ml-1.5 text-xs text-gray-400">off-ledger</span>
+                          <span
+                            className="ml-1.5 text-xs text-blue-500 font-medium"
+                            title="Off-ledger: enter actual amount manually, not tracked via CSV"
+                          >
+                            off-ledger
+                          </span>
                         )}
                       </td>
 
-                      {/* Editable budget cell */}
+                      {/* Budgeted — always editable */}
                       <td className="py-2 pr-2 text-right">
-                        {editingId === monthly.id ? (
-                          <input
-                            type="number"
-                            step="0.01"
-                            min="0"
-                            value={editValue}
-                            onChange={(e) => setEditValue(e.target.value)}
-                            onBlur={() => saveEdit(monthly.id)}
-                            onKeyDown={(e) => {
-                              if (e.key === "Enter") saveEdit(monthly.id);
-                              if (e.key === "Escape") setEditingId(null);
-                            }}
-                            className="w-28 rounded border border-orange-400 px-1.5 py-0.5 text-right text-sm focus:outline-none focus:ring-1 focus:ring-orange-500 dark:bg-gray-800"
-                            autoFocus
+                        <EditableCell
+                          monthlyId={monthly.id}
+                          field="budget"
+                          value={budget}
+                        />
+                      </td>
+
+                      {/* Spent / Actual — editable only for off-ledger categories */}
+                      <td className="py-2 pr-2 text-right">
+                        {cat.is_offledger ? (
+                          <EditableCell
+                            monthlyId={monthly.id}
+                            field="spent"
+                            value={spent}
+                            className="text-blue-600 dark:text-blue-400"
                           />
                         ) : (
-                          <button
-                            onClick={() => startEdit(monthly.id, budget)}
-                            title="Click to edit"
-                            className="tabular-nums hover:underline decoration-dashed"
-                          >
-                            <AmountDisplay amount={budget} />
-                          </button>
+                          <span className="tabular-nums text-gray-700 dark:text-gray-300">
+                            <AmountDisplay amount={spent} />
+                          </span>
                         )}
-                      </td>
-
-                      <td className={colClass + " pr-2"}>
-                        <AmountDisplay amount={spent} />
                       </td>
 
                       <td
@@ -213,7 +261,9 @@ export default function BudgetTable({ groups }: Props) {
       </table>
 
       <p className="text-xs text-gray-400 mt-2">
-        Click a budgeted amount to edit it for this month.
+        Click any budgeted amount to edit it.{" "}
+        <span className="text-blue-400">Off-ledger</span> categories also let you edit the
+        actual amount — useful for 401k contributions and other investments not tracked by CSV.
       </p>
     </div>
   );
