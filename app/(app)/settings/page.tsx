@@ -1,15 +1,18 @@
+import { getCategoryGroups, getCategories } from "@/lib/queries";
+import SettingsEditor from "@/components/settings/SettingsEditor";
+
 export const metadata = { title: "Settings — ToastyBudget" };
 
-export default async function SettingsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ month?: string }>;
-}) {
-  await searchParams;
+export default async function SettingsPage() {
+  const [groups, categories] = await Promise.all([
+    getCategoryGroups(),
+    getCategories(),
+  ]);
+
   return (
     <div>
-      <h1 className="text-2xl font-bold">Settings</h1>
-      <p className="mt-4 text-gray-400">Coming soon.</p>
+      <h1 className="text-2xl font-bold mb-6">Settings</h1>
+      <SettingsEditor groups={groups} categories={categories} />
     </div>
   );
 }

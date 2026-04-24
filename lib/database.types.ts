@@ -40,6 +40,15 @@ export interface Transaction {
   created_at: string;
 }
 
+export interface Account {
+  id: string;
+  name: string;
+  type: string;
+  balance: number;
+  notes: string | null;
+  updated_at: string;
+}
+
 export type Database = {
   public: {
     Tables: {
@@ -74,6 +83,11 @@ export type Database = {
           created_at?: string;
         };
         Update: Partial<Transaction>;
+      };
+      accounts: {
+        Row: Account;
+        Insert: Omit<Account, "id" | "updated_at"> & { id?: string; updated_at?: string };
+        Update: Partial<Omit<Account, "id">>;
       };
     };
   };

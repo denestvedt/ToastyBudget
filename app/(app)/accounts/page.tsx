@@ -1,16 +1,15 @@
+import { getAccounts } from "@/lib/queries";
+import AccountsEditor from "@/components/accounts/AccountsEditor";
+
 export const metadata = { title: "Accounts — ToastyBudget" };
 
-export default async function AccountsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ month?: string }>;
-}) {
-  const { month } = await searchParams;
+export default async function AccountsPage() {
+  const accounts = await getAccounts();
+
   return (
     <div>
-      <h1 className="text-2xl font-bold">Accounts</h1>
-      <p className="mt-1 text-sm text-gray-500">{month ?? "Current month"}</p>
-      <p className="mt-4 text-gray-400">Coming soon.</p>
+      <h1 className="text-2xl font-bold mb-6">Accounts</h1>
+      <AccountsEditor accounts={accounts} />
     </div>
   );
 }
