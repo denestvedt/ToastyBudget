@@ -37,11 +37,8 @@ const emptyCatForm = (): CategoryForm => ({
   notes: "",
 });
 
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
+function uniqueId(base: string): string {
+  return `${base}-${crypto.randomUUID()}`;
 }
 
 export default function SettingsEditor({ groups, categories }: Props) {
@@ -81,7 +78,7 @@ export default function SettingsEditor({ groups, categories }: Props) {
     const maxOrder = groups.reduce((m, g) => Math.max(m, g.order), -1);
     run(async () => {
       await createCategoryGroup({
-        id: slugify(newGroup.name) + "-" + Date.now(),
+        id: uniqueId("group"),
         name: newGroup.name.trim(),
         icon: newGroup.icon.trim() || undefined,
         order: maxOrder + 1,
@@ -135,7 +132,7 @@ export default function SettingsEditor({ groups, categories }: Props) {
       .reduce((m, c) => Math.max(m, c.order), -1);
     run(async () => {
       await createBudgetCategory({
-        id: slugify(newCatForm.name) + "-" + Date.now(),
+        id: uniqueId("cat"),
         group_id: groupId,
         name: newCatForm.name.trim(),
         budget_amount: parseFloat(newCatForm.budget_amount) || 0,

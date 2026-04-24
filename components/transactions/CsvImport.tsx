@@ -38,12 +38,13 @@ function dateToMonth(dateStr: string): string {
 }
 
 function isHeaderRow(row: string[]): boolean {
-  const first = row[0]?.toLowerCase() ?? "";
+  const first = row[0]?.toLowerCase().trim() ?? "";
   return (
     first === "date" ||
     first === "transaction date" ||
     first === "posted date" ||
-    isNaN(new Date(row[0]).getTime())
+    first === "posting date" ||
+    /^[a-z]/.test(first)
   );
 }
 
