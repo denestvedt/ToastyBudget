@@ -18,12 +18,25 @@ export default async function TransactionsPage({
     getCategories(),
   ]);
 
+  const total = transactions.reduce((s, t) => s + Number(t.amount), 0);
+  const fmt = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
+
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-5 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Transactions</h1>
-          <p className="mt-1 text-sm text-gray-500">{formatMonthLabel(month)}</p>
+          <p className="eyebrow mb-0.5">{formatMonthLabel(month)}</p>
+          <h1
+            className="font-bold"
+            style={{ fontSize: 22, letterSpacing: "-0.02em", color: "var(--text)" }}
+          >
+            Transactions
+          </h1>
+          {transactions.length > 0 && (
+            <p style={{ fontSize: 12, color: "var(--text-mute)", marginTop: 2 }}>
+              {transactions.length} this month · {fmt.format(total)} total
+            </p>
+          )}
         </div>
         <CsvImport />
       </div>

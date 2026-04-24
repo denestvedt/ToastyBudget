@@ -18,14 +18,22 @@ export default async function AppLayout({
   if (!user) redirect("/login");
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-screen overflow-hidden" style={{ background: "var(--bg)" }}>
       <Suspense>
-        <Sidebar />
+        <Sidebar userEmail={user.email} />
       </Suspense>
 
       <div className="flex flex-1 flex-col overflow-hidden">
-        <header className="flex h-14 items-center justify-between border-b px-4 md:px-6">
-          <span className="font-bold md:hidden">🍞 ToastyBudget</span>
+        <header
+          className="flex h-14 items-center justify-between px-4 md:px-6"
+          style={{ borderBottom: "1px solid var(--border)", background: "var(--surface)" }}
+        >
+          <span
+            className="font-bold md:hidden"
+            style={{ color: "var(--text)", fontSize: 14, letterSpacing: "-0.02em" }}
+          >
+            🍞 ToastyBudget
+          </span>
           <div className="ml-auto">
             <Suspense>
               <MonthSelector />
@@ -33,7 +41,10 @@ export default async function AppLayout({
           </div>
         </header>
 
-        <main className="flex-1 overflow-auto p-4 pb-20 md:p-6 md:pb-6">
+        <main
+          className="flex-1 overflow-auto p-4 pb-20 md:p-6 md:pb-6"
+          style={{ background: "var(--bg)" }}
+        >
           {children}
         </main>
       </div>

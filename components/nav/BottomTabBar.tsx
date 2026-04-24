@@ -17,20 +17,27 @@ export default function BottomTabBar() {
   }
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 flex border-t bg-white pb-safe dark:bg-gray-950 md:hidden">
+    <nav
+      className="fixed bottom-0 left-0 right-0 z-50 flex pb-safe md:hidden"
+      style={{
+        borderTop: "1px solid var(--border)",
+        background: "var(--surface)",
+      }}
+    >
       {NAV_LINKS.map(({ href, label, icon: Icon }) => {
         const isActive = pathname === href || pathname.startsWith(`${href}/`);
         return (
           <Link
             key={href}
             href={buildHref(href)}
-            className={`flex flex-1 flex-col items-center gap-0.5 py-2 text-xs font-medium transition-colors ${
-              isActive
-                ? "text-orange-600 dark:text-orange-400"
-                : "text-gray-500 dark:text-gray-400"
-            }`}
+            className="flex flex-1 flex-col items-center gap-0.5 py-2 transition-colors"
+            style={{
+              fontSize: 10,
+              fontWeight: 500,
+              color: isActive ? "var(--accent)" : "var(--text-dim)",
+            }}
           >
-            <Icon className="h-5 w-5" />
+            <Icon size={18} strokeWidth={1.75} />
             <span>{label}</span>
           </Link>
         );

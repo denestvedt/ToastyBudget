@@ -36,8 +36,7 @@ export default function TransactionTable({ transactions, categories }: Props) {
   const sorted = [...transactions].sort((a, b) => {
     let cmp = 0;
     if (sortKey === "date") cmp = a.date.localeCompare(b.date);
-    else if (sortKey === "description")
-      cmp = a.description.localeCompare(b.description);
+    else if (sortKey === "description") cmp = a.description.localeCompare(b.description);
     else if (sortKey === "amount") cmp = Number(a.amount) - Number(b.amount);
     else if (sortKey === "category")
       cmp = (a.category?.name ?? "").localeCompare(b.category?.name ?? "");
@@ -72,25 +71,52 @@ export default function TransactionTable({ transactions, categories }: Props) {
 
   const SortIcon = ({ col }: { col: SortKey }) =>
     sortKey !== col ? (
-      <span className="ml-1 text-gray-300">↕</span>
+      <span className="ml-1" style={{ color: "var(--border)" }}>↕</span>
     ) : sortDir === "asc" ? (
       <span className="ml-1">↑</span>
     ) : (
       <span className="ml-1">↓</span>
     );
 
+  const thStyle = {
+    fontSize: 11,
+    fontWeight: 600,
+    color: "var(--text-mute)",
+    textTransform: "uppercase" as const,
+    letterSpacing: "0.08em",
+    cursor: "pointer",
+  };
+
+  const selectStyle = {
+    background: "var(--bg)",
+    border: "1px solid var(--border)",
+    borderRadius: "var(--r-input)",
+    color: "var(--text)",
+    fontSize: 11,
+    padding: "2px 6px",
+    outline: "none",
+    width: "100%",
+  };
+
   return (
     <div className="space-y-3">
       {error && (
-        <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-600 dark:bg-red-900/30">
+        <p
+          className="rounded-card px-3 py-2"
+          style={{
+            fontSize: 12,
+            color: "var(--bad)",
+            background: "color-mix(in srgb, var(--bad) 10%, transparent)",
+          }}
+        >
           {error}
         </p>
       )}
 
-      <div className="flex items-center gap-4 text-sm text-gray-500">
-        <span>{transactions.length} transactions</span>
+      <div className="flex items-center gap-4" style={{ fontSize: 12, color: "var(--text-dim)" }}>
+        <span className="mono">{transactions.length} transactions</span>
         {uncategorized > 0 && (
-          <span className="text-orange-500 font-medium">
+          <span className="font-semibold" style={{ color: "var(--warn)" }}>
             {uncategorized} uncategorized
           </span>
         )}
@@ -102,30 +128,37 @@ export default function TransactionTable({ transactions, categories }: Props) {
           description="Import a CSV file to get started."
         />
       ) : (
-        <div className="overflow-x-auto rounded-lg border dark:border-gray-700">
+        <div
+          className="overflow-x-auto rounded-card"
+          style={{ border: "1px solid var(--border)" }}
+        >
           <table className="w-full text-sm border-collapse">
-            <thead className="bg-gray-50 dark:bg-gray-900/50">
-              <tr className="text-xs text-gray-500">
+            <thead style={{ background: "var(--surface-2)" }}>
+              <tr>
                 <th
-                  className="text-left py-2 px-3 font-medium cursor-pointer hover:text-gray-900 dark:hover:text-gray-100"
+                  className="text-left py-2 px-3"
+                  style={thStyle}
                   onClick={() => toggleSort("date")}
                 >
                   Date <SortIcon col="date" />
                 </th>
                 <th
-                  className="text-left py-2 px-3 font-medium cursor-pointer hover:text-gray-900 dark:hover:text-gray-100"
+                  className="text-left py-2 px-3"
+                  style={thStyle}
                   onClick={() => toggleSort("description")}
                 >
-                  Description <SortIcon col="description" />
+                  Merchant <SortIcon col="description" />
                 </th>
                 <th
-                  className="text-right py-2 px-3 font-medium cursor-pointer hover:text-gray-900 dark:hover:text-gray-100"
+                  className="text-right py-2 px-3"
+                  style={thStyle}
                   onClick={() => toggleSort("amount")}
                 >
                   Amount <SortIcon col="amount" />
                 </th>
                 <th
-                  className="text-left py-2 px-3 font-medium cursor-pointer hover:text-gray-900 dark:hover:text-gray-100"
+                  className="text-left py-2 px-3"
+                  style={thStyle}
                   onClick={() => toggleSort("category")}
                 >
                   Category <SortIcon col="category" />
@@ -135,50 +168,65 @@ export default function TransactionTable({ transactions, categories }: Props) {
             </thead>
 
             <tbody>
-              {sorted.map((tx) => (
+              {sorted.map((tx, idx) => (
                 <tr
                   key={tx.id}
-                  className="border-t dark:border-gray-700 hover:bg-gray-50/50 dark:hover:bg-gray-900/30"
+                  style={{
+                    borderTop: "1px solid var(--border)",
+                    background: "var(--surface)",
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLElement).style.background = "var(--surface-2)";
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLElement).style.background = "var(--surface)";
+                  }}
                 >
-                  <td className="py-2 px-3 text-gray-500 whitespace-nowrap">{tx.date}</td>
-                  <td className="py-2 px-3 max-w-xs truncate">{tx.description}</td>
-                  <td className="py-2 px-3 text-right tabular-nums font-medium">
+                  <td
+                    className="py-2 px-3 mono whitespace-nowrap"
+                    style={{ fontSize: 11, color: "var(--text-mute)" }}
+                  >
+                    {tx.date}
+                  </td>
+                  <td
+                    className="py-2 px-3 max-w-xs truncate"
+                    style={{ fontSize: 12.5, color: "var(--text)" }}
+                  >
+                    {tx.description}
+                  </td>
+                  <td className="py-2 px-3 text-right">
                     <AmountDisplay
                       amount={Number(tx.amount)}
-                      className={Number(tx.amount) < 0 ? "text-red-500" : ""}
+                      className="font-semibold"
+                      style={{
+                        fontSize: 12.5,
+                        color: Number(tx.amount) < 0 ? "var(--text)" : "var(--good)",
+                      }}
                     />
                   </td>
                   <td className="py-2 px-3">
-                    {tx.category ? (
-                      <CategoryBadge name={tx.category.name} />
-                    ) : null}
+                    {tx.category && <CategoryBadge name={tx.category.name} />}
                     <select
                       value={tx.category_id ?? ""}
                       onChange={(e) => handleCategoryChange(tx.id, e.target.value)}
-                      className={`mt-0.5 block w-full rounded border px-1.5 py-0.5 text-xs focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-gray-600 dark:bg-gray-800 ${
-                        tx.category ? "hidden" : ""
-                      }`}
+                      style={{ ...selectStyle, display: tx.category ? "none" : "block", marginTop: 2 }}
                       aria-label="Assign category"
                     >
                       <option value="">— Assign category —</option>
                       {categories.map((cat) => (
-                        <option key={cat.id} value={cat.id}>
-                          {cat.name}
-                        </option>
+                        <option key={cat.id} value={cat.id}>{cat.name}</option>
                       ))}
                     </select>
                     {tx.category && (
                       <select
                         value={tx.category_id ?? ""}
                         onChange={(e) => handleCategoryChange(tx.id, e.target.value)}
-                        className="mt-0.5 block w-full rounded border px-1.5 py-0.5 text-xs focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-gray-600 dark:bg-gray-800"
+                        style={{ ...selectStyle, marginTop: 2 }}
                         aria-label="Change category"
                       >
                         <option value="">— Remove category —</option>
                         {categories.map((cat) => (
-                          <option key={cat.id} value={cat.id}>
-                            {cat.name}
-                          </option>
+                          <option key={cat.id} value={cat.id}>{cat.name}</option>
                         ))}
                       </select>
                     )}
@@ -186,7 +234,10 @@ export default function TransactionTable({ transactions, categories }: Props) {
                   <td className="py-2 px-3">
                     <button
                       onClick={() => setDeleteId(tx.id)}
-                      className="text-gray-300 hover:text-red-500 transition-colors"
+                      className="transition-colors"
+                      style={{ color: "var(--border)", fontSize: 14 }}
+                      onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--bad)"; }}
+                      onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--border)"; }}
                       aria-label="Delete transaction"
                     >
                       ✕

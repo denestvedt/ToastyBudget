@@ -16,10 +16,15 @@ export default async function DashboardPage({
   const summary = await getSummary(month);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <div>
-        <h1 className="text-2xl font-bold">Dashboard</h1>
-        <p className="mt-1 text-sm text-gray-500">{formatMonthLabel(month)}</p>
+        <p className="eyebrow mb-0.5">{formatMonthLabel(month)}</p>
+        <h1
+          className="font-bold"
+          style={{ fontSize: 22, letterSpacing: "-0.02em", color: "var(--text)" }}
+        >
+          Dashboard
+        </h1>
       </div>
 
       <SummaryCards summary={summary} />

@@ -34,15 +34,24 @@ export default function CopyMonthButton({ fromMonth, toMonth }: Props) {
     <div className="flex flex-col items-end gap-1">
       <button
         onClick={handleCopy}
-        className="rounded-md border px-3 py-1.5 text-xs font-medium hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-800 whitespace-nowrap"
+        className="rounded-button whitespace-nowrap transition-colors"
+        style={{
+          border: "1px solid var(--border)",
+          background: "transparent",
+          color: "var(--text)",
+          fontSize: 12,
+          fontWeight: 600,
+          padding: "6px 14px",
+          cursor: "pointer",
+        }}
         title={`Copy budget amounts from ${formatMonthLabel(fromMonth)} into this month`}
       >
         Copy from {formatMonthLabel(fromMonth)}
       </button>
       {copied && (
-        <p className="text-xs text-green-600 dark:text-green-400">Budget amounts copied.</p>
+        <p style={{ fontSize: 11, color: "var(--good)" }}>Budget amounts copied.</p>
       )}
-      {error && <p className="text-xs text-red-500">{error}</p>}
+      {error && <p style={{ fontSize: 11, color: "var(--bad)" }}>{error}</p>}
     </div>
   );
 }

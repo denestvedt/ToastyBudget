@@ -16,17 +16,32 @@ export default async function AccountsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">Accounts</h1>
+      <div className="mb-5">
+        <h1
+          className="font-bold"
+          style={{ fontSize: 22, letterSpacing: "-0.02em", color: "var(--text)" }}
+        >
+          Accounts
+        </h1>
+        <p style={{ fontSize: 12, color: "var(--text-mute)", marginTop: 2 }}>
+          Net worth · balances · tracking
+        </p>
+      </div>
 
       {setupNeeded ? (
-        <div className="rounded-md border border-amber-200 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-900/20 max-w-xl">
-          <p className="text-sm font-semibold text-amber-800 dark:text-amber-400">
+        <div
+          className="rounded-card p-4 max-w-xl"
+          style={{
+            border: "1px solid var(--warn)",
+            background: "color-mix(in srgb, var(--warn) 8%, transparent)",
+          }}
+        >
+          <p className="font-semibold" style={{ fontSize: 13, color: "var(--warn)" }}>
             Database setup required
           </p>
-          <p className="mt-1 text-sm text-amber-700 dark:text-amber-500">
-            Run migrations <code className="font-mono">002_accounts.sql</code> and{" "}
-            <code className="font-mono">003_seed_defaults.sql</code> in your Supabase SQL
-            editor to enable account tracking.
+          <p className="mt-1" style={{ fontSize: 12, color: "var(--text-dim)" }}>
+            Run migrations <code className="mono">002_accounts.sql</code> and{" "}
+            <code className="mono">003_seed_defaults.sql</code> in your Supabase SQL editor.
           </p>
         </div>
       ) : (

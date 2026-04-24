@@ -11,7 +11,6 @@ interface Props {
   accounts: Account[];
 }
 
-// The 4 account groups shown on the page.
 const ACCOUNT_GROUPS = [
   {
     label: "Banking",
@@ -41,12 +40,7 @@ const ACCOUNT_GROUPS = [
 
 const ALL_TYPES = ["checking", "savings", "credit", "investment", "cash", "other"];
 
-type AccountForm = {
-  name: string;
-  type: string;
-  balance: string;
-  notes: string;
-};
+type AccountForm = { name: string; type: string; balance: string; notes: string };
 
 function emptyForm(defaultType = "checking"): AccountForm {
   return { name: "", type: defaultType, balance: "0", notes: "" };
@@ -57,10 +51,8 @@ export default function AccountsEditor({ accounts }: Props) {
   const [, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
-  // new account: keyed by group label so each group can have its own form open
   const [newGroupLabel, setNewGroupLabel] = useState<string | null>(null);
   const [newForm, setNewForm] = useState<AccountForm>(emptyForm());
-
   const [editId, setEditId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState<AccountForm>(emptyForm());
   const [deleteId, setDeleteId] = useState<string | null>(null);
@@ -93,12 +85,7 @@ export default function AccountsEditor({ accounts }: Props) {
 
   function startEdit(a: Account) {
     setEditId(a.id);
-    setEditForm({
-      name: a.name,
-      type: a.type,
-      balance: String(a.balance),
-      notes: a.notes ?? "",
-    });
+    setEditForm({ name: a.name, type: a.type, balance: String(a.balance), notes: a.notes ?? "" });
   }
 
   function handleUpdate() {
@@ -130,99 +117,141 @@ export default function AccountsEditor({ accounts }: Props) {
     .reduce((s, a) => s + Number(a.balance), 0);
   const netWorth = totalAssets - totalLiabilities;
 
-  const inputClass =
-    "rounded-md border border-gray-300 px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-gray-600 dark:bg-gray-800 w-full";
-  const btnPrimary =
-    "rounded-md bg-orange-500 px-2.5 py-1 text-xs font-medium text-white hover:bg-orange-600 whitespace-nowrap";
-  const btnSecondary =
-    "rounded-md border px-2.5 py-1 text-xs font-medium hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-800 whitespace-nowrap";
+  const inputStyle = {
+    background: "var(--bg)",
+    border: "1px solid var(--border)",
+    borderRadius: "var(--r-input)",
+    color: "var(--text)",
+    fontSize: 12.5,
+    padding: "6px 10px",
+    outline: "none",
+    width: "100%",
+  };
+
+  const btnPrimary = {
+    background: "var(--accent)",
+    color: "var(--bg)",
+    border: "none",
+    borderRadius: "var(--r-button)",
+    fontSize: 12,
+    fontWeight: 600,
+    padding: "5px 12px",
+    cursor: "pointer",
+    whiteSpace: "nowrap" as const,
+  };
+
+  const btnSecondary = {
+    background: "transparent",
+    color: "var(--text)",
+    border: "1px solid var(--border)",
+    borderRadius: "var(--r-button)",
+    fontSize: 12,
+    fontWeight: 600,
+    padding: "5px 12px",
+    cursor: "pointer",
+    whiteSpace: "nowrap" as const,
+  };
 
   return (
     <div className="space-y-6 max-w-xl">
       {error && (
-        <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-600 dark:bg-red-900/30">
+        <p
+          className="rounded-card px-3 py-2"
+          style={{
+            fontSize: 12,
+            color: "var(--bad)",
+            background: "color-mix(in srgb, var(--bad) 10%, transparent)",
+          }}
+        >
           {error}
         </p>
       )}
 
       {/* Net worth summary */}
       {accounts.length > 0 && (
-        <div className="rounded-lg border p-4 dark:border-gray-700 grid grid-cols-3 gap-4 text-center">
-          <div>
-            <p className="text-xs font-medium uppercase tracking-wide text-gray-400">Assets</p>
-            <p className="mt-1 text-lg font-bold text-green-600 dark:text-green-400 tabular-nums">
-              <AmountDisplay amount={totalAssets} />
-            </p>
-          </div>
-          <div>
-            <p className="text-xs font-medium uppercase tracking-wide text-gray-400">Liabilities</p>
-            <p className="mt-1 text-lg font-bold text-red-500 tabular-nums">
-              <AmountDisplay amount={totalLiabilities} />
-            </p>
-          </div>
-          <div>
-            <p className="text-xs font-medium uppercase tracking-wide text-gray-400">Net Worth</p>
-            <p
-              className={`mt-1 text-lg font-bold tabular-nums ${
-                netWorth >= 0
-                  ? "text-gray-900 dark:text-gray-100"
-                  : "text-red-600"
-              }`}
-            >
-              <AmountDisplay amount={netWorth} />
-            </p>
-          </div>
+        <div
+          className="rounded-card p-4 grid grid-cols-3 gap-4 text-center"
+          style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
+        >
+          {[
+            { label: "Assets", value: totalAssets, color: "var(--good)" },
+            { label: "Liabilities", value: totalLiabilities, color: "var(--bad)" },
+            { label: "Net Worth", value: netWorth, color: netWorth >= 0 ? "var(--text)" : "var(--bad)" },
+          ].map(({ label, value, color }) => (
+            <div key={label}>
+              <p className="eyebrow">{label}</p>
+              <AmountDisplay
+                amount={value}
+                className="mt-1 font-bold block"
+                style={{ fontSize: 18, color }}
+              />
+            </div>
+          ))}
         </div>
       )}
 
-      {/* 4 account groups */}
+      {/* Account groups */}
       {ACCOUNT_GROUPS.map((group) => {
         const groupAccounts = accounts.filter((a) => group.types.includes(a.type as never));
         const groupTotal = groupAccounts.reduce((s, a) => s + Number(a.balance), 0);
         const isAddingHere = newGroupLabel === group.label;
 
         return (
-          <div key={group.label} className="rounded-lg border dark:border-gray-700">
+          <div
+            key={group.label}
+            className="rounded-card overflow-hidden"
+            style={{ border: "1px solid var(--border)" }}
+          >
             {/* Group header */}
-            <div className="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-900/50 rounded-t-lg border-b dark:border-gray-700">
+            <div
+              className="flex items-center justify-between px-4 py-3"
+              style={{
+                background: "var(--surface-2)",
+                borderBottom: "1px solid var(--border)",
+              }}
+            >
               <div>
-                <p className="text-sm font-semibold">{group.label}</p>
-                <p className="text-xs text-gray-400">{group.description}</p>
+                <p className="font-semibold" style={{ fontSize: 13, color: "var(--text)" }}>
+                  {group.label}
+                </p>
+                <p style={{ fontSize: 11, color: "var(--text-mute)" }}>{group.description}</p>
               </div>
               {groupAccounts.length > 0 && (
-                <p className="text-sm font-semibold tabular-nums text-gray-700 dark:text-gray-300">
-                  <AmountDisplay amount={groupTotal} />
-                </p>
+                <AmountDisplay
+                  amount={groupTotal}
+                  className="font-semibold"
+                  style={{ fontSize: 13, color: "var(--text)" }}
+                />
               )}
             </div>
 
             {/* Account rows */}
             {groupAccounts.length > 0 && (
-              <div className="divide-y dark:divide-gray-700">
+              <div style={{ background: "var(--surface)" }}>
                 {groupAccounts.map((account) => (
-                  <div key={account.id} className="px-4 py-3">
+                  <div
+                    key={account.id}
+                    className="px-4 py-3"
+                    style={{ borderBottom: "1px solid var(--border)" }}
+                  >
                     {editId === account.id ? (
                       <div className="space-y-2">
                         <div className="flex flex-wrap gap-2">
                           <div className="flex-1 min-w-[120px]">
-                            <label className="text-xs text-gray-500">Name</label>
+                            <label className="eyebrow block mb-1">Name</label>
                             <input
-                              className={inputClass}
+                              style={inputStyle}
                               value={editForm.name}
-                              onChange={(e) =>
-                                setEditForm({ ...editForm, name: e.target.value })
-                              }
+                              onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
                               autoFocus
                             />
                           </div>
                           <div className="w-32">
-                            <label className="text-xs text-gray-500">Type</label>
+                            <label className="eyebrow block mb-1">Type</label>
                             <select
-                              className={inputClass}
+                              style={inputStyle}
                               value={editForm.type}
-                              onChange={(e) =>
-                                setEditForm({ ...editForm, type: e.target.value })
-                              }
+                              onChange={(e) => setEditForm({ ...editForm, type: e.target.value })}
                             >
                               {ALL_TYPES.map((t) => (
                                 <option key={t} value={t}>
@@ -232,59 +261,52 @@ export default function AccountsEditor({ accounts }: Props) {
                             </select>
                           </div>
                           <div className="w-32">
-                            <label className="text-xs text-gray-500">Balance ($)</label>
+                            <label className="eyebrow block mb-1">Balance ($)</label>
                             <input
                               type="number"
                               step="0.01"
-                              className={inputClass}
+                              style={inputStyle}
                               value={editForm.balance}
-                              onChange={(e) =>
-                                setEditForm({ ...editForm, balance: e.target.value })
-                              }
+                              onChange={(e) => setEditForm({ ...editForm, balance: e.target.value })}
                             />
                           </div>
                         </div>
                         <div>
-                          <label className="text-xs text-gray-500">Notes</label>
+                          <label className="eyebrow block mb-1">Notes</label>
                           <input
-                            className={inputClass}
+                            style={inputStyle}
                             value={editForm.notes}
-                            onChange={(e) =>
-                              setEditForm({ ...editForm, notes: e.target.value })
-                            }
+                            onChange={(e) => setEditForm({ ...editForm, notes: e.target.value })}
                             placeholder="Optional notes"
                           />
                         </div>
                         <div className="flex gap-2">
-                          <button onClick={handleUpdate} className={btnPrimary}>
-                            Save
-                          </button>
-                          <button onClick={() => setEditId(null)} className={btnSecondary}>
-                            Cancel
-                          </button>
+                          <button onClick={handleUpdate} style={btnPrimary}>Save</button>
+                          <button onClick={() => setEditId(null)} style={btnSecondary}>Cancel</button>
                         </div>
                       </div>
                     ) : (
                       <div className="flex items-center gap-3">
                         <div className="flex-1">
-                          <p className="text-sm font-medium">{account.name}</p>
-                          <p className="text-xs text-gray-400 capitalize">{account.type}</p>
+                          <p className="font-medium" style={{ fontSize: 12.5, color: "var(--text)" }}>
+                            {account.name}
+                          </p>
+                          <p className="capitalize" style={{ fontSize: 11, color: "var(--text-mute)" }}>
+                            {account.type}
+                          </p>
                         </div>
-                        <p
-                          className={`tabular-nums font-semibold text-sm ${
-                            Number(account.balance) < 0
-                              ? "text-red-500"
-                              : "text-gray-900 dark:text-gray-100"
-                          }`}
-                        >
-                          <AmountDisplay amount={Number(account.balance)} />
-                        </p>
-                        <button onClick={() => startEdit(account)} className={btnSecondary}>
-                          Edit
-                        </button>
+                        <AmountDisplay
+                          amount={Number(account.balance)}
+                          className="font-semibold"
+                          style={{
+                            fontSize: 13,
+                            color: Number(account.balance) < 0 ? "var(--bad)" : "var(--text)",
+                          }}
+                        />
+                        <button onClick={() => startEdit(account)} style={btnSecondary}>Edit</button>
                         <button
                           onClick={() => setDeleteId(account.id)}
-                          className="text-xs text-red-400 hover:text-red-600"
+                          style={{ fontSize: 12, color: "var(--bad)", cursor: "pointer", background: "none", border: "none" }}
                         >
                           Delete
                         </button>
@@ -295,29 +317,28 @@ export default function AccountsEditor({ accounts }: Props) {
               </div>
             )}
 
-            {/* Add account form or button */}
-            <div className="px-4 py-3 border-t dark:border-gray-700">
+            {/* Add form or button */}
+            <div
+              className="px-4 py-3"
+              style={{ background: "var(--surface)", borderTop: groupAccounts.length > 0 ? "none" : undefined }}
+            >
               {isAddingHere ? (
                 <div className="space-y-2">
                   <div className="flex flex-wrap gap-2">
                     <div className="flex-1 min-w-[120px]">
-                      <label className="text-xs text-gray-500">Name</label>
+                      <label className="eyebrow block mb-1">Name</label>
                       <input
-                        className={inputClass}
+                        style={inputStyle}
                         value={newForm.name}
                         onChange={(e) => setNewForm({ ...newForm, name: e.target.value })}
-                        placeholder={
-                          group.label === "Investments"
-                            ? "e.g. 401k, Roth IRA"
-                            : `e.g. ${group.label}`
-                        }
+                        placeholder={group.label === "Investments" ? "e.g. 401k, Roth IRA" : `e.g. ${group.label}`}
                         autoFocus
                       />
                     </div>
                     <div className="w-32">
-                      <label className="text-xs text-gray-500">Type</label>
+                      <label className="eyebrow block mb-1">Type</label>
                       <select
-                        className={inputClass}
+                        style={inputStyle}
                         value={newForm.type}
                         onChange={(e) => setNewForm({ ...newForm, type: e.target.value })}
                       >
@@ -329,35 +350,30 @@ export default function AccountsEditor({ accounts }: Props) {
                       </select>
                     </div>
                     <div className="w-32">
-                      <label className="text-xs text-gray-500">Balance ($)</label>
+                      <label className="eyebrow block mb-1">Balance ($)</label>
                       <input
                         type="number"
                         step="0.01"
-                        className={inputClass}
+                        style={inputStyle}
                         value={newForm.balance}
                         onChange={(e) => setNewForm({ ...newForm, balance: e.target.value })}
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="text-xs text-gray-500">Notes</label>
+                    <label className="eyebrow block mb-1">Notes</label>
                     <input
-                      className={inputClass}
+                      style={inputStyle}
                       value={newForm.notes}
                       onChange={(e) => setNewForm({ ...newForm, notes: e.target.value })}
                       placeholder="Optional notes"
                     />
                   </div>
                   <div className="flex gap-2">
-                    <button onClick={handleCreate} className={btnPrimary}>
-                      Save
-                    </button>
+                    <button onClick={handleCreate} style={btnPrimary}>Save</button>
                     <button
-                      onClick={() => {
-                        setNewGroupLabel(null);
-                        setNewForm(emptyForm());
-                      }}
-                      className={btnSecondary}
+                      onClick={() => { setNewGroupLabel(null); setNewForm(emptyForm()); }}
+                      style={btnSecondary}
                     >
                       Cancel
                     </button>
@@ -365,11 +381,8 @@ export default function AccountsEditor({ accounts }: Props) {
                 </div>
               ) : (
                 <button
-                  onClick={() => {
-                    setNewGroupLabel(group.label);
-                    setNewForm(emptyForm(group.defaultType));
-                  }}
-                  className="text-xs text-orange-500 hover:text-orange-700 font-medium"
+                  onClick={() => { setNewGroupLabel(group.label); setNewForm(emptyForm(group.defaultType)); }}
+                  style={{ fontSize: 12, color: "var(--accent)", fontWeight: 600, background: "none", border: "none", cursor: "pointer" }}
                 >
                   + Add {group.label} account
                 </button>

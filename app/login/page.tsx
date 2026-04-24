@@ -4,13 +4,39 @@ export const metadata = { title: "Sign In — ToastyBudget" };
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-950 p-4">
+    <div
+      className="min-h-screen flex items-center justify-center p-4"
+      style={{ background: "var(--bg)" }}
+    >
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold">🍞 ToastyBudget</h1>
-          <p className="text-sm text-gray-500 mt-1">Your CFO-style household tracker</p>
+          <div
+            className="inline-flex items-center justify-center rounded-[14px] mb-4 text-3xl"
+            style={{
+              width: 56,
+              height: 56,
+              background: "linear-gradient(135deg, var(--accent-2), var(--accent))",
+            }}
+          >
+            🍞
+          </div>
+          <h1
+            className="font-bold block"
+            style={{ fontSize: 22, letterSpacing: "-0.02em", color: "var(--text)" }}
+          >
+            ToastyBudget
+          </h1>
+          <p style={{ fontSize: 12, color: "var(--text-mute)", marginTop: 4 }}>
+            Your household budget, under control
+          </p>
         </div>
-        <LoginForm />
+
+        <div
+          className="rounded-card p-6"
+          style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
+        >
+          <LoginForm />
+        </div>
       </div>
     </div>
   );

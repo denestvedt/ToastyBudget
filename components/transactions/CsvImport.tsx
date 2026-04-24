@@ -118,26 +118,53 @@ export default function CsvImport() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="rounded-md bg-orange-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-orange-600"
+        className="rounded-button transition-colors"
+        style={{
+          background: "var(--accent)",
+          color: "var(--bg)",
+          border: "none",
+          fontSize: 12.5,
+          fontWeight: 600,
+          padding: "7px 14px",
+          cursor: "pointer",
+        }}
       >
         Import CSV
       </button>
 
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/40">
-          <div className="w-full max-w-lg rounded-lg bg-white p-6 shadow-xl dark:bg-gray-900">
+          <div
+            className="w-full max-w-lg rounded-card p-6 shadow-2xl"
+            style={{
+              background: "var(--surface)",
+              border: "1px solid var(--border)",
+              color: "var(--text)",
+            }}
+          >
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold">Import Transactions</h2>
+              <h2 className="font-semibold" style={{ fontSize: 15 }}>Import Transactions</h2>
               <button
                 onClick={handleClose}
-                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                style={{ color: "var(--text-mute)", background: "none", border: "none", cursor: "pointer", fontSize: 16 }}
               >
                 ✕
               </button>
             </div>
 
-            <p className="text-sm text-gray-500 mb-3">
-              CSV format: <code className="font-mono text-xs bg-gray-100 px-1 rounded dark:bg-gray-800">date, description, amount</code>
+            <p style={{ fontSize: 12, color: "var(--text-dim)", marginBottom: 12 }}>
+              CSV format:{" "}
+              <code
+                className="mono"
+                style={{
+                  fontSize: 11,
+                  background: "var(--surface-2)",
+                  padding: "1px 5px",
+                  borderRadius: 4,
+                }}
+              >
+                date, description, amount
+              </code>
               <br />
               A header row is detected and skipped automatically.
             </p>
@@ -147,34 +174,38 @@ export default function CsvImport() {
               type="file"
               accept=".csv,text/csv"
               onChange={handleFile}
-              className="block w-full text-sm text-gray-500 file:mr-3 file:rounded-md file:border-0 file:bg-orange-50 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-orange-700 hover:file:bg-orange-100"
+              className="block w-full"
+              style={{ fontSize: 12, color: "var(--text-dim)" }}
             />
 
             {parseError && (
-              <p className="mt-3 text-sm text-red-600">{parseError}</p>
+              <p className="mt-3" style={{ fontSize: 12, color: "var(--bad)" }}>{parseError}</p>
             )}
 
             {preview.length > 0 && (
               <div className="mt-4">
-                <p className="text-sm font-medium mb-2">
+                <p className="font-medium mb-2" style={{ fontSize: 12, color: "var(--text)" }}>
                   {preview.length} rows ready to import
                   {preview.length > 5 && " (showing first 5)"}
                 </p>
-                <div className="overflow-x-auto rounded border dark:border-gray-700 text-xs">
+                <div
+                  className="overflow-x-auto rounded-input"
+                  style={{ border: "1px solid var(--border)", fontSize: 11 }}
+                >
                   <table className="w-full">
-                    <thead className="bg-gray-50 dark:bg-gray-800">
+                    <thead style={{ background: "var(--surface-2)" }}>
                       <tr>
-                        <th className="text-left px-2 py-1 font-medium">Date</th>
-                        <th className="text-left px-2 py-1 font-medium">Description</th>
-                        <th className="text-right px-2 py-1 font-medium">Amount</th>
+                        <th className="text-left px-2 py-1 font-semibold eyebrow">Date</th>
+                        <th className="text-left px-2 py-1 font-semibold eyebrow">Description</th>
+                        <th className="text-right px-2 py-1 font-semibold eyebrow">Amount</th>
                       </tr>
                     </thead>
                     <tbody>
                       {preview.slice(0, 5).map((row, i) => (
-                        <tr key={i} className="border-t dark:border-gray-700">
-                          <td className="px-2 py-1 whitespace-nowrap">{row.date}</td>
-                          <td className="px-2 py-1 truncate max-w-[180px]">{row.description}</td>
-                          <td className="px-2 py-1 text-right tabular-nums">
+                        <tr key={i} style={{ borderTop: "1px solid var(--border)" }}>
+                          <td className="px-2 py-1 mono whitespace-nowrap" style={{ color: "var(--text-dim)" }}>{row.date}</td>
+                          <td className="px-2 py-1 truncate max-w-[180px]" style={{ color: "var(--text)" }}>{row.description}</td>
+                          <td className="px-2 py-1 text-right mono" style={{ color: "var(--text)" }}>
                             {row.amount.toFixed(2)}
                           </td>
                         </tr>
@@ -186,20 +217,39 @@ export default function CsvImport() {
             )}
 
             {importError && (
-              <p className="mt-3 text-sm text-red-600">{importError}</p>
+              <p className="mt-3" style={{ fontSize: 12, color: "var(--bad)" }}>{importError}</p>
             )}
 
             <div className="mt-5 flex justify-end gap-2">
               <button
                 onClick={handleClose}
-                className="rounded-md border px-3 py-1.5 text-sm font-medium hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-800"
+                className="rounded-button transition-colors"
+                style={{
+                  border: "1px solid var(--border)",
+                  background: "transparent",
+                  color: "var(--text)",
+                  fontSize: 12,
+                  fontWeight: 600,
+                  padding: "6px 14px",
+                  cursor: "pointer",
+                }}
               >
                 Cancel
               </button>
               <button
                 onClick={handleImport}
                 disabled={preview.length === 0}
-                className="rounded-md bg-orange-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-orange-600 disabled:opacity-40"
+                className="rounded-button transition-colors"
+                style={{
+                  background: "var(--accent)",
+                  color: "var(--bg)",
+                  border: "none",
+                  fontSize: 12,
+                  fontWeight: 600,
+                  padding: "6px 14px",
+                  cursor: preview.length === 0 ? "not-allowed" : "pointer",
+                  opacity: preview.length === 0 ? 0.4 : 1,
+                }}
               >
                 Import {preview.length > 0 ? `${preview.length} rows` : ""}
               </button>

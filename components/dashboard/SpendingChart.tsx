@@ -6,7 +6,6 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  Legend,
   ResponsiveContainer,
   Cell,
 } from "recharts";
@@ -31,24 +30,44 @@ export default function SpendingChart({ groups }: Props) {
     }));
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Bar chart */}
       {chartData.length > 0 && (
-        <div className="rounded-lg border p-4 dark:border-gray-700">
-          <h3 className="text-sm font-semibold mb-4">Budget vs. Spent by Group</h3>
-          <ResponsiveContainer width="100%" height={240}>
+        <div
+          className="rounded-card p-4"
+          style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
+        >
+          <h3 className="font-bold mb-4" style={{ fontSize: 14, color: "var(--text)" }}>
+            Budget vs. Spent by Group
+          </h3>
+          <ResponsiveContainer width="100%" height={220}>
             <BarChart data={chartData} margin={{ top: 0, right: 0, left: 10, bottom: 0 }}>
-              <XAxis dataKey="name" tick={{ fontSize: 11 }} />
-              <YAxis tickFormatter={(v) => USD.format(v)} tick={{ fontSize: 11 }} />
+              <XAxis
+                dataKey="name"
+                tick={{ fontSize: 11, fill: "var(--text-mute)" }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis
+                tickFormatter={(v) => USD.format(v)}
+                tick={{ fontSize: 11, fill: "var(--text-mute)" }}
+                axisLine={false}
+                tickLine={false}
+              />
               <Tooltip
                 formatter={(value) => (typeof value === "number" ? USD.format(value) : value)}
-                contentStyle={{ fontSize: 12 }}
+                contentStyle={{
+                  fontSize: 12,
+                  background: "var(--surface)",
+                  border: "1px solid var(--border)",
+                  borderRadius: 8,
+                  color: "var(--text)",
+                }}
               />
-              <Legend wrapperStyle={{ fontSize: 12 }} />
-              <Bar dataKey="Budget" fill="#e5e7eb" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="Budget" fill="var(--surface-2)" radius={[4, 4, 0, 0]} />
               <Bar dataKey="Spent" radius={[4, 4, 0, 0]}>
                 {chartData.map((entry, i) => (
-                  <Cell key={i} fill={entry.isOver ? "#ef4444" : "#f97316"} />
+                  <Cell key={i} fill={entry.isOver ? "var(--bad)" : "var(--accent)"} />
                 ))}
               </Bar>
             </BarChart>
@@ -57,32 +76,56 @@ export default function SpendingChart({ groups }: Props) {
       )}
 
       {/* Group progress list */}
-      <div className="rounded-lg border dark:border-gray-700 divide-y dark:divide-gray-700">
-        {groups.map((g) => {
+      <div
+        className="rounded-card overflow-hidden"
+        style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
+      >
+        <div
+          className="px-4 py-3 flex items-center justify-between"
+          style={{ borderBottom: "1px solid var(--border)" }}
+        >
+          <h3 className="font-bold" style={{ fontSize: 14, color: "var(--text)" }}>
+            Budget by Category
+          </h3>
+          <span className="eyebrow">
+            {groups.filter(g => g.total_spent > g.total_budget).length} over ·{" "}
+            {groups.filter(g => g.total_spent <= g.total_budget && g.total_budget > 0).length} on track
+          </span>
+        </div>
+
+        {groups.map((g, idx) => {
           const remaining = g.total_budget - g.total_spent;
           const isOver = remaining < 0;
           return (
-            <div key={g.id} className="px-4 py-3">
-              <div className="flex items-center justify-between mb-1">
-                <span className="text-sm font-medium">
+            <div
+              key={g.id}
+              className="px-4 py-3"
+              style={{
+                borderBottom: idx < groups.length - 1 ? "1px solid var(--border)" : "none",
+              }}
+            >
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="font-semibold" style={{ fontSize: 12.5, color: "var(--text)" }}>
                   {g.icon && <span className="mr-1">{g.icon}</span>}
                   {g.name}
                 </span>
                 <span
-                  className={`text-sm font-semibold tabular-nums ${
-                    isOver ? "text-red-600" : "text-gray-700 dark:text-gray-300"
-                  }`}
+                  className="mono font-semibold"
+                  style={{
+                    fontSize: 12.5,
+                    color: isOver ? "var(--bad)" : "var(--text)",
+                  }}
                 >
                   <AmountDisplay amount={g.total_spent} />
-                  <span className="text-gray-400 font-normal">
+                  <span style={{ color: "var(--text-mute)", fontWeight: 400 }}>
                     {" / "}
                     <AmountDisplay amount={g.total_budget} />
                   </span>
                 </span>
               </div>
-              <ProgressBar value={g.total_spent} max={g.total_budget} />
+              <ProgressBar value={g.total_spent} max={g.total_budget} height={5} />
               {isOver && (
-                <p className="mt-0.5 text-xs text-red-500">
+                <p className="mt-1" style={{ fontSize: 11, color: "var(--bad)" }}>
                   Over by <AmountDisplay amount={-remaining} />
                 </p>
               )}

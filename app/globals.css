@@ -2,29 +2,121 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ─── Tokens: Light (default) ─────────────────────────────────────── */
+:root,
+:root[data-theme='light'] {
+  --bg:        #FDF6EC;
+  --surface:   #FFFCF5;
+  --surface-2: #F5ECDB;
+  --border:    #E8DAC0;
+
+  --text:      #2B1810;
+  --text-dim:  #6B5340;
+  --text-mute: #9A826A;
+
+  --accent:    #C94F1A;
+  --accent-2:  #E8853A;
+
+  --good:      #6B8E4E;
+  --warn:      #D97706;
+  --bad:       #A63A2A;
+
+  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --r-pill:   4px;
+  --r-input:  6px;
+  --r-button: 7px;
+  --r-card:   10px;
+  --r-hero:   14px;
+
+  --ease-soft: cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+/* ─── Tokens: Dark ────────────────────────────────────────────────── */
+:root[data-theme='dark'] {
+  --bg:        #1A1108;
+  --surface:   #241810;
+  --surface-2: #2E2015;
+  --border:    #3D2B1C;
+
+  --text:      #FDF6EC;
+  --text-dim:  #C4A888;
+  --text-mute: #8A7258;
+
+  --accent:    #E8853A;
+  --accent-2:  #F5B871;
+
+  --good:      #A3C579;
+  --warn:      #F5B871;
+  --bad:       #E8735C;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  :root:not([data-theme='light']) {
+    --bg:        #1A1108;
+    --surface:   #241810;
+    --surface-2: #2E2015;
+    --border:    #3D2B1C;
+
+    --text:      #FDF6EC;
+    --text-dim:  #C4A888;
+    --text-mute: #8A7258;
+
+    --accent:    #E8853A;
+    --accent-2:  #F5B871;
+
+    --good:      #A3C579;
+    --warn:      #F5B871;
+    --bad:       #E8735C;
   }
 }
 
+/* ─── Base ─────────────────────────────────────────────────────────── */
+html,
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Nav item active/inactive states (color-mix not supported in Tailwind arbitrary values) */
+.nav-active {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--accent);
+  font-weight: 600;
+}
+.nav-inactive {
+  color: var(--text-dim);
+  font-weight: 500;
+}
+.nav-inactive:hover {
+  background: color-mix(in srgb, var(--text) 5%, transparent);
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
   .pb-safe {
     padding-bottom: env(safe-area-inset-bottom);
+  }
+  /* Mono numeric class — used on all currency / date / percent values */
+  .mono {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+  .eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-mute);
+    text-transform: uppercase;
+    letter-spacing: 0.10em;
   }
 }
