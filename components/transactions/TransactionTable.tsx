@@ -168,7 +168,7 @@ export default function TransactionTable({ transactions, categories }: Props) {
             </thead>
 
             <tbody>
-              {sorted.map((tx, idx) => (
+              {sorted.map((tx) => (
                 <tr
                   key={tx.id}
                   style={{
