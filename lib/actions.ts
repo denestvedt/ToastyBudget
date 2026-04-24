@@ -64,6 +64,42 @@ export async function updateMonthlyBudget(id: string, budget_amount: number) {
   revalidatePath("/", "layout");
 }
 
+export async function updateMonthlySpent(id: string, spent_amount: number) {
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("monthly_budgets")
+    .update({ spent_amount })
+    .eq("id", id);
+  if (error) throw new Error(error.message);
+  revalidatePath("/", "layout");
+}
+
+export async function copyBudgetToMonth(fromMonth: string, toMonth: string) {
+  const supabase = await createClient();
+
+  const { data: source, error } = await supabase
+    .from("monthly_budgets")
+    .select("category_id, budget_amount")
+    .eq("month", fromMonth);
+
+  if (error) throw new Error(error.message);
+  if (!source?.length) throw new Error(`No budget data found for ${fromMonth}`);
+
+  const rows = source.map((mb) => ({
+    category_id: mb.category_id,
+    month: toMonth,
+    budget_amount: mb.budget_amount,
+    spent_amount: 0,
+  }));
+
+  const { error: upsertError } = await supabase
+    .from("monthly_budgets")
+    .upsert(rows, { onConflict: "category_id,month" });
+
+  if (upsertError) throw new Error(upsertError.message);
+  revalidatePath("/", "layout");
+}
+
 // ── Transaction actions ────────────────────────────────────────────────────
 
 export async function importTransactions(
