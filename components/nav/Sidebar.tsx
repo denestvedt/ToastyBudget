@@ -8,7 +8,11 @@ import { NAV_LINKS } from "./NavLinks";
 import { createClient } from "@/lib/supabase/client";
 import { getMonthParam } from "@/lib/month";
 
-export default function Sidebar() {
+interface Props {
+  userEmail?: string;
+}
+
+export default function Sidebar({ userEmail }: Props) {
   const [collapsed, setCollapsed] = useState(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -27,63 +31,116 @@ export default function Sidebar() {
     router.push("/login");
   }
 
+  const initials = userEmail ? userEmail[0].toUpperCase() : "?";
+
   return (
     <aside
-      className={`hidden md:flex flex-col border-r transition-all duration-200 ${
-        collapsed ? "w-16" : "w-64"
-      }`}
+      className="hidden md:flex flex-col transition-all duration-200"
+      style={{
+        width: collapsed ? 56 : 200,
+        background: "var(--surface)",
+        borderRight: "1px solid var(--border)",
+        padding: collapsed ? "20px 8px" : "20px 14px",
+        flexShrink: 0,
+      }}
     >
-      {/* Logo */}
-      <div className="flex h-14 items-center px-4 border-b">
-        {collapsed ? (
-          <span className="text-xl">🍞</span>
-        ) : (
-          <span className="font-bold text-lg">🍞 ToastyBudget</span>
+      {/* Logo row */}
+      <div className="flex items-center gap-2.5 mb-6">
+        <div
+          className="flex items-center justify-center shrink-0 rounded-lg text-white text-base"
+          style={{
+            width: 28,
+            height: 28,
+            background: "linear-gradient(135deg, var(--accent-2), var(--accent))",
+          }}
+        >
+          🍞
+        </div>
+        {!collapsed && (
+          <div className="min-w-0">
+            <p
+              className="font-bold leading-none truncate"
+              style={{ fontSize: 14, letterSpacing: "-0.02em", color: "var(--text)" }}
+            >
+              ToastyBudget
+            </p>
+          </div>
         )}
       </div>
 
       {/* Nav links */}
-      <nav className="flex-1 overflow-y-auto py-4">
+      <nav className="flex flex-col gap-0.5 flex-1">
         {NAV_LINKS.map(({ href, label, icon: Icon }) => {
           const isActive = pathname === href || pathname.startsWith(`${href}/`);
           return (
             <Link
               key={href}
               href={buildHref(href)}
-              className={`flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 ${
-                isActive
-                  ? "bg-orange-50 text-orange-600 dark:bg-orange-950 dark:text-orange-400"
-                  : "text-gray-600 dark:text-gray-400"
-              }`}
+              className={`flex items-center rounded-[7px] transition-colors duration-120 ${
+                collapsed ? "justify-center px-2 py-2" : "gap-2.5 px-3 py-2"
+              } ${isActive ? "nav-active" : "nav-inactive"}`}
+              title={collapsed ? label : undefined}
             >
-              <Icon className="h-5 w-5 shrink-0" />
-              {!collapsed && <span>{label}</span>}
+              <Icon size={15} strokeWidth={1.75} className="shrink-0" />
+              {!collapsed && (
+                <span style={{ fontSize: 12.5 }}>{label}</span>
+              )}
             </Link>
           );
         })}
       </nav>
 
-      {/* Bottom: sign out + collapse toggle */}
-      <div className="border-t py-2">
+      {/* User row + sign out + collapse */}
+      <div
+        className="flex flex-col gap-1 mt-4 pt-4"
+        style={{ borderTop: "1px solid var(--border)" }}
+      >
+        {!collapsed && userEmail && (
+          <div className="flex items-center gap-2 px-1 mb-1">
+            <div
+              className="flex items-center justify-center rounded-full shrink-0 text-xs font-semibold text-white"
+              style={{
+                width: 26,
+                height: 26,
+                background: "var(--accent-2)",
+                fontSize: 10,
+              }}
+            >
+              {initials}
+            </div>
+            <p
+              className="truncate"
+              style={{ fontSize: 10, color: "var(--text-mute)", lineHeight: 1.3 }}
+            >
+              {userEmail}
+            </p>
+          </div>
+        )}
+
         <button
           onClick={handleSignOut}
-          className="flex w-full items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
+          className={`flex items-center rounded-[7px] nav-inactive transition-colors ${
+            collapsed ? "justify-center px-2 py-2" : "gap-2.5 px-3 py-2"
+          }`}
+          title={collapsed ? "Sign out" : undefined}
         >
-          <LogOut className="h-5 w-5 shrink-0" />
-          {!collapsed && <span>Sign Out</span>}
+          <LogOut size={15} strokeWidth={1.75} className="shrink-0" />
+          {!collapsed && <span style={{ fontSize: 12.5 }}>Sign Out</span>}
         </button>
 
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="flex w-full items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+          className={`flex items-center rounded-[7px] nav-inactive transition-colors ${
+            collapsed ? "justify-center px-2 py-2" : "gap-2.5 px-3 py-2"
+          }`}
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {collapsed ? (
-            <ChevronRight className="h-5 w-5 shrink-0" />
+            <ChevronRight size={15} strokeWidth={1.75} />
           ) : (
             <>
-              <ChevronLeft className="h-5 w-5 shrink-0" />
-              <span>Collapse</span>
+              <ChevronLeft size={15} strokeWidth={1.75} />
+              <span style={{ fontSize: 12.5 }}>Collapse</span>
             </>
           )}
         </button>

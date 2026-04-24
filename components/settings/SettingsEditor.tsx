@@ -46,13 +46,11 @@ export default function SettingsEditor({ groups, categories }: Props) {
   const [, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
-  // Group state
   const [newGroup, setNewGroup] = useState<GroupForm | null>(null);
   const [editGroupId, setEditGroupId] = useState<string | null>(null);
   const [editGroupForm, setEditGroupForm] = useState<GroupForm>(emptyGroupForm());
   const [deleteGroupId, setDeleteGroupId] = useState<string | null>(null);
 
-  // Category state
   const [newCatGroupId, setNewCatGroupId] = useState<string | null>(null);
   const [newCatForm, setNewCatForm] = useState<CategoryForm>(emptyCatForm());
   const [editCatId, setEditCatId] = useState<string | null>(null);
@@ -70,8 +68,6 @@ export default function SettingsEditor({ groups, categories }: Props) {
       }
     });
   }
-
-  // ── Group handlers ────────────────────────────────────────────────────────
 
   function handleCreateGroup() {
     if (!newGroup || !newGroup.name.trim()) return;
@@ -122,8 +118,6 @@ export default function SettingsEditor({ groups, categories }: Props) {
       await updateCategoryGroup(b.id, { order: a.order });
     });
   }
-
-  // ── Category handlers ─────────────────────────────────────────────────────
 
   function handleCreateCategory(groupId: string) {
     if (!newCatForm.name.trim()) return;
@@ -192,40 +186,86 @@ export default function SettingsEditor({ groups, categories }: Props) {
     });
   }
 
-  const inputClass =
-    "rounded-md border border-gray-300 px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-gray-600 dark:bg-gray-800 w-full";
-  const btnPrimary =
-    "rounded-md bg-orange-500 px-2.5 py-1 text-xs font-medium text-white hover:bg-orange-600 whitespace-nowrap";
-  const btnSecondary =
-    "rounded-md border px-2.5 py-1 text-xs font-medium hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-800 whitespace-nowrap";
-  const btnDanger = "text-xs text-red-400 hover:text-red-600";
+  const inputStyle = {
+    background: "var(--bg)",
+    border: "1px solid var(--border)",
+    borderRadius: "var(--r-input)",
+    color: "var(--text)",
+    fontSize: 12.5,
+    padding: "6px 10px",
+    outline: "none",
+    width: "100%",
+  };
+
+  const btnPrimary = {
+    background: "var(--accent)",
+    color: "var(--bg)",
+    border: "none",
+    borderRadius: "var(--r-button)",
+    fontSize: 12,
+    fontWeight: 600,
+    padding: "5px 12px",
+    cursor: "pointer",
+    whiteSpace: "nowrap" as const,
+  };
+
+  const btnSecondary = {
+    background: "transparent",
+    color: "var(--text)",
+    border: "1px solid var(--border)",
+    borderRadius: "var(--r-button)",
+    fontSize: 12,
+    fontWeight: 600,
+    padding: "5px 12px",
+    cursor: "pointer",
+    whiteSpace: "nowrap" as const,
+  };
+
+  const btnDanger = {
+    fontSize: 12,
+    color: "var(--bad)",
+    background: "none",
+    border: "none",
+    cursor: "pointer",
+  };
 
   return (
     <div className="space-y-8">
       {error && (
-        <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-600 dark:bg-red-900/30">
+        <p
+          className="rounded-card px-3 py-2"
+          style={{
+            fontSize: 12,
+            color: "var(--bad)",
+            background: "color-mix(in srgb, var(--bad) 10%, transparent)",
+          }}
+        >
           {error}
         </p>
       )}
 
-      {/* ── Category Groups ─────────────────────────────────────────────── */}
+      {/* Category Groups */}
       <section>
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-base font-semibold">Category Groups</h2>
+          <h2 className="font-semibold" style={{ fontSize: 15, color: "var(--text)" }}>
+            Category Groups
+          </h2>
           {newGroup === null && (
-            <button onClick={() => setNewGroup(emptyGroupForm())} className={btnPrimary}>
+            <button onClick={() => setNewGroup(emptyGroupForm())} style={btnPrimary}>
               + Add Group
             </button>
           )}
         </div>
 
-        {/* New group form */}
         {newGroup && (
-          <div className="mb-3 flex flex-wrap items-end gap-2 rounded-lg border border-orange-300 p-3 dark:border-orange-700">
+          <div
+            className="mb-3 flex flex-wrap items-end gap-2 rounded-card p-3"
+            style={{ border: "1px solid var(--accent)", background: "var(--surface)" }}
+          >
             <div className="flex-1 min-w-[140px]">
-              <label className="text-xs text-gray-500">Name</label>
+              <label className="eyebrow block mb-1">Name</label>
               <input
-                className={inputClass}
+                style={inputStyle}
                 value={newGroup.name}
                 onChange={(e) => setNewGroup({ ...newGroup, name: e.target.value })}
                 placeholder="e.g. Housing"
@@ -233,20 +273,16 @@ export default function SettingsEditor({ groups, categories }: Props) {
               />
             </div>
             <div className="w-20">
-              <label className="text-xs text-gray-500">Icon (emoji)</label>
+              <label className="eyebrow block mb-1">Icon (emoji)</label>
               <input
-                className={inputClass}
+                style={inputStyle}
                 value={newGroup.icon}
                 onChange={(e) => setNewGroup({ ...newGroup, icon: e.target.value })}
                 placeholder="🏠"
               />
             </div>
-            <button onClick={handleCreateGroup} className={btnPrimary}>
-              Save
-            </button>
-            <button onClick={() => setNewGroup(null)} className={btnSecondary}>
-              Cancel
-            </button>
+            <button onClick={handleCreateGroup} style={btnPrimary}>Save</button>
+            <button onClick={() => setNewGroup(null)} style={btnSecondary}>Cancel</button>
           </div>
         )}
 
@@ -257,43 +293,45 @@ export default function SettingsEditor({ groups, categories }: Props) {
           />
         )}
 
-        <div className="space-y-6">
+        <div className="space-y-5">
           {groups.map((group, gi) => {
             const cats = categories.filter((c) => c.group_id === group.id);
             const isEditingGroup = editGroupId === group.id;
 
             return (
-              <div key={group.id} className="rounded-lg border dark:border-gray-700">
+              <div
+                key={group.id}
+                className="rounded-card overflow-hidden"
+                style={{ border: "1px solid var(--border)" }}
+              >
                 {/* Group header */}
-                <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-gray-900/50 rounded-t-lg border-b dark:border-gray-700">
+                <div
+                  className="flex items-center gap-2 px-3 py-2"
+                  style={{
+                    background: "var(--surface-2)",
+                    borderBottom: "1px solid var(--border)",
+                  }}
+                >
                   {isEditingGroup ? (
                     <>
                       <input
-                        className={inputClass + " w-12 flex-none"}
+                        style={{ ...inputStyle, width: 48 }}
                         value={editGroupForm.icon}
-                        onChange={(e) =>
-                          setEditGroupForm({ ...editGroupForm, icon: e.target.value })
-                        }
+                        onChange={(e) => setEditGroupForm({ ...editGroupForm, icon: e.target.value })}
                         placeholder="🏠"
                       />
                       <input
-                        className={inputClass + " flex-1"}
+                        style={{ ...inputStyle, flex: 1 }}
                         value={editGroupForm.name}
-                        onChange={(e) =>
-                          setEditGroupForm({ ...editGroupForm, name: e.target.value })
-                        }
+                        onChange={(e) => setEditGroupForm({ ...editGroupForm, name: e.target.value })}
                         autoFocus
                       />
-                      <button onClick={handleUpdateGroup} className={btnPrimary}>
-                        Save
-                      </button>
-                      <button onClick={() => setEditGroupId(null)} className={btnSecondary}>
-                        Cancel
-                      </button>
+                      <button onClick={handleUpdateGroup} style={btnPrimary}>Save</button>
+                      <button onClick={() => setEditGroupId(null)} style={btnSecondary}>Cancel</button>
                     </>
                   ) : (
                     <>
-                      <span className="font-semibold flex-1 text-sm">
+                      <span className="font-semibold flex-1" style={{ fontSize: 13, color: "var(--text)" }}>
                         {group.icon && <span className="mr-1">{group.icon}</span>}
                         {group.name}
                       </span>
@@ -301,7 +339,7 @@ export default function SettingsEditor({ groups, categories }: Props) {
                         <button
                           onClick={() => handleMoveGroup(group.id, -1)}
                           disabled={gi === 0}
-                          className="text-gray-400 hover:text-gray-600 disabled:opacity-30 text-xs px-1"
+                          style={{ ...btnDanger, opacity: gi === 0 ? 0.3 : 1 }}
                           aria-label="Move up"
                         >
                           ↑
@@ -309,18 +347,13 @@ export default function SettingsEditor({ groups, categories }: Props) {
                         <button
                           onClick={() => handleMoveGroup(group.id, 1)}
                           disabled={gi === groups.length - 1}
-                          className="text-gray-400 hover:text-gray-600 disabled:opacity-30 text-xs px-1"
+                          style={{ ...btnDanger, opacity: gi === groups.length - 1 ? 0.3 : 1 }}
                           aria-label="Move down"
                         >
                           ↓
                         </button>
-                        <button onClick={() => startEditGroup(group)} className={btnSecondary}>
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => setDeleteGroupId(group.id)}
-                          className={btnDanger}
-                        >
+                        <button onClick={() => startEditGroup(group)} style={btnSecondary}>Edit</button>
+                        <button onClick={() => setDeleteGroupId(group.id)} style={btnDanger}>
                           Delete
                         </button>
                       </div>
@@ -328,51 +361,49 @@ export default function SettingsEditor({ groups, categories }: Props) {
                   )}
                 </div>
 
-                {/* Categories within group */}
-                <div className="divide-y dark:divide-gray-700">
+                {/* Categories */}
+                <div style={{ background: "var(--surface)" }}>
                   {cats.map((cat, ci) => {
                     const isEditingCat = editCatId === cat.id;
                     return (
-                      <div key={cat.id} className="px-3 py-2">
+                      <div
+                        key={cat.id}
+                        className="px-3 py-2"
+                        style={{ borderBottom: "1px solid var(--border)" }}
+                      >
                         {isEditingCat ? (
                           <div className="space-y-2">
                             <div className="flex flex-wrap gap-2">
                               <div className="flex-1 min-w-[140px]">
-                                <label className="text-xs text-gray-500">Name</label>
+                                <label className="eyebrow block mb-1">Name</label>
                                 <input
-                                  className={inputClass}
+                                  style={inputStyle}
                                   value={editCatForm.name}
-                                  onChange={(e) =>
-                                    setEditCatForm({ ...editCatForm, name: e.target.value })
-                                  }
+                                  onChange={(e) => setEditCatForm({ ...editCatForm, name: e.target.value })}
                                   autoFocus
                                 />
                               </div>
                               <div className="w-32">
-                                <label className="text-xs text-gray-500">Default Budget ($)</label>
+                                <label className="eyebrow block mb-1">Default Budget ($)</label>
                                 <input
                                   type="number"
                                   step="0.01"
                                   min="0"
-                                  className={inputClass}
+                                  style={inputStyle}
                                   value={editCatForm.budget_amount}
-                                  onChange={(e) =>
-                                    setEditCatForm({
-                                      ...editCatForm,
-                                      budget_amount: e.target.value,
-                                    })
-                                  }
+                                  onChange={(e) => setEditCatForm({ ...editCatForm, budget_amount: e.target.value })}
                                 />
                               </div>
                             </div>
-                            <div className="flex flex-wrap gap-4 text-xs text-gray-600 dark:text-gray-400">
+                            <div
+                              className="flex flex-wrap gap-4"
+                              style={{ fontSize: 12, color: "var(--text-dim)" }}
+                            >
                               <label className="flex items-center gap-1.5">
                                 <input
                                   type="checkbox"
                                   checked={editCatForm.is_fixed}
-                                  onChange={(e) =>
-                                    setEditCatForm({ ...editCatForm, is_fixed: e.target.checked })
-                                  }
+                                  onChange={(e) => setEditCatForm({ ...editCatForm, is_fixed: e.target.checked })}
                                 />
                                 Fixed expense
                               </label>
@@ -380,52 +411,43 @@ export default function SettingsEditor({ groups, categories }: Props) {
                                 <input
                                   type="checkbox"
                                   checked={editCatForm.is_offledger}
-                                  onChange={(e) =>
-                                    setEditCatForm({
-                                      ...editCatForm,
-                                      is_offledger: e.target.checked,
-                                    })
-                                  }
+                                  onChange={(e) => setEditCatForm({ ...editCatForm, is_offledger: e.target.checked })}
                                 />
                                 Off-ledger
                               </label>
                             </div>
                             <div>
-                              <label className="text-xs text-gray-500">Notes</label>
+                              <label className="eyebrow block mb-1">Notes</label>
                               <input
-                                className={inputClass}
+                                style={inputStyle}
                                 value={editCatForm.notes}
-                                onChange={(e) =>
-                                  setEditCatForm({ ...editCatForm, notes: e.target.value })
-                                }
+                                onChange={(e) => setEditCatForm({ ...editCatForm, notes: e.target.value })}
                                 placeholder="Optional notes"
                               />
                             </div>
                             <div className="flex gap-2">
-                              <button onClick={handleUpdateCategory} className={btnPrimary}>
-                                Save
-                              </button>
-                              <button onClick={() => setEditCatId(null)} className={btnSecondary}>
-                                Cancel
-                              </button>
+                              <button onClick={handleUpdateCategory} style={btnPrimary}>Save</button>
+                              <button onClick={() => setEditCatId(null)} style={btnSecondary}>Cancel</button>
                             </div>
                           </div>
                         ) : (
                           <div className="flex items-center gap-2">
-                            <span className="flex-1 text-sm">{cat.name}</span>
-                            <span className="text-xs text-gray-400 tabular-nums">
+                            <span className="flex-1" style={{ fontSize: 12.5, color: "var(--text)" }}>
+                              {cat.name}
+                            </span>
+                            <span className="mono" style={{ fontSize: 11, color: "var(--text-mute)" }}>
                               ${Number(cat.budget_amount).toFixed(2)}
                             </span>
                             {cat.is_fixed && (
-                              <span className="text-xs text-gray-400">fixed</span>
+                              <span style={{ fontSize: 10, color: "var(--text-mute)" }}>fixed</span>
                             )}
                             {cat.is_offledger && (
-                              <span className="text-xs text-gray-400">off-ledger</span>
+                              <span style={{ fontSize: 10, color: "var(--text-mute)" }}>off-ledger</span>
                             )}
                             <button
                               onClick={() => handleMoveCategory(cat.id, group.id, -1)}
                               disabled={ci === 0}
-                              className="text-gray-400 hover:text-gray-600 disabled:opacity-30 text-xs px-1"
+                              style={{ ...btnDanger, opacity: ci === 0 ? 0.3 : 1 }}
                               aria-label="Move up"
                             >
                               ↑
@@ -433,20 +455,13 @@ export default function SettingsEditor({ groups, categories }: Props) {
                             <button
                               onClick={() => handleMoveCategory(cat.id, group.id, 1)}
                               disabled={ci === cats.length - 1}
-                              className="text-gray-400 hover:text-gray-600 disabled:opacity-30 text-xs px-1"
+                              style={{ ...btnDanger, opacity: ci === cats.length - 1 ? 0.3 : 1 }}
                               aria-label="Move down"
                             >
                               ↓
                             </button>
-                            <button onClick={() => startEditCat(cat)} className={btnSecondary}>
-                              Edit
-                            </button>
-                            <button
-                              onClick={() => setDeleteCatId(cat.id)}
-                              className={btnDanger}
-                            >
-                              Delete
-                            </button>
+                            <button onClick={() => startEditCat(cat)} style={btnSecondary}>Edit</button>
+                            <button onClick={() => setDeleteCatId(cat.id)} style={btnDanger}>Delete</button>
                           </div>
                         )}
                       </div>
@@ -455,42 +470,42 @@ export default function SettingsEditor({ groups, categories }: Props) {
 
                   {/* New category form */}
                   {newCatGroupId === group.id ? (
-                    <div className="px-3 py-3 space-y-2 bg-orange-50/40 dark:bg-orange-950/10">
+                    <div
+                      className="px-3 py-3 space-y-2"
+                      style={{
+                        background: "color-mix(in srgb, var(--accent) 5%, transparent)",
+                        borderBottom: "1px solid var(--border)",
+                      }}
+                    >
                       <div className="flex flex-wrap gap-2">
                         <div className="flex-1 min-w-[140px]">
-                          <label className="text-xs text-gray-500">Name</label>
+                          <label className="eyebrow block mb-1">Name</label>
                           <input
-                            className={inputClass}
+                            style={inputStyle}
                             value={newCatForm.name}
-                            onChange={(e) =>
-                              setNewCatForm({ ...newCatForm, name: e.target.value })
-                            }
+                            onChange={(e) => setNewCatForm({ ...newCatForm, name: e.target.value })}
                             placeholder="e.g. Rent"
                             autoFocus
                           />
                         </div>
                         <div className="w-32">
-                          <label className="text-xs text-gray-500">Default Budget ($)</label>
+                          <label className="eyebrow block mb-1">Default Budget ($)</label>
                           <input
                             type="number"
                             step="0.01"
                             min="0"
-                            className={inputClass}
+                            style={inputStyle}
                             value={newCatForm.budget_amount}
-                            onChange={(e) =>
-                              setNewCatForm({ ...newCatForm, budget_amount: e.target.value })
-                            }
+                            onChange={(e) => setNewCatForm({ ...newCatForm, budget_amount: e.target.value })}
                           />
                         </div>
                       </div>
-                      <div className="flex flex-wrap gap-4 text-xs text-gray-600 dark:text-gray-400">
+                      <div className="flex flex-wrap gap-4" style={{ fontSize: 12, color: "var(--text-dim)" }}>
                         <label className="flex items-center gap-1.5">
                           <input
                             type="checkbox"
                             checked={newCatForm.is_fixed}
-                            onChange={(e) =>
-                              setNewCatForm({ ...newCatForm, is_fixed: e.target.checked })
-                            }
+                            onChange={(e) => setNewCatForm({ ...newCatForm, is_fixed: e.target.checked })}
                           />
                           Fixed expense
                         </label>
@@ -498,23 +513,16 @@ export default function SettingsEditor({ groups, categories }: Props) {
                           <input
                             type="checkbox"
                             checked={newCatForm.is_offledger}
-                            onChange={(e) =>
-                              setNewCatForm({ ...newCatForm, is_offledger: e.target.checked })
-                            }
+                            onChange={(e) => setNewCatForm({ ...newCatForm, is_offledger: e.target.checked })}
                           />
                           Off-ledger
                         </label>
                       </div>
                       <div className="flex gap-2">
-                        <button onClick={() => handleCreateCategory(group.id)} className={btnPrimary}>
-                          Save
-                        </button>
+                        <button onClick={() => handleCreateCategory(group.id)} style={btnPrimary}>Save</button>
                         <button
-                          onClick={() => {
-                            setNewCatGroupId(null);
-                            setNewCatForm(emptyCatForm());
-                          }}
-                          className={btnSecondary}
+                          onClick={() => { setNewCatGroupId(null); setNewCatForm(emptyCatForm()); }}
+                          style={btnSecondary}
                         >
                           Cancel
                         </button>
@@ -523,11 +531,8 @@ export default function SettingsEditor({ groups, categories }: Props) {
                   ) : (
                     <div className="px-3 py-2">
                       <button
-                        onClick={() => {
-                          setNewCatGroupId(group.id);
-                          setNewCatForm(emptyCatForm());
-                        }}
-                        className="text-xs text-orange-500 hover:text-orange-700 font-medium"
+                        onClick={() => { setNewCatGroupId(group.id); setNewCatForm(emptyCatForm()); }}
+                        style={{ fontSize: 12, color: "var(--accent)", fontWeight: 600, background: "none", border: "none", cursor: "pointer" }}
                       >
                         + Add Category
                       </button>
@@ -540,7 +545,6 @@ export default function SettingsEditor({ groups, categories }: Props) {
         </div>
       </section>
 
-      {/* Confirm dialogs */}
       <ConfirmDialog
         open={deleteGroupId !== null}
         title="Delete group?"

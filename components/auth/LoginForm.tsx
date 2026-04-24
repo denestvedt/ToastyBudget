@@ -46,10 +46,25 @@ export default function LoginForm() {
     setLoading(false);
   }
 
+  const inputStyle = {
+    background: "var(--bg)",
+    border: "1px solid var(--border)",
+    borderRadius: "var(--r-input)",
+    color: "var(--text)",
+    fontSize: 13,
+    padding: "9px 12px",
+    outline: "none",
+    width: "100%",
+  };
+
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <div className="flex flex-col gap-1">
-        <label htmlFor="email" className="text-sm font-medium">
+      <div className="flex flex-col gap-1.5">
+        <label
+          htmlFor="email"
+          className="font-semibold"
+          style={{ fontSize: 12, color: "var(--text-dim)" }}
+        >
           Email
         </label>
         <input
@@ -59,12 +74,16 @@ export default function LoginForm() {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 dark:border-gray-600 dark:bg-gray-800"
+          style={inputStyle}
         />
       </div>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="password" className="text-sm font-medium">
+      <div className="flex flex-col gap-1.5">
+        <label
+          htmlFor="password"
+          className="font-semibold"
+          style={{ fontSize: 12, color: "var(--text-dim)" }}
+        >
           Password
         </label>
         <input
@@ -74,22 +93,36 @@ export default function LoginForm() {
           required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 dark:border-gray-600 dark:bg-gray-800"
+          style={inputStyle}
         />
       </div>
 
-      {error && <p className="text-sm text-red-500">{error}</p>}
-      {message && <p className="text-sm text-green-600">{message}</p>}
+      {error && (
+        <p style={{ fontSize: 12, color: "var(--bad)" }}>{error}</p>
+      )}
+      {message && (
+        <p style={{ fontSize: 12, color: "var(--good)" }}>{message}</p>
+      )}
 
       <button
         type="submit"
         disabled={loading}
-        className="rounded-md bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600 disabled:opacity-50"
+        className="rounded-button transition-colors"
+        style={{
+          background: "var(--accent)",
+          color: "var(--bg)",
+          border: "none",
+          fontSize: 13,
+          fontWeight: 600,
+          padding: "10px 16px",
+          cursor: loading ? "not-allowed" : "pointer",
+          opacity: loading ? 0.6 : 1,
+        }}
       >
         {loading ? "…" : mode === "signin" ? "Sign In" : "Create Account"}
       </button>
 
-      <p className="text-center text-sm text-gray-500">
+      <p className="text-center" style={{ fontSize: 12, color: "var(--text-dim)" }}>
         {mode === "signin" ? "Don't have an account? " : "Already have an account? "}
         <button
           type="button"
@@ -98,7 +131,13 @@ export default function LoginForm() {
             setError(null);
             setMessage(null);
           }}
-          className="font-medium text-orange-500 hover:underline"
+          className="font-semibold"
+          style={{
+            color: "var(--accent)",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+          }}
         >
           {mode === "signin" ? "Sign up" : "Sign in"}
         </button>

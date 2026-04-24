@@ -16,12 +16,24 @@ export default async function BudgetPage({
   const prevMonth = offsetMonth(month, -1);
   const groups = await getBudgetData(month);
 
+  const totalCategories = groups.reduce((s, g) => s + g.categories.length, 0);
+
   return (
     <div>
-      <div className="flex items-start justify-between mb-4 gap-4">
+      <div className="flex items-start justify-between mb-5 gap-4">
         <div>
-          <h1 className="text-2xl font-bold">Budget</h1>
-          <p className="mt-1 text-sm text-gray-500">{formatMonthLabel(month)}</p>
+          <p className="eyebrow mb-0.5">{formatMonthLabel(month)}</p>
+          <h1
+            className="font-bold"
+            style={{ fontSize: 22, letterSpacing: "-0.02em", color: "var(--text)" }}
+          >
+            Budget
+          </h1>
+          {totalCategories > 0 && (
+            <p style={{ fontSize: 12, color: "var(--text-mute)", marginTop: 2 }}>
+              {groups.length} group{groups.length !== 1 ? "s" : ""} · {totalCategories} categories
+            </p>
+          )}
         </div>
         <CopyMonthButton fromMonth={prevMonth} toMonth={month} />
       </div>

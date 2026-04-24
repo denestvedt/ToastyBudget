@@ -55,12 +55,12 @@ export default function BudgetTable({ groups }: Props) {
     monthlyId,
     field,
     value,
-    className,
+    dimColor,
   }: {
     monthlyId: string;
     field: "budget" | "spent";
     value: number;
-    className?: string;
+    dimColor?: boolean;
   }) {
     const isEditing = editing?.id === monthlyId && editing?.field === field;
     if (isEditing) {
@@ -76,7 +76,14 @@ export default function BudgetTable({ groups }: Props) {
             if (e.key === "Enter") saveEdit(monthlyId, field);
             if (e.key === "Escape") setEditing(null);
           }}
-          className="w-28 rounded border border-orange-400 px-1.5 py-0.5 text-right text-sm focus:outline-none focus:ring-1 focus:ring-orange-500 dark:bg-gray-800"
+          className="mono w-28 rounded-input px-1.5 py-0.5 text-right"
+          style={{
+            border: "1px solid var(--accent)",
+            background: "var(--bg)",
+            color: "var(--text)",
+            fontSize: 12.5,
+            outline: "none",
+          }}
           autoFocus
         />
       );
@@ -85,185 +92,220 @@ export default function BudgetTable({ groups }: Props) {
       <button
         onClick={() => startEdit(monthlyId, field, value)}
         title="Click to edit"
-        className={`tabular-nums hover:underline decoration-dashed ${className ?? ""}`}
+        className="mono hover:underline decoration-dashed"
+        style={{
+          fontSize: 12.5,
+          color: dimColor ? "var(--accent)" : "var(--text)",
+        }}
       >
         <AmountDisplay amount={value} />
       </button>
     );
   }
 
-  const colClass = "py-2 text-right tabular-nums";
-
   return (
     <div className="space-y-2">
       {error && (
-        <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-600 dark:bg-red-900/30">
+        <p
+          className="rounded-card px-3 py-2"
+          style={{
+            fontSize: 12,
+            color: "var(--bad)",
+            background: "color-mix(in srgb, var(--bad) 10%, transparent)",
+          }}
+        >
           {error}
         </p>
       )}
 
-      <table className="w-full text-sm border-collapse">
-        <thead>
-          <tr className="border-b text-xs text-gray-400">
-            <th className="text-left py-2 font-normal">Category</th>
-            <th className="text-right py-2 font-normal pr-2">Budgeted</th>
-            <th className="text-right py-2 font-normal pr-2">
-              Spent
-              <span className="ml-1 text-gray-300 font-normal">/ Actual</span>
-            </th>
-            <th className="text-right py-2 font-normal">Remaining</th>
-          </tr>
-        </thead>
+      <div
+        className="rounded-card overflow-hidden"
+        style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
+      >
+        <table className="w-full text-sm border-collapse">
+          <thead>
+            <tr style={{ borderBottom: "1px solid var(--border)" }}>
+              <th
+                className="text-left py-2 px-4 font-normal eyebrow"
+                style={{ paddingTop: 10, paddingBottom: 10 }}
+              >
+                Category
+              </th>
+              <th className="text-right py-2 px-3 font-normal eyebrow">Budgeted</th>
+              <th className="text-right py-2 px-3 font-normal eyebrow">
+                Spent
+                <span className="ml-1 font-normal" style={{ opacity: 0.5 }}>/ Actual</span>
+              </th>
+              <th className="text-right py-2 px-4 font-normal eyebrow">Remaining</th>
+            </tr>
+          </thead>
 
-        <tbody>
-          {groups.map((group) => {
-            const groupBudget = group.categories.reduce(
-              (s, c) => s + Number(c.monthly.budget_amount),
-              0
-            );
-            const groupSpent = group.categories.reduce(
-              (s, c) => s + Number(c.monthly.spent_amount),
-              0
-            );
-            const groupRemaining = groupBudget - groupSpent;
+          <tbody>
+            {groups.map((group) => {
+              const groupBudget = group.categories.reduce(
+                (s, c) => s + Number(c.monthly.budget_amount),
+                0
+              );
+              const groupSpent = group.categories.reduce(
+                (s, c) => s + Number(c.monthly.spent_amount),
+                0
+              );
+              const groupRemaining = groupBudget - groupSpent;
 
-            return (
-              <>
-                {/* Group header */}
-                <tr key={`gh-${group.id}`} className="bg-gray-50 dark:bg-gray-900/50">
-                  <td
-                    colSpan={4}
-                    className="py-2 px-2 text-xs font-semibold uppercase tracking-wide text-gray-500"
-                  >
-                    {group.icon && <span className="mr-1">{group.icon}</span>}
-                    {group.name}
-                  </td>
-                </tr>
-
-                {/* Category rows */}
-                {group.categories.map((cat) => {
-                  const { monthly } = cat;
-                  const budget = Number(monthly.budget_amount);
-                  const spent = Number(monthly.spent_amount);
-                  const remaining = budget - spent;
-                  const isOver = remaining < 0;
-                  const isWarning =
-                    !isOver && budget > 0 && remaining / budget < 0.1;
-
-                  return (
-                    <tr
-                      key={cat.id}
-                      className={`border-b last:border-0 transition-colors ${
-                        isOver
-                          ? "bg-red-50/50 dark:bg-red-950/20"
-                          : "hover:bg-gray-50/50 dark:hover:bg-gray-900/30"
-                      }`}
+              return (
+                <>
+                  {/* Group header */}
+                  <tr key={`gh-${group.id}`} style={{ background: "var(--surface-2)" }}>
+                    <td
+                      colSpan={4}
+                      className="py-2 px-4 eyebrow"
                     >
-                      <td className="py-2 pl-4 pr-2">
-                        <span>{cat.name}</span>
-                        {cat.is_fixed && (
-                          <span className="ml-1.5 text-xs text-gray-400">fixed</span>
-                        )}
-                        {cat.is_offledger && (
-                          <span
-                            className="ml-1.5 text-xs text-blue-500 font-medium"
-                            title="Off-ledger: enter actual amount manually, not tracked via CSV"
-                          >
-                            off-ledger
-                          </span>
-                        )}
-                      </td>
+                      {group.icon && <span className="mr-1">{group.icon}</span>}
+                      {group.name}
+                    </td>
+                  </tr>
 
-                      {/* Budgeted — always editable */}
-                      <td className="py-2 pr-2 text-right">
-                        <EditableCell
-                          monthlyId={monthly.id}
-                          field="budget"
-                          value={budget}
-                        />
-                      </td>
+                  {/* Category rows */}
+                  {group.categories.map((cat) => {
+                    const { monthly } = cat;
+                    const budget = Number(monthly.budget_amount);
+                    const spent = Number(monthly.spent_amount);
+                    const remaining = budget - spent;
+                    const isOver = remaining < 0;
+                    const isWarning = !isOver && budget > 0 && remaining / budget < 0.1;
 
-                      {/* Spent / Actual — editable only for off-ledger categories */}
-                      <td className="py-2 pr-2 text-right">
-                        {cat.is_offledger ? (
-                          <EditableCell
-                            monthlyId={monthly.id}
-                            field="spent"
-                            value={spent}
-                            className="text-blue-600 dark:text-blue-400"
-                          />
-                        ) : (
-                          <span className="tabular-nums text-gray-700 dark:text-gray-300">
-                            <AmountDisplay amount={spent} />
-                          </span>
-                        )}
-                      </td>
-
-                      <td
-                        className={`${colClass} font-medium ${
-                          isOver
-                            ? "text-red-600"
-                            : isWarning
-                            ? "text-orange-500"
-                            : "text-green-600 dark:text-green-400"
-                        }`}
+                    return (
+                      <tr
+                        key={cat.id}
+                        style={{
+                          borderBottom: "1px solid var(--border)",
+                          background: isOver
+                            ? "color-mix(in srgb, var(--bad) 5%, transparent)"
+                            : "transparent",
+                        }}
                       >
-                        <AmountDisplay amount={remaining} />
-                      </td>
-                    </tr>
-                  );
-                })}
+                        <td className="py-2 pl-6 pr-2" style={{ color: "var(--text)", fontSize: 12.5 }}>
+                          {cat.name}
+                          {cat.is_fixed && (
+                            <span className="ml-1.5" style={{ fontSize: 10, color: "var(--text-mute)" }}>
+                              fixed
+                            </span>
+                          )}
+                          {cat.is_offledger && (
+                            <span
+                              className="ml-1.5 font-medium"
+                              style={{ fontSize: 10, color: "var(--accent-2)" }}
+                              title="Off-ledger: enter actual amount manually"
+                            >
+                              off-ledger
+                            </span>
+                          )}
+                        </td>
 
-                {/* Group subtotal */}
-                <tr
-                  key={`st-${group.id}`}
-                  className="border-b-2 bg-gray-100/60 dark:bg-gray-800/40 text-xs text-gray-500"
-                >
-                  <td className="py-1.5 pl-4 italic">Subtotal</td>
-                  <td className="py-1.5 pr-2 text-right tabular-nums">
-                    <AmountDisplay amount={groupBudget} />
-                  </td>
-                  <td className="py-1.5 pr-2 text-right tabular-nums">
-                    <AmountDisplay amount={groupSpent} />
-                  </td>
-                  <td
-                    className={`py-1.5 text-right tabular-nums font-semibold ${
-                      groupRemaining < 0 ? "text-red-600" : "text-green-600 dark:text-green-400"
-                    }`}
+                        <td className="py-2 pr-3 text-right">
+                          <EditableCell monthlyId={monthly.id} field="budget" value={budget} />
+                        </td>
+
+                        <td className="py-2 pr-3 text-right">
+                          {cat.is_offledger ? (
+                            <EditableCell
+                              monthlyId={monthly.id}
+                              field="spent"
+                              value={spent}
+                              dimColor
+                            />
+                          ) : (
+                            <span
+                              className="mono"
+                              style={{ fontSize: 12.5, color: "var(--text-dim)" }}
+                            >
+                              <AmountDisplay amount={spent} />
+                            </span>
+                          )}
+                        </td>
+
+                        <td className="py-2 pr-4 text-right">
+                          <span
+                            className="mono font-semibold"
+                            style={{
+                              fontSize: 12.5,
+                              color: isOver
+                                ? "var(--bad)"
+                                : isWarning
+                                ? "var(--warn)"
+                                : "var(--good)",
+                            }}
+                          >
+                            <AmountDisplay amount={remaining} />
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
+
+                  {/* Group subtotal */}
+                  <tr
+                    key={`st-${group.id}`}
+                    style={{
+                      borderBottom: "2px solid var(--border)",
+                      background: "var(--surface-2)",
+                    }}
                   >
-                    <AmountDisplay amount={groupRemaining} />
-                  </td>
-                </tr>
-              </>
-            );
-          })}
+                    <td
+                      className="py-1.5 pl-6 italic"
+                      style={{ fontSize: 11, color: "var(--text-mute)" }}
+                    >
+                      Subtotal
+                    </td>
+                    <td className="py-1.5 pr-3 text-right mono" style={{ fontSize: 11, color: "var(--text-dim)" }}>
+                      <AmountDisplay amount={groupBudget} />
+                    </td>
+                    <td className="py-1.5 pr-3 text-right mono" style={{ fontSize: 11, color: "var(--text-dim)" }}>
+                      <AmountDisplay amount={groupSpent} />
+                    </td>
+                    <td
+                      className="py-1.5 pr-4 text-right mono font-semibold"
+                      style={{
+                        fontSize: 11,
+                        color: groupRemaining < 0 ? "var(--bad)" : "var(--good)",
+                      }}
+                    >
+                      <AmountDisplay amount={groupRemaining} />
+                    </td>
+                  </tr>
+                </>
+              );
+            })}
 
-          {/* Grand total */}
-          <tr className="border-t-2 font-bold text-sm">
-            <td className="py-3">Total</td>
-            <td className="py-3 pr-2 text-right tabular-nums">
-              <AmountDisplay amount={totalBudget} />
-            </td>
-            <td className="py-3 pr-2 text-right tabular-nums">
-              <AmountDisplay amount={totalSpent} />
-            </td>
-            <td
-              className={`py-3 text-right tabular-nums ${
-                totalBudget - totalSpent < 0
-                  ? "text-red-600"
-                  : "text-green-600 dark:text-green-400"
-              }`}
-            >
-              <AmountDisplay amount={totalBudget - totalSpent} />
-            </td>
-          </tr>
-        </tbody>
-      </table>
+            {/* Grand total */}
+            <tr style={{ borderTop: "2px solid var(--border)" }}>
+              <td className="py-3 px-4 font-bold" style={{ fontSize: 13, color: "var(--text)" }}>
+                Total
+              </td>
+              <td className="py-3 pr-3 text-right mono font-bold" style={{ fontSize: 13, color: "var(--text)" }}>
+                <AmountDisplay amount={totalBudget} />
+              </td>
+              <td className="py-3 pr-3 text-right mono font-bold" style={{ fontSize: 13, color: "var(--text)" }}>
+                <AmountDisplay amount={totalSpent} />
+              </td>
+              <td
+                className="py-3 pr-4 text-right mono font-bold"
+                style={{
+                  fontSize: 13,
+                  color: totalBudget - totalSpent < 0 ? "var(--bad)" : "var(--good)",
+                }}
+              >
+                <AmountDisplay amount={totalBudget - totalSpent} />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-      <p className="text-xs text-gray-400 mt-2">
+      <p style={{ fontSize: 11, color: "var(--text-mute)" }} className="mt-2">
         Click any budgeted amount to edit it.{" "}
-        <span className="text-blue-400">Off-ledger</span> categories also let you edit the
-        actual amount — useful for 401k contributions and other investments not tracked by CSV.
+        <span style={{ color: "var(--accent-2)" }}>Off-ledger</span> categories also let you edit
+        the actual amount.
       </p>
     </div>
   );

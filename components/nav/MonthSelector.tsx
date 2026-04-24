@@ -18,23 +18,31 @@ export default function MonthSelector() {
   }
 
   return (
-    <div className="flex items-center gap-1">
+    <div
+      className="flex items-center rounded-[7px] overflow-hidden"
+      style={{ border: "1px solid var(--border)", background: "var(--bg)" }}
+    >
       <button
         onClick={() => navigate(-1)}
         aria-label="Previous month"
-        className="rounded p-1 hover:bg-gray-100 dark:hover:bg-gray-800"
+        className="flex items-center justify-center transition-colors"
+        style={{ padding: "5px 8px", color: "var(--text-dim)" }}
       >
-        <ChevronLeft className="h-4 w-4" />
+        <ChevronLeft size={14} strokeWidth={1.75} />
       </button>
-      <span className="w-36 text-center text-sm font-medium">
+      <span
+        className="mono text-center"
+        style={{ fontSize: 12, fontWeight: 500, color: "var(--text)", minWidth: 120, padding: "0 4px" }}
+      >
         {formatMonthLabel(month)}
       </span>
       <button
         onClick={() => navigate(1)}
         aria-label="Next month"
-        className="rounded p-1 hover:bg-gray-100 dark:hover:bg-gray-800"
+        className="flex items-center justify-center transition-colors"
+        style={{ padding: "5px 8px", color: "var(--text-dim)" }}
       >
-        <ChevronRight className="h-4 w-4" />
+        <ChevronRight size={14} strokeWidth={1.75} />
       </button>
     </div>
   );
