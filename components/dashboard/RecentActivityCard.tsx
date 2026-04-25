@@ -10,7 +10,7 @@ const fmt = new Intl.NumberFormat("en-US", {
 });
 
 export default function RecentActivityCard({ transactions }: Props) {
-  const recent = transactions.slice(0, 4);
+  const recent = transactions.slice(0, 5);
 
   return (
     <div
@@ -18,7 +18,7 @@ export default function RecentActivityCard({ transactions }: Props) {
       style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
     >
       <div
-        className="px-4 py-3"
+        className="px-5 py-3.5"
         style={{ borderBottom: "1px solid var(--border)" }}
       >
         <h3 className="font-bold" style={{ fontSize: 13, color: "var(--text)" }}>
@@ -28,7 +28,7 @@ export default function RecentActivityCard({ transactions }: Props) {
 
       {recent.length === 0 ? (
         <p
-          className="px-4 py-6 text-center"
+          className="px-5 py-6 text-center"
           style={{ fontSize: 12, color: "var(--text-mute)" }}
         >
           No transactions this month
@@ -47,7 +47,7 @@ export default function RecentActivityCard({ transactions }: Props) {
           return (
             <div
               key={tx.id}
-              className="px-4 py-2.5 flex items-center gap-3"
+              className="px-5 py-3 flex items-center gap-3"
               style={{
                 borderBottom:
                   idx < recent.length - 1

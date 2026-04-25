@@ -26,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       {/* Runs before paint — restores theme, font, and text-size to prevent flash */}
       <script
         dangerouslySetInnerHTML={{

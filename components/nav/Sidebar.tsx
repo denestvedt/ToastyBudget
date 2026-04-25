@@ -59,7 +59,7 @@ export default function Sidebar({ userEmail, userName, dailyPace }: Props) {
       }}
     >
       {/* Logo row — gradient tile + ToastMark SVG */}
-      <div className="flex items-center gap-2.5 mb-6">
+      <div className="flex items-center gap-2.5 mb-4">
         <div
           className="flex items-center justify-center shrink-0 rounded-lg"
           style={{
@@ -80,30 +80,10 @@ export default function Sidebar({ userEmail, userName, dailyPace }: Props) {
         )}
       </div>
 
-      {/* Nav links */}
-      <nav className="flex flex-col gap-0.5 flex-1">
-        {NAV_LINKS.map(({ href, label, icon: Icon }) => {
-          const isActive = pathname === href || pathname.startsWith(`${href}/`);
-          return (
-            <Link
-              key={href}
-              href={buildHref(href)}
-              className={`flex items-center rounded-[7px] transition-colors duration-150 ${
-                collapsed ? "justify-center px-2 py-2" : "gap-2.5 px-3 py-2"
-              } ${isActive ? "nav-active" : "nav-inactive"}`}
-              title={collapsed ? label : undefined}
-            >
-              <Icon size={15} strokeWidth={1.75} className="shrink-0" />
-              {!collapsed && <span style={{ fontSize: 12.5 }}>{label}</span>}
-            </Link>
-          );
-        })}
-      </nav>
-
-      {/* Daily Pace mini-card — uses cream bg (var(--bg)) so it pops off the surface sidebar */}
+      {/* Daily Pace mini-card — pinned below logo, uses cream bg so it pops off sidebar surface */}
       {!collapsed && dailyPace != null && (
         <div
-          className="rounded-card px-3 py-2.5 mb-3"
+          className="rounded-card px-3 py-2.5 mb-4"
           style={{ background: "var(--bg)", border: "1px solid var(--border)" }}
         >
           <p className="eyebrow mb-1">Daily Pace</p>
@@ -124,6 +104,26 @@ export default function Sidebar({ userEmail, userName, dailyPace }: Props) {
           </p>
         </div>
       )}
+
+      {/* Nav links */}
+      <nav className="flex flex-col gap-0.5 flex-1">
+        {NAV_LINKS.map(({ href, label, icon: Icon }) => {
+          const isActive = pathname === href || pathname.startsWith(`${href}/`);
+          return (
+            <Link
+              key={href}
+              href={buildHref(href)}
+              className={`flex items-center rounded-[7px] transition-colors duration-150 ${
+                collapsed ? "justify-center px-2 py-2" : "gap-2.5 px-3 py-2"
+              } ${isActive ? "nav-active" : "nav-inactive"}`}
+              title={collapsed ? label : undefined}
+            >
+              <Icon size={15} strokeWidth={1.75} className="shrink-0" />
+              {!collapsed && <span style={{ fontSize: 12.5 }}>{label}</span>}
+            </Link>
+          );
+        })}
+      </nav>
 
       {/* User row + sign out + collapse */}
       <div

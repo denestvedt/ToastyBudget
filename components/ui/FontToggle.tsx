@@ -23,6 +23,7 @@ export default function FontToggle() {
   useEffect(() => {
     const stored = (localStorage.getItem("font") as Font | null) ?? "toasty";
     setFont(stored);
+    applyFont(stored);
   }, []);
 
   function select(next: Font) {

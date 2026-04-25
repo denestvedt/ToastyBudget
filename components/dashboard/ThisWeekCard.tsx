@@ -47,15 +47,15 @@ export default function ThisWeekCard({ transactions }: Props) {
       style={{
         background: "var(--surface)",
         border: "1px solid var(--border)",
-        padding: 16,
+        padding: 20,
       }}
     >
-      <div className="flex items-baseline justify-between" style={{ marginBottom: 10 }}>
+      <div className="flex items-baseline justify-between" style={{ marginBottom: 14 }}>
         <h3 className="font-bold" style={{ fontSize: 13, color: "var(--text)" }}>
           This Week
         </h3>
         {!isEmpty && (
-          <span className="mono" style={{ fontSize: 12, color: "var(--text-dim)" }}>
+          <span className="mono" style={{ fontSize: 13, color: "var(--text-dim)" }}>
             {fmt.format(weekTotal)}
           </span>
         )}
@@ -68,22 +68,22 @@ export default function ThisWeekCard({ transactions }: Props) {
             style={{
               borderTop: "1px dashed var(--border)",
               height: 0,
-              marginBottom: 10,
+              marginBottom: 12,
             }}
           />
           <p
             className="text-center"
-            style={{ fontSize: 11.5, color: "var(--text-mute)" }}
+            style={{ fontSize: 12, color: "var(--text-mute)" }}
           >
             No spending this week yet.
           </p>
-          <div className="flex" style={{ gap: 6, marginTop: 14 }}>
+          <div className="flex" style={{ gap: 6, marginTop: 18 }}>
             {days.map(({ date, label, isToday }) => (
               <p
                 key={date}
                 className="flex-1 text-center font-medium"
                 style={{
-                  fontSize: 9,
+                  fontSize: 10,
                   color: isToday ? "var(--accent)" : "var(--text-mute)",
                 }}
               >
@@ -95,10 +95,10 @@ export default function ThisWeekCard({ transactions }: Props) {
       ) : (
         <>
           {/* Bars */}
-          <div className="flex items-end" style={{ gap: 6, height: 60 }}>
+          <div className="flex items-end" style={{ gap: 5, height: 80 }}>
             {days.map(({ date, isToday, total }) => {
               const pct = total > 0 ? total / maxTotal : 0;
-              const barH = total > 0 ? Math.max(Math.round(pct * 52), 6) : 3;
+              const barH = total > 0 ? Math.max(Math.round(pct * 70), 6) : 4;
               return (
                 <div
                   key={date}
@@ -119,13 +119,13 @@ export default function ThisWeekCard({ transactions }: Props) {
           </div>
 
           {/* Labels */}
-          <div className="flex" style={{ gap: 6, marginTop: 6 }}>
+          <div className="flex" style={{ gap: 5, marginTop: 8 }}>
             {days.map(({ date, label, isToday }) => (
               <p
                 key={date}
                 className="flex-1 text-center font-medium"
                 style={{
-                  fontSize: 9,
+                  fontSize: 10,
                   color: isToday ? "var(--accent)" : "var(--text-mute)",
                 }}
               >

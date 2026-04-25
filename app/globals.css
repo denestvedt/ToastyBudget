@@ -77,13 +77,11 @@ html[data-font='system'] {
   --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
 }
 
-/* ─── Text size presets — use rem-based scaling instead of zoom.
-   `zoom` interacts badly with inline pixel values and was making the
-   hero card squashed/oversized inconsistently. Tailwind + inline px
-   styles inherit from html { font-size }, but our hard-coded inline
-   styles do not — so this is a no-op for now. Re-introduce text-size
-   scaling later by switching inline px values to rem.  ────────────── */
-html { font-size: 16px; }
+/* ─── Text size: scales rem-based values; px values in inline styles won't scale ── */
+html                                { font-size: 13px; }
+html[data-text-size='compact']      { font-size: 11.05px; }
+html[data-text-size='comfortable']  { font-size: 14.95px; }
+html[data-text-size='large']        { font-size: 16.9px;  }
 
 /* ─── Base ─────────────────────────────────────────────────────────── */
 html,
@@ -91,7 +89,6 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-sans);
-  font-size: 13px;
   line-height: 1.45;
   -webkit-font-smoothing: antialiased;
 }
