@@ -21,8 +21,8 @@
   --warn:      #D97706;
   --bad:       #A63A2A;
 
-  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains-mono), ui-monospace, 'SF Mono', Menlo, monospace;
+  --font-sans: var(--font-inter), system-ui, 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, 'Consolas', 'Cascadia Code', 'SF Mono', Menlo, monospace;
 
   --r-pill:   4px;
   --r-input:  6px;
@@ -74,7 +74,7 @@
 
 /* ─── Font preset (system fallback) ───────────────────────────────── */
 html[data-font='system'] {
-  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-sans: system-ui, 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 /* ─── Text size: scales rem-based values; px values in inline styles won't scale ── */
