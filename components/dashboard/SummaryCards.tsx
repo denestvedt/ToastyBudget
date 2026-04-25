@@ -12,13 +12,6 @@ const fmtNoCents = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 0,
 });
 
-function formatHero(amount: number): { dollars: string; cents: string } {
-  const abs = Math.abs(amount);
-  const dollars = fmtNoCents.format(amount < 0 ? -abs : amount < 0 ? -abs : amount);
-  const cents = String(Math.round((abs % 1) * 100)).padStart(2, "0");
-  return { dollars, cents };
-}
-
 export default function SummaryCards({ summary, accounts = [] }: Props) {
   const remaining = summary.total_budget - summary.total_spent;
   const pct =
@@ -33,62 +26,92 @@ export default function SummaryCards({ summary, accounts = [] }: Props) {
   }, 0);
   const hasAccounts = accounts.length > 0;
 
-  const { dollars: heroDollars } = formatHero(remaining);
+  // Days remaining helper for sub-text
+  const today = new Date();
+  const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+  const daysLeft = Math.max(daysInMonth - today.getDate() + 1, 1);
+  const perDay = remaining > 0 ? Math.round(remaining / daysLeft) : 0;
+
+  // Split hero number into dollars + cents for visual hierarchy
+  const heroDollars = fmtNoCents.format(remaining);
+  const heroCents = `.${String(Math.abs(Math.round((remaining % 1) * 100))).padStart(2, "0")}`;
 
   return (
     <div
-      className="rounded-hero p-5 text-[#FFFCF5]"
-      style={{ background: "linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%)" }}
+      className="rounded-hero relative overflow-hidden text-[#FFFCF5]"
+      style={{
+        background: "linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%)",
+        padding: "20px 24px",
+      }}
     >
-      <div className="grid grid-cols-1 sm:grid-cols-3">
+      {/* Subtle radial highlight for depth */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          opacity: 0.08,
+          background:
+            "radial-gradient(circle at 90% 20%, white 0%, transparent 40%)",
+        }}
+      />
+
+      <div
+        className="relative grid grid-cols-1 sm:grid-cols-[1.4fr_1fr_1fr]"
+        style={{ gap: 24, alignItems: "center" }}
+      >
         {/* Col 1: Left to spend */}
-        <div className="sm:pr-6">
-          <p className="eyebrow" style={{ color: "rgba(255,252,245,0.75)" }}>
-            Left to Spend
+        <div>
+          <p
+            className="eyebrow"
+            style={{
+              color: "rgba(255,252,245,0.85)",
+              letterSpacing: "0.12em",
+            }}
+          >
+            Left to Spend in {today.toLocaleString("en-US", { month: "long" })}
           </p>
           <p
-            className="mono mt-1 font-bold leading-none"
-            style={{ fontSize: 44, letterSpacing: "-0.02em" }}
+            className="mono font-bold"
+            style={{
+              fontSize: 44,
+              lineHeight: 1.05,
+              letterSpacing: "-0.02em",
+              marginTop: 6,
+            }}
           >
             {heroDollars}
+            <span style={{ fontSize: 22, opacity: 0.7 }}>{heroCents}</span>
           </p>
-          <p className="mt-2" style={{ fontSize: 11, opacity: 0.7 }}>
-            {summary.groups.length} category group{summary.groups.length !== 1 ? "s" : ""} · this month
+          <p style={{ fontSize: 12, opacity: 0.9, marginTop: 6 }}>
+            {daysLeft} days left
+            {perDay > 0 ? ` · ~${fmtNoCents.format(perDay)}/day` : ""}
           </p>
         </div>
 
         {/* Col 2: Spent */}
-        <div className="mt-5 sm:mt-0">
-          <div
-            className="hidden sm:block h-full"
-            style={{ borderLeft: "1px solid rgba(255,252,245,0.2)", paddingLeft: 24 }}
-          >
-            <SpentCol spent={summary.total_spent} budget={summary.total_budget} pct={pct} />
-          </div>
-          <div className="sm:hidden">
-            <SpentCol spent={summary.total_spent} budget={summary.total_budget} pct={pct} />
-          </div>
+        <div
+          className="sm:border-l"
+          style={{
+            borderLeftColor: "rgba(255,252,245,0.2)",
+            paddingLeft: 24,
+          }}
+        >
+          <SpentCol spent={summary.total_spent} budget={summary.total_budget} pct={pct} />
         </div>
 
-        {/* Col 3: Net Worth (or Total Budget if no accounts) */}
-        <div className="mt-5 sm:mt-0">
-          <div
-            className="hidden sm:block"
-            style={{ borderLeft: "1px solid rgba(255,252,245,0.2)", paddingLeft: 24 }}
-          >
-            {hasAccounts ? (
-              <NetWorthCol netWorth={netWorth} />
-            ) : (
-              <BudgetCol budget={summary.total_budget} />
-            )}
-          </div>
-          <div className="sm:hidden">
-            {hasAccounts ? (
-              <NetWorthCol netWorth={netWorth} />
-            ) : (
-              <BudgetCol budget={summary.total_budget} />
-            )}
-          </div>
+        {/* Col 3: Net worth or Total Budget */}
+        <div
+          className="sm:border-l"
+          style={{
+            borderLeftColor: "rgba(255,252,245,0.2)",
+            paddingLeft: 24,
+          }}
+        >
+          {hasAccounts ? (
+            <NetWorthCol netWorth={netWorth} />
+          ) : (
+            <BudgetCol budget={summary.total_budget} />
+          )}
         </div>
       </div>
     </div>
@@ -98,24 +121,33 @@ export default function SummaryCards({ summary, accounts = [] }: Props) {
 function SpentCol({ spent, budget, pct }: { spent: number; budget: number; pct: number }) {
   return (
     <>
-      <p className="eyebrow" style={{ color: "rgba(255,252,245,0.75)" }}>Spent</p>
-      <p className="mono mt-1 font-bold leading-none" style={{ fontSize: 22 }}>
+      <p className="eyebrow" style={{ color: "rgba(255,252,245,0.75)" }}>
+        Spent
+      </p>
+      <p
+        className="mono font-bold leading-none"
+        style={{ fontSize: 22, marginTop: 4 }}
+      >
         {fmt.format(spent)}
       </p>
       <div
-        className="mt-2 rounded-full overflow-hidden"
-        style={{ height: 5, background: "rgba(255,252,245,0.25)" }}
+        className="rounded-full overflow-hidden"
+        style={{
+          height: 5,
+          background: "rgba(255,252,245,0.2)",
+          marginTop: 8,
+        }}
       >
         <div
           className="h-full rounded-full"
           style={{
             width: `${pct}%`,
-            background: "rgba(255,252,245,0.75)",
+            background: "#FFFCF5",
             transition: "width 400ms cubic-bezier(0.2, 0.7, 0.3, 1)",
           }}
         />
       </div>
-      <p className="mt-1" style={{ fontSize: 11, opacity: 0.7 }}>
+      <p style={{ fontSize: 10.5, opacity: 0.85, marginTop: 4 }}>
         {pct.toFixed(0)}% of {fmt.format(budget)} budget
       </p>
     </>
@@ -125,11 +157,16 @@ function SpentCol({ spent, budget, pct }: { spent: number; budget: number; pct: 
 function BudgetCol({ budget }: { budget: number }) {
   return (
     <>
-      <p className="eyebrow" style={{ color: "rgba(255,252,245,0.75)" }}>Total Budget</p>
-      <p className="mono mt-1 font-bold leading-none" style={{ fontSize: 22 }}>
+      <p className="eyebrow" style={{ color: "rgba(255,252,245,0.75)" }}>
+        Total Budget
+      </p>
+      <p
+        className="mono font-bold leading-none"
+        style={{ fontSize: 22, marginTop: 4 }}
+      >
         {fmt.format(budget)}
       </p>
-      <p className="mt-2" style={{ fontSize: 11, opacity: 0.7 }}>monthly envelope</p>
+      <p style={{ fontSize: 10.5, opacity: 0.85, marginTop: 6 }}>monthly envelope</p>
     </>
   );
 }
@@ -137,14 +174,16 @@ function BudgetCol({ budget }: { budget: number }) {
 function NetWorthCol({ netWorth }: { netWorth: number }) {
   return (
     <>
-      <p className="eyebrow" style={{ color: "rgba(255,252,245,0.75)" }}>Net Worth</p>
+      <p className="eyebrow" style={{ color: "rgba(255,252,245,0.75)" }}>
+        Net Worth
+      </p>
       <p
-        className="mono mt-1 font-bold leading-none"
-        style={{ fontSize: 22 }}
+        className="mono font-bold leading-none"
+        style={{ fontSize: 22, marginTop: 4 }}
       >
         {fmt.format(netWorth)}
       </p>
-      <p className="mt-2" style={{ fontSize: 11, opacity: 0.7 }}>
+      <p style={{ fontSize: 10.5, opacity: 0.85, marginTop: 6 }}>
         assets minus liabilities
       </p>
     </>
