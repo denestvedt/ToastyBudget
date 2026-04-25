@@ -81,7 +81,7 @@ export default function BudgetTable({ groups }: Props) {
             border: "1px solid var(--accent)",
             background: "var(--bg)",
             color: "var(--text)",
-            fontSize: 12.5,
+            fontSize: "0.962rem",
             outline: "none",
           }}
           autoFocus
@@ -94,7 +94,7 @@ export default function BudgetTable({ groups }: Props) {
         title="Click to edit"
         className="mono hover:underline decoration-dashed"
         style={{
-          fontSize: 12.5,
+          fontSize: "0.962rem",
           color: dimColor ? "var(--accent)" : "var(--text)",
         }}
       >
@@ -109,7 +109,7 @@ export default function BudgetTable({ groups }: Props) {
         <p
           className="rounded-card px-3 py-2"
           style={{
-            fontSize: 12,
+            fontSize: "0.923rem",
             color: "var(--bad)",
             background: "color-mix(in srgb, var(--bad) 10%, transparent)",
           }}
@@ -184,17 +184,17 @@ export default function BudgetTable({ groups }: Props) {
                             : "transparent",
                         }}
                       >
-                        <td className="py-2 pl-6 pr-2" style={{ color: "var(--text)", fontSize: 12.5 }}>
+                        <td className="py-2 pl-6 pr-2" style={{ color: "var(--text)", fontSize: "0.962rem" }}>
                           {cat.name}
                           {cat.is_fixed && (
-                            <span className="ml-1.5" style={{ fontSize: 10, color: "var(--text-mute)" }}>
+                            <span className="ml-1.5" style={{ fontSize: "0.769rem", color: "var(--text-mute)" }}>
                               fixed
                             </span>
                           )}
                           {cat.is_offledger && (
                             <span
                               className="ml-1.5 font-medium"
-                              style={{ fontSize: 10, color: "var(--accent-2)" }}
+                              style={{ fontSize: "0.769rem", color: "var(--accent-2)" }}
                               title="Off-ledger: enter actual amount manually"
                             >
                               off-ledger
@@ -217,7 +217,7 @@ export default function BudgetTable({ groups }: Props) {
                           ) : (
                             <span
                               className="mono"
-                              style={{ fontSize: 12.5, color: "var(--text-dim)" }}
+                              style={{ fontSize: "0.962rem", color: "var(--text-dim)" }}
                             >
                               <AmountDisplay amount={spent} />
                             </span>
@@ -228,7 +228,7 @@ export default function BudgetTable({ groups }: Props) {
                           <span
                             className="mono font-semibold"
                             style={{
-                              fontSize: 12.5,
+                              fontSize: "0.962rem",
                               color: isOver
                                 ? "var(--bad)"
                                 : isWarning
@@ -253,20 +253,20 @@ export default function BudgetTable({ groups }: Props) {
                   >
                     <td
                       className="py-1.5 pl-6 italic"
-                      style={{ fontSize: 11, color: "var(--text-mute)" }}
+                      style={{ fontSize: "0.846rem", color: "var(--text-mute)" }}
                     >
                       Subtotal
                     </td>
-                    <td className="py-1.5 pr-3 text-right mono" style={{ fontSize: 11, color: "var(--text-dim)" }}>
+                    <td className="py-1.5 pr-3 text-right mono" style={{ fontSize: "0.846rem", color: "var(--text-dim)" }}>
                       <AmountDisplay amount={groupBudget} />
                     </td>
-                    <td className="py-1.5 pr-3 text-right mono" style={{ fontSize: 11, color: "var(--text-dim)" }}>
+                    <td className="py-1.5 pr-3 text-right mono" style={{ fontSize: "0.846rem", color: "var(--text-dim)" }}>
                       <AmountDisplay amount={groupSpent} />
                     </td>
                     <td
                       className="py-1.5 pr-4 text-right mono font-semibold"
                       style={{
-                        fontSize: 11,
+                        fontSize: "0.846rem",
                         color: groupRemaining < 0 ? "var(--bad)" : "var(--good)",
                       }}
                     >
@@ -279,19 +279,19 @@ export default function BudgetTable({ groups }: Props) {
 
             {/* Grand total */}
             <tr style={{ borderTop: "2px solid var(--border)" }}>
-              <td className="py-3 px-4 font-bold" style={{ fontSize: 13, color: "var(--text)" }}>
+              <td className="py-3 px-4 font-bold" style={{ fontSize: "1rem", color: "var(--text)" }}>
                 Total
               </td>
-              <td className="py-3 pr-3 text-right mono font-bold" style={{ fontSize: 13, color: "var(--text)" }}>
+              <td className="py-3 pr-3 text-right mono font-bold" style={{ fontSize: "1rem", color: "var(--text)" }}>
                 <AmountDisplay amount={totalBudget} />
               </td>
-              <td className="py-3 pr-3 text-right mono font-bold" style={{ fontSize: 13, color: "var(--text)" }}>
+              <td className="py-3 pr-3 text-right mono font-bold" style={{ fontSize: "1rem", color: "var(--text)" }}>
                 <AmountDisplay amount={totalSpent} />
               </td>
               <td
                 className="py-3 pr-4 text-right mono font-bold"
                 style={{
-                  fontSize: 13,
+                  fontSize: "1rem",
                   color: totalBudget - totalSpent < 0 ? "var(--bad)" : "var(--good)",
                 }}
               >
@@ -302,7 +302,7 @@ export default function BudgetTable({ groups }: Props) {
         </table>
       </div>
 
-      <p style={{ fontSize: 11, color: "var(--text-mute)" }} className="mt-2">
+      <p style={{ fontSize: "0.846rem", color: "var(--text-mute)" }} className="mt-2">
         Click any budgeted amount to edit it.{" "}
         <span style={{ color: "var(--accent-2)" }}>Off-ledger</span> categories also let you edit
         the actual amount.

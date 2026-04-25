@@ -19,11 +19,11 @@ export default async function AccountsPage() {
       <div className="mb-5">
         <h1
           className="font-bold"
-          style={{ fontSize: 22, letterSpacing: "-0.02em", color: "var(--text)" }}
+          style={{ fontSize: "1.692rem", letterSpacing: "-0.02em", color: "var(--text)" }}
         >
           Accounts
         </h1>
-        <p style={{ fontSize: 12, color: "var(--text-mute)", marginTop: 2 }}>
+        <p style={{ fontSize: "0.923rem", color: "var(--text-mute)", marginTop: 2 }}>
           Net worth · balances · tracking
         </p>
       </div>
@@ -36,10 +36,10 @@ export default async function AccountsPage() {
             background: "color-mix(in srgb, var(--warn) 8%, transparent)",
           }}
         >
-          <p className="font-semibold" style={{ fontSize: 13, color: "var(--warn)" }}>
+          <p className="font-semibold" style={{ fontSize: "1rem", color: "var(--warn)" }}>
             Database setup required
           </p>
-          <p className="mt-1" style={{ fontSize: 12, color: "var(--text-dim)" }}>
+          <p className="mt-1" style={{ fontSize: "0.923rem", color: "var(--text-dim)" }}>
             Run migrations <code className="mono">002_accounts.sql</code> and{" "}
             <code className="mono">003_seed_defaults.sql</code> in your Supabase SQL editor.
           </p>

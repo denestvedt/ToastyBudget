@@ -21,14 +21,14 @@ export default function EmptyState({ title, description, action }: EmptyStatePro
       </div>
       <p
         className="font-semibold"
-        style={{ fontSize: 14, color: "var(--text)" }}
+        style={{ fontSize: "1.077rem", color: "var(--text)" }}
       >
         {title}
       </p>
       {description && (
         <p
           className="mt-1 max-w-xs"
-          style={{ fontSize: 12, color: "var(--text-mute)" }}
+          style={{ fontSize: "0.923rem", color: "var(--text-mute)" }}
         >
           {description}
         </p>

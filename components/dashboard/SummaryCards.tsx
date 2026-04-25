@@ -73,16 +73,16 @@ export default function SummaryCards({ summary, accounts = [] }: Props) {
           <p
             className="mono font-bold"
             style={{
-              fontSize: 44,
+              fontSize: "3.385rem",
               lineHeight: 1.05,
               letterSpacing: "-0.02em",
               marginTop: 6,
             }}
           >
             {heroDollars}
-            <span style={{ fontSize: 22, opacity: 0.7 }}>{heroCents}</span>
+            <span style={{ fontSize: "1.692rem", opacity: 0.7 }}>{heroCents}</span>
           </p>
-          <p style={{ fontSize: 12, opacity: 0.9, marginTop: 6 }}>
+          <p style={{ fontSize: "0.923rem", opacity: 0.9, marginTop: 6 }}>
             {daysLeft} days left
             {perDay > 0 ? ` · ~${fmtNoCents.format(perDay)}/day` : ""}
           </p>
@@ -122,7 +122,7 @@ function SpentCol({ spent, budget, pct }: { spent: number; budget: number; pct: 
       </p>
       <p
         className="mono font-bold leading-none"
-        style={{ fontSize: 22, marginTop: 4 }}
+        style={{ fontSize: "1.692rem", marginTop: 4 }}
       >
         {fmt.format(spent)}
       </p>
@@ -143,7 +143,7 @@ function SpentCol({ spent, budget, pct }: { spent: number; budget: number; pct: 
           }}
         />
       </div>
-      <p style={{ fontSize: 10.5, opacity: 0.85, marginTop: 4 }}>
+      <p style={{ fontSize: "0.808rem", opacity: 0.85, marginTop: 4 }}>
         {pct.toFixed(0)}% of {fmt.format(budget)} budget
       </p>
     </>
@@ -158,11 +158,11 @@ function NetWorthCol({ netWorth, hasAccounts }: { netWorth: number; hasAccounts:
       </p>
       <p
         className="mono font-bold leading-none"
-        style={{ fontSize: 22, marginTop: 4 }}
+        style={{ fontSize: "1.692rem", marginTop: 4 }}
       >
         {hasAccounts ? fmt.format(netWorth) : "—"}
       </p>
-      <p style={{ fontSize: 10.5, opacity: 0.85, marginTop: 6 }}>
+      <p style={{ fontSize: "0.808rem", opacity: 0.85, marginTop: 6 }}>
         {hasAccounts ? "assets minus liabilities" : "add accounts to track"}
       </p>
     </>

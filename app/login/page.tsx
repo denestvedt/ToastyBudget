@@ -22,11 +22,11 @@ export default function LoginPage() {
           </div>
           <h1
             className="font-bold block"
-            style={{ fontSize: 22, letterSpacing: "-0.02em", color: "var(--text)" }}
+            style={{ fontSize: "1.692rem", letterSpacing: "-0.02em", color: "var(--text)" }}
           >
             ToastyBudget
           </h1>
-          <p style={{ fontSize: 12, color: "var(--text-mute)", marginTop: 4 }}>
+          <p style={{ fontSize: "0.923rem", color: "var(--text-mute)", marginTop: 4 }}>
             Your household budget, under control
           </p>
         </div>

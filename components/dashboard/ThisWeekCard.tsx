@@ -51,11 +51,11 @@ export default function ThisWeekCard({ transactions }: Props) {
       }}
     >
       <div className="flex items-baseline justify-between" style={{ marginBottom: 14 }}>
-        <h3 className="font-bold" style={{ fontSize: 13, color: "var(--text)" }}>
+        <h3 className="font-bold" style={{ fontSize: "1rem", color: "var(--text)" }}>
           This Week
         </h3>
         {!isEmpty && (
-          <span className="mono" style={{ fontSize: 13, color: "var(--text-dim)" }}>
+          <span className="mono" style={{ fontSize: "1rem", color: "var(--text-dim)" }}>
             {fmt.format(weekTotal)}
           </span>
         )}
@@ -73,7 +73,7 @@ export default function ThisWeekCard({ transactions }: Props) {
           />
           <p
             className="text-center"
-            style={{ fontSize: 12, color: "var(--text-mute)" }}
+            style={{ fontSize: "0.923rem", color: "var(--text-mute)" }}
           >
             No spending this week yet.
           </p>
@@ -83,7 +83,7 @@ export default function ThisWeekCard({ transactions }: Props) {
                 key={date}
                 className="flex-1 text-center font-medium"
                 style={{
-                  fontSize: 10,
+                  fontSize: "0.769rem",
                   color: isToday ? "var(--accent)" : "var(--text-mute)",
                 }}
               >
@@ -125,7 +125,7 @@ export default function ThisWeekCard({ transactions }: Props) {
                 key={date}
                 className="flex-1 text-center font-medium"
                 style={{
-                  fontSize: 10,
+                  fontSize: "0.769rem",
                   color: isToday ? "var(--accent)" : "var(--text-mute)",
                 }}
               >

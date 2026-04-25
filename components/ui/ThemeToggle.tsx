@@ -52,7 +52,7 @@ export default function ThemeToggle() {
             onClick={() => select(value)}
             className="flex-1 py-2 text-center font-semibold transition-colors"
             style={{
-              fontSize: 12,
+              fontSize: "0.923rem",
               background: active
                 ? "color-mix(in srgb, var(--accent) 10%, var(--surface))"
                 : "var(--surface)",

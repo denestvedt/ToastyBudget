@@ -79,7 +79,7 @@ export default function TransactionTable({ transactions, categories }: Props) {
     );
 
   const thStyle = {
-    fontSize: 11,
+    fontSize: "0.846rem",
     fontWeight: 600,
     color: "var(--text-mute)",
     textTransform: "uppercase" as const,
@@ -92,7 +92,7 @@ export default function TransactionTable({ transactions, categories }: Props) {
     border: "1px solid var(--border)",
     borderRadius: "var(--r-input)",
     color: "var(--text)",
-    fontSize: 11,
+    fontSize: "0.846rem",
     padding: "2px 6px",
     outline: "none",
     width: "100%",
@@ -104,7 +104,7 @@ export default function TransactionTable({ transactions, categories }: Props) {
         <p
           className="rounded-card px-3 py-2"
           style={{
-            fontSize: 12,
+            fontSize: "0.923rem",
             color: "var(--bad)",
             background: "color-mix(in srgb, var(--bad) 10%, transparent)",
           }}
@@ -113,7 +113,7 @@ export default function TransactionTable({ transactions, categories }: Props) {
         </p>
       )}
 
-      <div className="flex items-center gap-4" style={{ fontSize: 12, color: "var(--text-dim)" }}>
+      <div className="flex items-center gap-4" style={{ fontSize: "0.923rem", color: "var(--text-dim)" }}>
         <span className="mono">{transactions.length} transactions</span>
         {uncategorized > 0 && (
           <span className="font-semibold" style={{ color: "var(--warn)" }}>
@@ -184,13 +184,13 @@ export default function TransactionTable({ transactions, categories }: Props) {
                 >
                   <td
                     className="py-2 px-3 mono whitespace-nowrap"
-                    style={{ fontSize: 11, color: "var(--text-mute)" }}
+                    style={{ fontSize: "0.846rem", color: "var(--text-mute)" }}
                   >
                     {tx.date}
                   </td>
                   <td
                     className="py-2 px-3 max-w-xs truncate"
-                    style={{ fontSize: 12.5, color: "var(--text)" }}
+                    style={{ fontSize: "0.962rem", color: "var(--text)" }}
                   >
                     {tx.description}
                   </td>
@@ -199,7 +199,7 @@ export default function TransactionTable({ transactions, categories }: Props) {
                       amount={Number(tx.amount)}
                       className="font-semibold"
                       style={{
-                        fontSize: 12.5,
+                        fontSize: "0.962rem",
                         color: Number(tx.amount) < 0 ? "var(--text)" : "var(--good)",
                       }}
                     />
@@ -235,7 +235,7 @@ export default function TransactionTable({ transactions, categories }: Props) {
                     <button
                       onClick={() => setDeleteId(tx.id)}
                       className="transition-colors"
-                      style={{ color: "var(--border)", fontSize: 14 }}
+                      style={{ color: "var(--border)", fontSize: "1.077rem" }}
                       onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--bad)"; }}
                       onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--border)"; }}
                       aria-label="Delete transaction"

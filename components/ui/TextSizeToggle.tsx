@@ -59,10 +59,10 @@ export default function TextSizeToggle() {
             }}
             aria-pressed={active}
           >
-            <p className="font-semibold" style={{ fontSize: 12, color: active ? "var(--accent)" : "var(--text)" }}>
+            <p className="font-semibold" style={{ fontSize: "0.923rem", color: active ? "var(--accent)" : "var(--text)" }}>
               {label}
             </p>
-            <p className="mono" style={{ fontSize: 10, color: "var(--text-mute)", marginTop: 1 }}>{sub}</p>
+            <p className="mono" style={{ fontSize: "0.769rem", color: "var(--text-mute)", marginTop: 1 }}>{sub}</p>
           </button>
         );
       })}

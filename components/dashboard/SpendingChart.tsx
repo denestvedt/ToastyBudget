@@ -37,27 +37,27 @@ export default function SpendingChart({ groups }: Props) {
           className="rounded-card p-4"
           style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
         >
-          <h3 className="font-bold mb-4" style={{ fontSize: 14, color: "var(--text)" }}>
+          <h3 className="font-bold mb-4" style={{ fontSize: "1.077rem", color: "var(--text)" }}>
             Budget vs. Spent by Group
           </h3>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={chartData} margin={{ top: 0, right: 0, left: 10, bottom: 0 }}>
               <XAxis
                 dataKey="name"
-                tick={{ fontSize: 11, fill: "var(--text-mute)" }}
+                tick={{ fontSize: "0.846rem", fill: "var(--text-mute)" }}
                 axisLine={false}
                 tickLine={false}
               />
               <YAxis
                 tickFormatter={(v) => USD.format(v)}
-                tick={{ fontSize: 11, fill: "var(--text-mute)" }}
+                tick={{ fontSize: "0.846rem", fill: "var(--text-mute)" }}
                 axisLine={false}
                 tickLine={false}
               />
               <Tooltip
                 formatter={(value) => (typeof value === "number" ? USD.format(value) : value)}
                 contentStyle={{
-                  fontSize: 12,
+                  fontSize: "0.923rem",
                   background: "var(--surface)",
                   border: "1px solid var(--border)",
                   borderRadius: 8,
@@ -84,7 +84,7 @@ export default function SpendingChart({ groups }: Props) {
           className="px-4 py-3 flex items-center justify-between"
           style={{ borderBottom: "1px solid var(--border)" }}
         >
-          <h3 className="font-bold" style={{ fontSize: 14, color: "var(--text)" }}>
+          <h3 className="font-bold" style={{ fontSize: "1.077rem", color: "var(--text)" }}>
             Budget by Category
           </h3>
           <span className="eyebrow">
@@ -105,14 +105,14 @@ export default function SpendingChart({ groups }: Props) {
               }}
             >
               <div className="flex items-center justify-between mb-1.5">
-                <span className="font-semibold" style={{ fontSize: 12.5, color: "var(--text)" }}>
+                <span className="font-semibold" style={{ fontSize: "0.962rem", color: "var(--text)" }}>
                   {g.icon && <span className="mr-1">{g.icon}</span>}
                   {g.name}
                 </span>
                 <span
                   className="mono font-semibold"
                   style={{
-                    fontSize: 12.5,
+                    fontSize: "0.962rem",
                     color: isOver ? "var(--bad)" : "var(--text)",
                   }}
                 >
@@ -125,7 +125,7 @@ export default function SpendingChart({ groups }: Props) {
               </div>
               <ProgressBar value={g.total_spent} max={g.total_budget} height={5} />
               {isOver && (
-                <p className="mt-1" style={{ fontSize: 11, color: "var(--bad)" }}>
+                <p className="mt-1" style={{ fontSize: "0.846rem", color: "var(--bad)" }}>
                   Over by <AmountDisplay amount={-remaining} />
                 </p>
               )}

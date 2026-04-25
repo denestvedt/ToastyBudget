@@ -25,12 +25,12 @@ export default async function BudgetPage({
           <p className="eyebrow mb-0.5">{formatMonthLabel(month)}</p>
           <h1
             className="font-bold"
-            style={{ fontSize: 22, letterSpacing: "-0.02em", color: "var(--text)" }}
+            style={{ fontSize: "1.692rem", letterSpacing: "-0.02em", color: "var(--text)" }}
           >
             Budget
           </h1>
           {totalCategories > 0 && (
-            <p style={{ fontSize: 12, color: "var(--text-mute)", marginTop: 2 }}>
+            <p style={{ fontSize: "0.923rem", color: "var(--text-mute)", marginTop: 2 }}>
               {groups.length} group{groups.length !== 1 ? "s" : ""} · {totalCategories} categories
             </p>
           )}

@@ -28,12 +28,12 @@ export default async function TransactionsPage({
           <p className="eyebrow mb-0.5">{formatMonthLabel(month)}</p>
           <h1
             className="font-bold"
-            style={{ fontSize: 22, letterSpacing: "-0.02em", color: "var(--text)" }}
+            style={{ fontSize: "1.692rem", letterSpacing: "-0.02em", color: "var(--text)" }}
           >
             Transactions
           </h1>
           {transactions.length > 0 && (
-            <p style={{ fontSize: 12, color: "var(--text-mute)", marginTop: 2 }}>
+            <p style={{ fontSize: "0.923rem", color: "var(--text-mute)", marginTop: 2 }}>
               {transactions.length} this month · {fmt.format(total)} total
             </p>
           )}

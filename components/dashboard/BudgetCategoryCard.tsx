@@ -27,10 +27,10 @@ export default function BudgetCategoryCard({ groups }: Props) {
         style={{ padding: "14px 18px", borderBottom: "1px solid var(--border)" }}
       >
         <div>
-          <h3 className="font-bold" style={{ fontSize: 14, color: "var(--text)", letterSpacing: "-0.01em" }}>
+          <h3 className="font-bold" style={{ fontSize: "1.077rem", color: "var(--text)", letterSpacing: "-0.01em" }}>
             Budget by Category
           </h3>
-          <p style={{ fontSize: 11, color: "var(--text-mute)", marginTop: 2 }}>
+          <p style={{ fontSize: "0.846rem", color: "var(--text-mute)", marginTop: 2 }}>
             {activeGroups.length === 0
               ? "Set up envelopes to track your spending"
               : `${over > 0 ? `${over} over · ` : ""}${onTrack} on track`}
@@ -41,7 +41,7 @@ export default function BudgetCategoryCard({ groups }: Props) {
             href="/settings"
             className="transition-colors"
             style={{
-              fontSize: 11.5,
+              fontSize: "0.885rem",
               fontWeight: 600,
               color: "var(--text-dim)",
               padding: "5px 10px",
@@ -71,10 +71,10 @@ export default function BudgetCategoryCard({ groups }: Props) {
             <Wallet size={20} strokeWidth={1.75} />
           </div>
           <div>
-            <p style={{ fontSize: 14, fontWeight: 700, color: "var(--text)" }}>
+            <p style={{ fontSize: "1.077rem", fontWeight: 700, color: "var(--text)" }}>
               No categories yet
             </p>
-            <p style={{ fontSize: 12, color: "var(--text-dim)", marginTop: 4, maxWidth: 280 }}>
+            <p style={{ fontSize: "0.923rem", color: "var(--text-dim)", marginTop: 4, maxWidth: 280 }}>
               Add a few category groups in Settings to start tracking how
               you&apos;re spending each month.
             </p>
@@ -85,7 +85,7 @@ export default function BudgetCategoryCard({ groups }: Props) {
             style={{
               gap: 6,
               padding: "8px 14px",
-              fontSize: 12.5,
+              fontSize: "0.962rem",
               fontWeight: 600,
               background: "var(--accent)",
               color: "var(--bg)",
@@ -129,14 +129,14 @@ export default function BudgetCategoryCard({ groups }: Props) {
                 <div className="flex items-baseline justify-between" style={{ marginBottom: 5 }}>
                   <span
                     className="font-semibold truncate"
-                    style={{ fontSize: 12.5, color: "var(--text)" }}
+                    style={{ fontSize: "0.962rem", color: "var(--text)" }}
                   >
                     {g.name}
                   </span>
                   <span
                     className="mono shrink-0"
                     style={{
-                      fontSize: 11.5,
+                      fontSize: "0.885rem",
                       color: isOver ? "var(--bad)" : "var(--text)",
                       fontWeight: 600,
                       marginLeft: 8,
