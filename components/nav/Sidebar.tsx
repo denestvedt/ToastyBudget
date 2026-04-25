@@ -7,6 +7,7 @@ import { ChevronLeft, ChevronRight, LogOut } from "lucide-react";
 import { NAV_LINKS } from "./NavLinks";
 import { createClient } from "@/lib/supabase/client";
 import { getMonthParam } from "@/lib/month";
+import ToastMark from "@/components/ui/ToastMark";
 
 interface Props {
   userEmail?: string;
@@ -57,27 +58,25 @@ export default function Sidebar({ userEmail, userName, dailyPace }: Props) {
         flexShrink: 0,
       }}
     >
-      {/* Logo row */}
+      {/* Logo row — gradient tile + ToastMark SVG */}
       <div className="flex items-center gap-2.5 mb-6">
         <div
-          className="flex items-center justify-center shrink-0 rounded-lg text-white text-base"
+          className="flex items-center justify-center shrink-0 rounded-lg"
           style={{
             width: 28,
             height: 28,
             background: "linear-gradient(135deg, var(--accent-2), var(--accent))",
           }}
         >
-          🍞
+          <ToastMark size={18} color="#FFFCF5" glow="#C94F1A" />
         </div>
         {!collapsed && (
-          <div className="min-w-0">
-            <p
-              className="font-bold leading-none truncate"
-              style={{ fontSize: 14, letterSpacing: "-0.02em", color: "var(--text)" }}
-            >
-              ToastyBudget
-            </p>
-          </div>
+          <p
+            className="font-bold leading-none truncate"
+            style={{ fontSize: 14, letterSpacing: "-0.02em", color: "var(--text)" }}
+          >
+            ToastyBudget
+          </p>
         )}
       </div>
 
@@ -89,32 +88,30 @@ export default function Sidebar({ userEmail, userName, dailyPace }: Props) {
             <Link
               key={href}
               href={buildHref(href)}
-              className={`flex items-center rounded-[7px] transition-colors duration-120 ${
+              className={`flex items-center rounded-[7px] transition-colors duration-150 ${
                 collapsed ? "justify-center px-2 py-2" : "gap-2.5 px-3 py-2"
               } ${isActive ? "nav-active" : "nav-inactive"}`}
               title={collapsed ? label : undefined}
             >
               <Icon size={15} strokeWidth={1.75} className="shrink-0" />
-              {!collapsed && (
-                <span style={{ fontSize: 12.5 }}>{label}</span>
-              )}
+              {!collapsed && <span style={{ fontSize: 12.5 }}>{label}</span>}
             </Link>
           );
         })}
       </nav>
 
-      {/* Daily Pace mini-card */}
+      {/* Daily Pace mini-card — uses cream bg (var(--bg)) so it pops off the surface sidebar */}
       {!collapsed && dailyPace != null && (
         <div
           className="rounded-card px-3 py-2.5 mb-3"
-          style={{ background: "var(--surface-2)", border: "1px solid var(--border)" }}
+          style={{ background: "var(--bg)", border: "1px solid var(--border)" }}
         >
           <p className="eyebrow mb-1">Daily Pace</p>
           <p
             className="mono font-bold leading-none"
             style={{
               fontSize: 18,
-              color: dailyPace >= 0 ? "var(--text)" : "var(--bad)",
+              color: dailyPace >= 0 ? "var(--good)" : "var(--bad)",
             }}
           >
             {paceFmt.format(Math.abs(dailyPace))}
@@ -122,7 +119,7 @@ export default function Sidebar({ userEmail, userName, dailyPace }: Props) {
               /day
             </span>
           </p>
-          <p style={{ fontSize: 10, color: "var(--text-mute)", marginTop: 3 }}>
+          <p style={{ fontSize: 10, color: "var(--text-dim)", marginTop: 3 }}>
             {dailyPace >= 0 ? "remaining budget" : "over budget"}
           </p>
         </div>
@@ -136,7 +133,7 @@ export default function Sidebar({ userEmail, userName, dailyPace }: Props) {
         {!collapsed && (
           <div className="flex items-center gap-2 px-1 mb-1">
             <div
-              className="flex items-center justify-center rounded-full shrink-0 font-semibold text-white shrink-0"
+              className="flex items-center justify-center rounded-full shrink-0 font-semibold text-white"
               style={{
                 width: 26,
                 height: 26,
