@@ -123,7 +123,7 @@ export default function CsvImport() {
           background: "var(--accent)",
           color: "var(--bg)",
           border: "none",
-          fontSize: 12.5,
+          fontSize: "0.962rem",
           fontWeight: 600,
           padding: "7px 14px",
           cursor: "pointer",
@@ -143,21 +143,21 @@ export default function CsvImport() {
             }}
           >
             <div className="flex items-center justify-between mb-4">
-              <h2 className="font-semibold" style={{ fontSize: 15 }}>Import Transactions</h2>
+              <h2 className="font-semibold" style={{ fontSize: "1.154rem" }}>Import Transactions</h2>
               <button
                 onClick={handleClose}
-                style={{ color: "var(--text-mute)", background: "none", border: "none", cursor: "pointer", fontSize: 16 }}
+                style={{ color: "var(--text-mute)", background: "none", border: "none", cursor: "pointer", fontSize: "1.231rem" }}
               >
                 ✕
               </button>
             </div>
 
-            <p style={{ fontSize: 12, color: "var(--text-dim)", marginBottom: 12 }}>
+            <p style={{ fontSize: "0.923rem", color: "var(--text-dim)", marginBottom: 12 }}>
               CSV format:{" "}
               <code
                 className="mono"
                 style={{
-                  fontSize: 11,
+                  fontSize: "0.846rem",
                   background: "var(--surface-2)",
                   padding: "1px 5px",
                   borderRadius: 4,
@@ -175,22 +175,22 @@ export default function CsvImport() {
               accept=".csv,text/csv"
               onChange={handleFile}
               className="block w-full"
-              style={{ fontSize: 12, color: "var(--text-dim)" }}
+              style={{ fontSize: "0.923rem", color: "var(--text-dim)" }}
             />
 
             {parseError && (
-              <p className="mt-3" style={{ fontSize: 12, color: "var(--bad)" }}>{parseError}</p>
+              <p className="mt-3" style={{ fontSize: "0.923rem", color: "var(--bad)" }}>{parseError}</p>
             )}
 
             {preview.length > 0 && (
               <div className="mt-4">
-                <p className="font-medium mb-2" style={{ fontSize: 12, color: "var(--text)" }}>
+                <p className="font-medium mb-2" style={{ fontSize: "0.923rem", color: "var(--text)" }}>
                   {preview.length} rows ready to import
                   {preview.length > 5 && " (showing first 5)"}
                 </p>
                 <div
                   className="overflow-x-auto rounded-input"
-                  style={{ border: "1px solid var(--border)", fontSize: 11 }}
+                  style={{ border: "1px solid var(--border)", fontSize: "0.846rem" }}
                 >
                   <table className="w-full">
                     <thead style={{ background: "var(--surface-2)" }}>
@@ -217,7 +217,7 @@ export default function CsvImport() {
             )}
 
             {importError && (
-              <p className="mt-3" style={{ fontSize: 12, color: "var(--bad)" }}>{importError}</p>
+              <p className="mt-3" style={{ fontSize: "0.923rem", color: "var(--bad)" }}>{importError}</p>
             )}
 
             <div className="mt-5 flex justify-end gap-2">
@@ -228,7 +228,7 @@ export default function CsvImport() {
                   border: "1px solid var(--border)",
                   background: "transparent",
                   color: "var(--text)",
-                  fontSize: 12,
+                  fontSize: "0.923rem",
                   fontWeight: 600,
                   padding: "6px 14px",
                   cursor: "pointer",
@@ -244,7 +244,7 @@ export default function CsvImport() {
                   background: "var(--accent)",
                   color: "var(--bg)",
                   border: "none",
-                  fontSize: 12,
+                  fontSize: "0.923rem",
                   fontWeight: 600,
                   padding: "6px 14px",
                   cursor: preview.length === 0 ? "not-allowed" : "pointer",

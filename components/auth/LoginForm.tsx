@@ -51,7 +51,7 @@ export default function LoginForm() {
     border: "1px solid var(--border)",
     borderRadius: "var(--r-input)",
     color: "var(--text)",
-    fontSize: 13,
+    fontSize: "1rem",
     padding: "9px 12px",
     outline: "none",
     width: "100%",
@@ -63,7 +63,7 @@ export default function LoginForm() {
         <label
           htmlFor="email"
           className="font-semibold"
-          style={{ fontSize: 12, color: "var(--text-dim)" }}
+          style={{ fontSize: "0.923rem", color: "var(--text-dim)" }}
         >
           Email
         </label>
@@ -82,7 +82,7 @@ export default function LoginForm() {
         <label
           htmlFor="password"
           className="font-semibold"
-          style={{ fontSize: 12, color: "var(--text-dim)" }}
+          style={{ fontSize: "0.923rem", color: "var(--text-dim)" }}
         >
           Password
         </label>
@@ -98,10 +98,10 @@ export default function LoginForm() {
       </div>
 
       {error && (
-        <p style={{ fontSize: 12, color: "var(--bad)" }}>{error}</p>
+        <p style={{ fontSize: "0.923rem", color: "var(--bad)" }}>{error}</p>
       )}
       {message && (
-        <p style={{ fontSize: 12, color: "var(--good)" }}>{message}</p>
+        <p style={{ fontSize: "0.923rem", color: "var(--good)" }}>{message}</p>
       )}
 
       <button
@@ -112,7 +112,7 @@ export default function LoginForm() {
           background: "var(--accent)",
           color: "var(--bg)",
           border: "none",
-          fontSize: 13,
+          fontSize: "1rem",
           fontWeight: 600,
           padding: "10px 16px",
           cursor: loading ? "not-allowed" : "pointer",
@@ -122,7 +122,7 @@ export default function LoginForm() {
         {loading ? "…" : mode === "signin" ? "Sign In" : "Create Account"}
       </button>
 
-      <p className="text-center" style={{ fontSize: 12, color: "var(--text-dim)" }}>
+      <p className="text-center" style={{ fontSize: "0.923rem", color: "var(--text-dim)" }}>
         {mode === "signin" ? "Don't have an account? " : "Already have an account? "}
         <button
           type="button"

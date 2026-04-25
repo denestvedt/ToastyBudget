@@ -191,7 +191,7 @@ export default function SettingsEditor({ groups, categories }: Props) {
     border: "1px solid var(--border)",
     borderRadius: "var(--r-input)",
     color: "var(--text)",
-    fontSize: 12.5,
+    fontSize: "0.962rem",
     padding: "6px 10px",
     outline: "none",
     width: "100%",
@@ -202,7 +202,7 @@ export default function SettingsEditor({ groups, categories }: Props) {
     color: "var(--bg)",
     border: "none",
     borderRadius: "var(--r-button)",
-    fontSize: 12,
+    fontSize: "0.923rem",
     fontWeight: 600,
     padding: "5px 12px",
     cursor: "pointer",
@@ -214,7 +214,7 @@ export default function SettingsEditor({ groups, categories }: Props) {
     color: "var(--text)",
     border: "1px solid var(--border)",
     borderRadius: "var(--r-button)",
-    fontSize: 12,
+    fontSize: "0.923rem",
     fontWeight: 600,
     padding: "5px 12px",
     cursor: "pointer",
@@ -222,7 +222,7 @@ export default function SettingsEditor({ groups, categories }: Props) {
   };
 
   const btnDanger = {
-    fontSize: 12,
+    fontSize: "0.923rem",
     color: "var(--bad)",
     background: "none",
     border: "none",
@@ -235,7 +235,7 @@ export default function SettingsEditor({ groups, categories }: Props) {
         <p
           className="rounded-card px-3 py-2"
           style={{
-            fontSize: 12,
+            fontSize: "0.923rem",
             color: "var(--bad)",
             background: "color-mix(in srgb, var(--bad) 10%, transparent)",
           }}
@@ -247,7 +247,7 @@ export default function SettingsEditor({ groups, categories }: Props) {
       {/* Category Groups */}
       <section>
         <div className="flex items-center justify-between mb-3">
-          <h2 className="font-semibold" style={{ fontSize: 15, color: "var(--text)" }}>
+          <h2 className="font-semibold" style={{ fontSize: "1.154rem", color: "var(--text)" }}>
             Category Groups
           </h2>
           {newGroup === null && (
@@ -331,7 +331,7 @@ export default function SettingsEditor({ groups, categories }: Props) {
                     </>
                   ) : (
                     <>
-                      <span className="font-semibold flex-1" style={{ fontSize: 13, color: "var(--text)" }}>
+                      <span className="font-semibold flex-1" style={{ fontSize: "1rem", color: "var(--text)" }}>
                         {group.icon && <span className="mr-1">{group.icon}</span>}
                         {group.name}
                       </span>
@@ -397,7 +397,7 @@ export default function SettingsEditor({ groups, categories }: Props) {
                             </div>
                             <div
                               className="flex flex-wrap gap-4"
-                              style={{ fontSize: 12, color: "var(--text-dim)" }}
+                              style={{ fontSize: "0.923rem", color: "var(--text-dim)" }}
                             >
                               <label className="flex items-center gap-1.5">
                                 <input
@@ -432,17 +432,17 @@ export default function SettingsEditor({ groups, categories }: Props) {
                           </div>
                         ) : (
                           <div className="flex items-center gap-2">
-                            <span className="flex-1" style={{ fontSize: 12.5, color: "var(--text)" }}>
+                            <span className="flex-1" style={{ fontSize: "0.962rem", color: "var(--text)" }}>
                               {cat.name}
                             </span>
-                            <span className="mono" style={{ fontSize: 11, color: "var(--text-mute)" }}>
+                            <span className="mono" style={{ fontSize: "0.846rem", color: "var(--text-mute)" }}>
                               ${Number(cat.budget_amount).toFixed(2)}
                             </span>
                             {cat.is_fixed && (
-                              <span style={{ fontSize: 10, color: "var(--text-mute)" }}>fixed</span>
+                              <span style={{ fontSize: "0.769rem", color: "var(--text-mute)" }}>fixed</span>
                             )}
                             {cat.is_offledger && (
-                              <span style={{ fontSize: 10, color: "var(--text-mute)" }}>off-ledger</span>
+                              <span style={{ fontSize: "0.769rem", color: "var(--text-mute)" }}>off-ledger</span>
                             )}
                             <button
                               onClick={() => handleMoveCategory(cat.id, group.id, -1)}
@@ -500,7 +500,7 @@ export default function SettingsEditor({ groups, categories }: Props) {
                           />
                         </div>
                       </div>
-                      <div className="flex flex-wrap gap-4" style={{ fontSize: 12, color: "var(--text-dim)" }}>
+                      <div className="flex flex-wrap gap-4" style={{ fontSize: "0.923rem", color: "var(--text-dim)" }}>
                         <label className="flex items-center gap-1.5">
                           <input
                             type="checkbox"
@@ -532,7 +532,7 @@ export default function SettingsEditor({ groups, categories }: Props) {
                     <div className="px-3 py-2">
                       <button
                         onClick={() => { setNewCatGroupId(group.id); setNewCatForm(emptyCatForm()); }}
-                        style={{ fontSize: 12, color: "var(--accent)", fontWeight: 600, background: "none", border: "none", cursor: "pointer" }}
+                        style={{ fontSize: "0.923rem", color: "var(--accent)", fontWeight: 600, background: "none", border: "none", cursor: "pointer" }}
                       >
                         + Add Category
                       </button>

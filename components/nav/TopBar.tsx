@@ -46,7 +46,7 @@ export default function TopBar({ userName }: Props) {
       <div>
         <span
           className="font-bold md:hidden"
-          style={{ color: "var(--text)", fontSize: 14, letterSpacing: "-0.02em" }}
+          style={{ color: "var(--text)", fontSize: "1.077rem", letterSpacing: "-0.02em" }}
         >
           ToastyBudget
         </span>
@@ -54,7 +54,7 @@ export default function TopBar({ userName }: Props) {
           {dateStr && <p className="eyebrow" style={{ marginBottom: 3 }}>{dateStr}</p>}
           <p
             className="font-bold leading-none"
-            style={{ fontSize: 22, letterSpacing: "-0.02em", color: "var(--text)" }}
+            style={{ fontSize: "1.692rem", letterSpacing: "-0.02em", color: "var(--text)" }}
           >
             {greeting}
             {firstName ? `, ${firstName}` : ""}
@@ -75,7 +75,7 @@ export default function TopBar({ userName }: Props) {
             borderRadius: 8,
             background: "var(--surface)",
             color: "var(--text-mute)",
-            fontSize: 11.5,
+            fontSize: "0.885rem",
             fontFamily: "inherit",
             cursor: "pointer",
           }}
@@ -85,7 +85,7 @@ export default function TopBar({ userName }: Props) {
           <kbd
             className="mono"
             style={{
-              fontSize: 10,
+              fontSize: "0.769rem",
               padding: "1px 5px",
               border: "1px solid var(--border)",
               borderRadius: 4,
@@ -107,7 +107,7 @@ export default function TopBar({ userName }: Props) {
           style={{
             gap: 6,
             padding: "7px 14px",
-            fontSize: 12.5,
+            fontSize: "0.962rem",
             fontWeight: 600,
             background: "var(--accent)",
             color: "var(--bg)",

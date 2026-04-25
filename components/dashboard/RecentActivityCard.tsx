@@ -21,7 +21,7 @@ export default function RecentActivityCard({ transactions }: Props) {
         className="px-5 py-3.5"
         style={{ borderBottom: "1px solid var(--border)" }}
       >
-        <h3 className="font-bold" style={{ fontSize: 13, color: "var(--text)" }}>
+        <h3 className="font-bold" style={{ fontSize: "1rem", color: "var(--text)" }}>
           Recent Activity
         </h3>
       </div>
@@ -29,7 +29,7 @@ export default function RecentActivityCard({ transactions }: Props) {
       {recent.length === 0 ? (
         <p
           className="px-5 py-6 text-center"
-          style={{ fontSize: 12, color: "var(--text-mute)" }}
+          style={{ fontSize: "0.923rem", color: "var(--text-mute)" }}
         >
           No transactions this month
         </p>
@@ -62,7 +62,7 @@ export default function RecentActivityCard({ transactions }: Props) {
                   width: 28,
                   height: 28,
                   background: "color-mix(in srgb, var(--accent) 10%, var(--surface))",
-                  fontSize: 11,
+                  fontSize: "0.846rem",
                   color: "var(--accent)",
                 }}
               >
@@ -73,7 +73,7 @@ export default function RecentActivityCard({ transactions }: Props) {
               <div className="flex-1 min-w-0">
                 <p
                   className="font-semibold truncate"
-                  style={{ fontSize: 12.5, color: "var(--text)" }}
+                  style={{ fontSize: "0.962rem", color: "var(--text)" }}
                 >
                   {tx.description}
                 </p>
@@ -89,7 +89,7 @@ export default function RecentActivityCard({ transactions }: Props) {
                 <p
                   className="mono font-semibold"
                   style={{
-                    fontSize: 12.5,
+                    fontSize: "0.962rem",
                     color: isIncome ? "var(--good)" : "var(--text)",
                   }}
                 >
@@ -98,7 +98,7 @@ export default function RecentActivityCard({ transactions }: Props) {
                 </p>
                 <p
                   style={{
-                    fontSize: 10,
+                    fontSize: "0.769rem",
                     color: "var(--text-mute)",
                     marginTop: 1,
                   }}

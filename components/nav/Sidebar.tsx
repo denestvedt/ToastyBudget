@@ -73,7 +73,7 @@ export default function Sidebar({ userEmail, userName, dailyPace }: Props) {
         {!collapsed && (
           <p
             className="font-bold leading-none truncate"
-            style={{ fontSize: 14, letterSpacing: "-0.02em", color: "var(--text)" }}
+            style={{ fontSize: "1.077rem", letterSpacing: "-0.02em", color: "var(--text)" }}
           >
             ToastyBudget
           </p>
@@ -90,16 +90,16 @@ export default function Sidebar({ userEmail, userName, dailyPace }: Props) {
           <p
             className="mono font-bold leading-none"
             style={{
-              fontSize: 18,
+              fontSize: "1.385rem",
               color: dailyPace >= 0 ? "var(--good)" : "var(--bad)",
             }}
           >
             {paceFmt.format(Math.abs(dailyPace))}
-            <span style={{ fontSize: 11, fontWeight: 400, color: "var(--text-mute)" }}>
+            <span style={{ fontSize: "0.846rem", fontWeight: 400, color: "var(--text-mute)" }}>
               /day
             </span>
           </p>
-          <p style={{ fontSize: 10, color: "var(--text-dim)", marginTop: 3 }}>
+          <p style={{ fontSize: "0.769rem", color: "var(--text-dim)", marginTop: 3 }}>
             {dailyPace >= 0 ? "remaining budget" : "over budget"}
           </p>
         </div>
@@ -119,7 +119,7 @@ export default function Sidebar({ userEmail, userName, dailyPace }: Props) {
               title={collapsed ? label : undefined}
             >
               <Icon size={15} strokeWidth={1.75} className="shrink-0" />
-              {!collapsed && <span style={{ fontSize: 12.5 }}>{label}</span>}
+              {!collapsed && <span style={{ fontSize: "0.962rem" }}>{label}</span>}
             </Link>
           );
         })}
@@ -138,7 +138,7 @@ export default function Sidebar({ userEmail, userName, dailyPace }: Props) {
                 width: 26,
                 height: 26,
                 background: "var(--accent-2)",
-                fontSize: 10,
+                fontSize: "0.769rem",
               }}
             >
               {initials}
@@ -146,14 +146,14 @@ export default function Sidebar({ userEmail, userName, dailyPace }: Props) {
             <div className="min-w-0">
               <p
                 className="truncate font-semibold"
-                style={{ fontSize: 11.5, color: "var(--text)", lineHeight: 1.2 }}
+                style={{ fontSize: "0.885rem", color: "var(--text)", lineHeight: 1.2 }}
               >
                 {displayName}
               </p>
               {userEmail && (
                 <p
                   className="truncate"
-                  style={{ fontSize: 10, color: "var(--text-mute)", lineHeight: 1.3 }}
+                  style={{ fontSize: "0.769rem", color: "var(--text-mute)", lineHeight: 1.3 }}
                 >
                   {userEmail}
                 </p>
@@ -170,7 +170,7 @@ export default function Sidebar({ userEmail, userName, dailyPace }: Props) {
           title={collapsed ? "Sign out" : undefined}
         >
           <LogOut size={15} strokeWidth={1.75} className="shrink-0" />
-          {!collapsed && <span style={{ fontSize: 12.5 }}>Sign Out</span>}
+          {!collapsed && <span style={{ fontSize: "0.962rem" }}>Sign Out</span>}
         </button>
 
         <button
@@ -185,7 +185,7 @@ export default function Sidebar({ userEmail, userName, dailyPace }: Props) {
           ) : (
             <>
               <ChevronLeft size={15} strokeWidth={1.75} />
-              <span style={{ fontSize: 12.5 }}>Collapse</span>
+              <span style={{ fontSize: "0.962rem" }}>Collapse</span>
             </>
           )}
         </button>

@@ -39,7 +39,7 @@ export default function CopyMonthButton({ fromMonth, toMonth }: Props) {
           border: "1px solid var(--border)",
           background: "transparent",
           color: "var(--text)",
-          fontSize: 12,
+          fontSize: "0.923rem",
           fontWeight: 600,
           padding: "6px 14px",
           cursor: "pointer",
@@ -49,9 +49,9 @@ export default function CopyMonthButton({ fromMonth, toMonth }: Props) {
         Copy from {formatMonthLabel(fromMonth)}
       </button>
       {copied && (
-        <p style={{ fontSize: 11, color: "var(--good)" }}>Budget amounts copied.</p>
+        <p style={{ fontSize: "0.846rem", color: "var(--good)" }}>Budget amounts copied.</p>
       )}
-      {error && <p style={{ fontSize: 11, color: "var(--bad)" }}>{error}</p>}
+      {error && <p style={{ fontSize: "0.846rem", color: "var(--bad)" }}>{error}</p>}
     </div>
   );
 }

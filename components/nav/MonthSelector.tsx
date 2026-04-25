@@ -32,7 +32,7 @@ export default function MonthSelector() {
       </button>
       <span
         className="mono text-center"
-        style={{ fontSize: 12, fontWeight: 500, color: "var(--text)", minWidth: 120, padding: "0 4px" }}
+        style={{ fontSize: "0.923rem", fontWeight: 500, color: "var(--text)", minWidth: 120, padding: "0 4px" }}
       >
         {formatMonthLabel(month)}
       </span>

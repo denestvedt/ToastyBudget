@@ -17,11 +17,11 @@ export default async function SettingsPage() {
       <div className="mb-5">
         <h1
           className="font-bold"
-          style={{ fontSize: 22, letterSpacing: "-0.02em", color: "var(--text)" }}
+          style={{ fontSize: "1.692rem", letterSpacing: "-0.02em", color: "var(--text)" }}
         >
           Settings
         </h1>
-        <p style={{ fontSize: 12, color: "var(--text-mute)", marginTop: 2 }}>
+        <p style={{ fontSize: "0.923rem", color: "var(--text-mute)", marginTop: 2 }}>
           Category groups, budget defaults, and more
         </p>
       </div>
@@ -35,7 +35,7 @@ export default async function SettingsPage() {
         >
           {/* Theme */}
           <div className="p-4">
-            <p className="font-semibold mb-2.5" style={{ fontSize: 13, color: "var(--text)" }}>
+            <p className="font-semibold mb-2.5" style={{ fontSize: "1rem", color: "var(--text)" }}>
               Theme
             </p>
             <ThemeToggle />
@@ -43,10 +43,10 @@ export default async function SettingsPage() {
 
           {/* Font */}
           <div className="p-4" style={{ borderTop: "1px solid var(--border)" }}>
-            <p className="font-semibold mb-1" style={{ fontSize: 13, color: "var(--text)" }}>
+            <p className="font-semibold mb-1" style={{ fontSize: "1rem", color: "var(--text)" }}>
               Font
             </p>
-            <p className="mb-2.5" style={{ fontSize: 11, color: "var(--text-mute)" }}>
+            <p className="mb-2.5" style={{ fontSize: "0.846rem", color: "var(--text-mute)" }}>
               Toasty Warm uses Inter — a clean, modern typeface designed for screens.
             </p>
             <FontToggle />
@@ -54,10 +54,10 @@ export default async function SettingsPage() {
 
           {/* Text size */}
           <div className="p-4" style={{ borderTop: "1px solid var(--border)" }}>
-            <p className="font-semibold mb-1" style={{ fontSize: 13, color: "var(--text)" }}>
+            <p className="font-semibold mb-1" style={{ fontSize: "1rem", color: "var(--text)" }}>
               Text Size
             </p>
-            <p className="mb-2.5" style={{ fontSize: 11, color: "var(--text-mute)" }}>
+            <p className="mb-2.5" style={{ fontSize: "0.846rem", color: "var(--text-mute)" }}>
               Scales the entire interface. Default matches the Toasty Warm design spec.
             </p>
             <TextSizeToggle />

@@ -122,7 +122,7 @@ export default function AccountsEditor({ accounts }: Props) {
     border: "1px solid var(--border)",
     borderRadius: "var(--r-input)",
     color: "var(--text)",
-    fontSize: 12.5,
+    fontSize: "0.962rem",
     padding: "6px 10px",
     outline: "none",
     width: "100%",
@@ -133,7 +133,7 @@ export default function AccountsEditor({ accounts }: Props) {
     color: "var(--bg)",
     border: "none",
     borderRadius: "var(--r-button)",
-    fontSize: 12,
+    fontSize: "0.923rem",
     fontWeight: 600,
     padding: "5px 12px",
     cursor: "pointer",
@@ -145,7 +145,7 @@ export default function AccountsEditor({ accounts }: Props) {
     color: "var(--text)",
     border: "1px solid var(--border)",
     borderRadius: "var(--r-button)",
-    fontSize: 12,
+    fontSize: "0.923rem",
     fontWeight: 600,
     padding: "5px 12px",
     cursor: "pointer",
@@ -158,7 +158,7 @@ export default function AccountsEditor({ accounts }: Props) {
         <p
           className="rounded-card px-3 py-2"
           style={{
-            fontSize: 12,
+            fontSize: "0.923rem",
             color: "var(--bad)",
             background: "color-mix(in srgb, var(--bad) 10%, transparent)",
           }}
@@ -183,7 +183,7 @@ export default function AccountsEditor({ accounts }: Props) {
               <AmountDisplay
                 amount={value}
                 className="mt-1 font-bold block"
-                style={{ fontSize: 18, color }}
+                style={{ fontSize: "1.385rem", color }}
               />
             </div>
           ))}
@@ -211,16 +211,16 @@ export default function AccountsEditor({ accounts }: Props) {
               }}
             >
               <div>
-                <p className="font-semibold" style={{ fontSize: 13, color: "var(--text)" }}>
+                <p className="font-semibold" style={{ fontSize: "1rem", color: "var(--text)" }}>
                   {group.label}
                 </p>
-                <p style={{ fontSize: 11, color: "var(--text-mute)" }}>{group.description}</p>
+                <p style={{ fontSize: "0.846rem", color: "var(--text-mute)" }}>{group.description}</p>
               </div>
               {groupAccounts.length > 0 && (
                 <AmountDisplay
                   amount={groupTotal}
                   className="font-semibold"
-                  style={{ fontSize: 13, color: "var(--text)" }}
+                  style={{ fontSize: "1rem", color: "var(--text)" }}
                 />
               )}
             </div>
@@ -288,10 +288,10 @@ export default function AccountsEditor({ accounts }: Props) {
                     ) : (
                       <div className="flex items-center gap-3">
                         <div className="flex-1">
-                          <p className="font-medium" style={{ fontSize: 12.5, color: "var(--text)" }}>
+                          <p className="font-medium" style={{ fontSize: "0.962rem", color: "var(--text)" }}>
                             {account.name}
                           </p>
-                          <p className="capitalize" style={{ fontSize: 11, color: "var(--text-mute)" }}>
+                          <p className="capitalize" style={{ fontSize: "0.846rem", color: "var(--text-mute)" }}>
                             {account.type}
                           </p>
                         </div>
@@ -299,14 +299,14 @@ export default function AccountsEditor({ accounts }: Props) {
                           amount={Number(account.balance)}
                           className="font-semibold"
                           style={{
-                            fontSize: 13,
+                            fontSize: "1rem",
                             color: Number(account.balance) < 0 ? "var(--bad)" : "var(--text)",
                           }}
                         />
                         <button onClick={() => startEdit(account)} style={btnSecondary}>Edit</button>
                         <button
                           onClick={() => setDeleteId(account.id)}
-                          style={{ fontSize: 12, color: "var(--bad)", cursor: "pointer", background: "none", border: "none" }}
+                          style={{ fontSize: "0.923rem", color: "var(--bad)", cursor: "pointer", background: "none", border: "none" }}
                         >
                           Delete
                         </button>
@@ -382,7 +382,7 @@ export default function AccountsEditor({ accounts }: Props) {
               ) : (
                 <button
                   onClick={() => { setNewGroupLabel(group.label); setNewForm(emptyForm(group.defaultType)); }}
-                  style={{ fontSize: 12, color: "var(--accent)", fontWeight: 600, background: "none", border: "none", cursor: "pointer" }}
+                  style={{ fontSize: "0.923rem", color: "var(--accent)", fontWeight: 600, background: "none", border: "none", cursor: "pointer" }}
                 >
                   + Add {group.label} account
                 </button>
