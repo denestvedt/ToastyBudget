@@ -1,6 +1,8 @@
 import { getCategoryGroups, getCategories } from "@/lib/queries";
 import SettingsEditor from "@/components/settings/SettingsEditor";
 import ThemeToggle from "@/components/ui/ThemeToggle";
+import FontToggle from "@/components/ui/FontToggle";
+import TextSizeToggle from "@/components/ui/TextSizeToggle";
 
 export const metadata = { title: "Settings — ToastyBudget" };
 
@@ -25,18 +27,41 @@ export default async function SettingsPage() {
       </div>
 
       {/* Appearance */}
-      <div className="mb-8 max-w-sm">
+      <div className="mb-8 max-w-md">
         <p className="eyebrow mb-2">Appearance</p>
         <div
-          className="rounded-card p-4"
+          className="rounded-card divide-y"
           style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
         >
-          <div className="flex items-center justify-between mb-3">
-            <p className="font-semibold" style={{ fontSize: 13, color: "var(--text)" }}>
+          {/* Theme */}
+          <div className="p-4">
+            <p className="font-semibold mb-2.5" style={{ fontSize: 13, color: "var(--text)" }}>
               Theme
             </p>
+            <ThemeToggle />
           </div>
-          <ThemeToggle />
+
+          {/* Font */}
+          <div className="p-4" style={{ borderTop: "1px solid var(--border)" }}>
+            <p className="font-semibold mb-1" style={{ fontSize: 13, color: "var(--text)" }}>
+              Font
+            </p>
+            <p className="mb-2.5" style={{ fontSize: 11, color: "var(--text-mute)" }}>
+              Toasty Warm uses Inter — a clean, modern typeface designed for screens.
+            </p>
+            <FontToggle />
+          </div>
+
+          {/* Text size */}
+          <div className="p-4" style={{ borderTop: "1px solid var(--border)" }}>
+            <p className="font-semibold mb-1" style={{ fontSize: 13, color: "var(--text)" }}>
+              Text Size
+            </p>
+            <p className="mb-2.5" style={{ fontSize: 11, color: "var(--text-mute)" }}>
+              Scales the entire interface. Default matches the Toasty Warm design spec.
+            </p>
+            <TextSizeToggle />
+          </div>
         </div>
       </div>
 
