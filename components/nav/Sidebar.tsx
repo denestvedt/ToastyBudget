@@ -10,9 +10,10 @@ import { getMonthParam } from "@/lib/month";
 
 interface Props {
   userEmail?: string;
+  userName?: string;
 }
 
-export default function Sidebar({ userEmail }: Props) {
+export default function Sidebar({ userEmail, userName }: Props) {
   const [collapsed, setCollapsed] = useState(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -31,7 +32,12 @@ export default function Sidebar({ userEmail }: Props) {
     router.push("/login");
   }
 
-  const initials = userEmail ? userEmail[0].toUpperCase() : "?";
+  const displayName = userName || userEmail?.split("@")[0] || "User";
+  const initials = userName
+    ? userName.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase()
+    : userEmail
+    ? userEmail[0].toUpperCase()
+    : "?";
 
   return (
     <aside
@@ -95,10 +101,10 @@ export default function Sidebar({ userEmail }: Props) {
         className="flex flex-col gap-1 mt-4 pt-4"
         style={{ borderTop: "1px solid var(--border)" }}
       >
-        {!collapsed && userEmail && (
+        {!collapsed && (
           <div className="flex items-center gap-2 px-1 mb-1">
             <div
-              className="flex items-center justify-center rounded-full shrink-0 text-xs font-semibold text-white"
+              className="flex items-center justify-center rounded-full shrink-0 font-semibold text-white shrink-0"
               style={{
                 width: 26,
                 height: 26,
@@ -108,12 +114,22 @@ export default function Sidebar({ userEmail }: Props) {
             >
               {initials}
             </div>
-            <p
-              className="truncate"
-              style={{ fontSize: 10, color: "var(--text-mute)", lineHeight: 1.3 }}
-            >
-              {userEmail}
-            </p>
+            <div className="min-w-0">
+              <p
+                className="truncate font-semibold"
+                style={{ fontSize: 11.5, color: "var(--text)", lineHeight: 1.2 }}
+              >
+                {displayName}
+              </p>
+              {userEmail && (
+                <p
+                  className="truncate"
+                  style={{ fontSize: 10, color: "var(--text-mute)", lineHeight: 1.3 }}
+                >
+                  {userEmail}
+                </p>
+              )}
+            </div>
           </div>
         )}
 
