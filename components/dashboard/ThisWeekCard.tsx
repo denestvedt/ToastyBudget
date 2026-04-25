@@ -39,62 +39,102 @@ export default function ThisWeekCard({ transactions }: Props) {
 
   const weekTotal = days.reduce((s, d) => s + d.total, 0);
   const maxTotal = Math.max(...days.map((d) => d.total), 1);
+  const isEmpty = weekTotal === 0;
 
   return (
     <div
-      className="rounded-card p-4"
-      style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
+      className="rounded-card"
+      style={{
+        background: "var(--surface)",
+        border: "1px solid var(--border)",
+        padding: 16,
+      }}
     >
-      <div className="flex items-baseline justify-between mb-3">
+      <div className="flex items-baseline justify-between" style={{ marginBottom: 10 }}>
         <h3 className="font-bold" style={{ fontSize: 13, color: "var(--text)" }}>
           This Week
         </h3>
-        {weekTotal > 0 && (
+        {!isEmpty && (
           <span className="mono" style={{ fontSize: 12, color: "var(--text-dim)" }}>
             {fmt.format(weekTotal)}
           </span>
         )}
       </div>
 
-      {/* Bars */}
-      <div className="flex items-end gap-1.5" style={{ height: 52 }}>
-        {days.map(({ date, isToday, total }) => {
-          const pct = total > 0 ? total / maxTotal : 0;
-          const barH = Math.max(Math.round(pct * 44), total > 0 ? 4 : 2);
-          return (
-            <div
-              key={date}
-              className="flex-1 rounded-sm"
-              style={{
-                height: barH,
-                background: isToday
-                  ? "var(--accent)"
-                  : total > 0
-                  ? "color-mix(in srgb, var(--accent) 40%, var(--surface-2))"
-                  : "var(--surface-2)",
-                alignSelf: "flex-end",
-                transition: "height 300ms var(--ease-soft)",
-              }}
-            />
-          );
-        })}
-      </div>
-
-      {/* Labels */}
-      <div className="flex gap-1.5 mt-1.5">
-        {days.map(({ date, label, isToday }) => (
-          <p
-            key={date}
-            className="flex-1 text-center font-medium"
+      {isEmpty ? (
+        // Real empty state — dashed baseline + caption
+        <div style={{ paddingTop: 14, paddingBottom: 6 }}>
+          <div
             style={{
-              fontSize: 9,
-              color: isToday ? "var(--accent)" : "var(--text-mute)",
+              borderTop: "1px dashed var(--border)",
+              height: 0,
+              marginBottom: 10,
             }}
+          />
+          <p
+            className="text-center"
+            style={{ fontSize: 11.5, color: "var(--text-mute)" }}
           >
-            {label}
+            No spending this week yet.
           </p>
-        ))}
-      </div>
+          <div className="flex" style={{ gap: 6, marginTop: 14 }}>
+            {days.map(({ date, label, isToday }) => (
+              <p
+                key={date}
+                className="flex-1 text-center font-medium"
+                style={{
+                  fontSize: 9,
+                  color: isToday ? "var(--accent)" : "var(--text-mute)",
+                }}
+              >
+                {label}
+              </p>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <>
+          {/* Bars */}
+          <div className="flex items-end" style={{ gap: 6, height: 60 }}>
+            {days.map(({ date, isToday, total }) => {
+              const pct = total > 0 ? total / maxTotal : 0;
+              const barH = total > 0 ? Math.max(Math.round(pct * 52), 6) : 3;
+              return (
+                <div
+                  key={date}
+                  className="flex-1 rounded-sm"
+                  style={{
+                    height: barH,
+                    background: isToday
+                      ? "var(--accent)"
+                      : total > 0
+                      ? "color-mix(in srgb, var(--accent) 40%, var(--surface-2))"
+                      : "var(--surface-2)",
+                    alignSelf: "flex-end",
+                    transition: "height 300ms var(--ease-soft)",
+                  }}
+                />
+              );
+            })}
+          </div>
+
+          {/* Labels */}
+          <div className="flex" style={{ gap: 6, marginTop: 6 }}>
+            {days.map(({ date, label, isToday }) => (
+              <p
+                key={date}
+                className="flex-1 text-center font-medium"
+                style={{
+                  fontSize: 9,
+                  color: isToday ? "var(--accent)" : "var(--text-mute)",
+                }}
+              >
+                {label}
+              </p>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }
