@@ -1,6 +1,8 @@
 "use client";
 
 import { Suspense, useState, useEffect } from "react";
+import Link from "next/link";
+import { Search, Plus } from "lucide-react";
 import MonthSelector from "./MonthSelector";
 
 interface Props {
@@ -32,8 +34,13 @@ export default function TopBar({ userName }: Props) {
 
   return (
     <header
-      className="flex h-14 items-center justify-between px-4 md:px-6 shrink-0"
-      style={{ borderBottom: "1px solid var(--border)", background: "var(--surface)" }}
+      className="flex items-center justify-between shrink-0"
+      style={{
+        height: 68,
+        padding: "0 28px",
+        borderBottom: "1px solid var(--border)",
+        background: "var(--surface)",
+      }}
     >
       {/* Left: brand (mobile) or greeting (desktop) */}
       <div>
@@ -41,25 +48,77 @@ export default function TopBar({ userName }: Props) {
           className="font-bold md:hidden"
           style={{ color: "var(--text)", fontSize: 14, letterSpacing: "-0.02em" }}
         >
-          🍞 ToastyBudget
+          ToastyBudget
         </span>
         <div className="hidden md:block">
-          {dateStr && (
-            <p className="eyebrow mb-0.5">{dateStr}</p>
-          )}
+          {dateStr && <p className="eyebrow" style={{ marginBottom: 3 }}>{dateStr}</p>}
           <p
             className="font-bold leading-none"
-            style={{ fontSize: 15, letterSpacing: "-0.02em", color: "var(--text)" }}
+            style={{ fontSize: 22, letterSpacing: "-0.02em", color: "var(--text)" }}
           >
-            {greeting}{firstName ? `, ${firstName}` : ""}
+            {greeting}
+            {firstName ? `, ${firstName}` : ""}
           </p>
         </div>
       </div>
 
-      {/* Right: month selector */}
-      <Suspense>
-        <MonthSelector />
-      </Suspense>
+      {/* Right: Search · Month · Add */}
+      <div className="flex items-center" style={{ gap: 10 }}>
+        {/* Search pill */}
+        <button
+          type="button"
+          className="hidden md:flex items-center transition-colors"
+          style={{
+            gap: 6,
+            padding: "7px 12px",
+            border: "1px solid var(--border)",
+            borderRadius: 8,
+            background: "var(--surface)",
+            color: "var(--text-mute)",
+            fontSize: 11.5,
+            fontFamily: "inherit",
+            cursor: "pointer",
+          }}
+        >
+          <Search size={13} strokeWidth={1.75} />
+          <span>Search</span>
+          <kbd
+            className="mono"
+            style={{
+              fontSize: 10,
+              padding: "1px 5px",
+              border: "1px solid var(--border)",
+              borderRadius: 4,
+              background: "var(--bg)",
+            }}
+          >
+            ⌘K
+          </kbd>
+        </button>
+
+        <Suspense>
+          <MonthSelector />
+        </Suspense>
+
+        {/* Primary Add transaction button */}
+        <Link
+          href="/transactions?new=1"
+          className="hidden md:inline-flex items-center transition-[filter] duration-150"
+          style={{
+            gap: 6,
+            padding: "7px 14px",
+            fontSize: 12.5,
+            fontWeight: 600,
+            background: "var(--accent)",
+            color: "var(--bg)",
+            borderRadius: 7,
+          }}
+        >
+          <Plus size={13} strokeWidth={2} />
+          Add transaction
+        </Link>
+      </div>
     </header>
   );
 }
+
