@@ -27,10 +27,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      {/* Runs before paint — reads localStorage and sets data-theme to prevent flash */}
+      {/* Runs before paint — restores theme, font, and text-size to prevent flash */}
       <script
         dangerouslySetInnerHTML={{
-          __html: `(function(){try{var t=localStorage.getItem('theme')||'system';if(t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.setAttribute('data-theme','dark');}else{document.documentElement.setAttribute('data-theme','light');}}catch(e){}})();`,
+          __html: `(function(){try{var h=document.documentElement;var t=localStorage.getItem('theme')||'system';h.setAttribute('data-theme',(t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme:dark)').matches))?'dark':'light');var f=localStorage.getItem('font');if(f)h.setAttribute('data-font',f);var s=localStorage.getItem('text-size');if(s)h.setAttribute('data-text-size',s);}catch(e){}})();`,
         }}
       />
       <body className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}>

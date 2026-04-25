@@ -72,6 +72,17 @@
   }
 }
 
+/* ─── Font presets ────────────────────────────────────────────────── */
+html[data-font='system'] {
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+
+/* ─── Text size presets (zoom scales inline px values too) ─────────── */
+html[data-text-size='compact']     { zoom: 0.85; }
+html[data-text-size='default']     { zoom: 1;    }
+html[data-text-size='comfortable'] { zoom: 1.15; }
+html[data-text-size='large']       { zoom: 1.3;  }
+
 /* ─── Base ─────────────────────────────────────────────────────────── */
 html,
 body {

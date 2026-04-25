@@ -1,9 +1,11 @@
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
+import { getSummary } from "@/lib/queries";
+import { getCurrentMonth } from "@/lib/month";
 import Sidebar from "@/components/nav/Sidebar";
 import BottomTabBar from "@/components/nav/BottomTabBar";
-import MonthSelector from "@/components/nav/MonthSelector";
+import TopBar from "@/components/nav/TopBar";
 
 export default async function AppLayout({
   children,
@@ -17,29 +19,26 @@ export default async function AppLayout({
 
   if (!user) redirect("/login");
 
+  const userName = user.user_metadata?.full_name as string | undefined;
+
+  // Compute daily pace for current month regardless of which month the user is viewing
+  const summary = await getSummary(getCurrentMonth()).catch(() => null);
+  let dailyPace: number | null = null;
+  if (summary) {
+    const today = new Date();
+    const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+    const daysLeft = Math.max(daysInMonth - today.getDate() + 1, 1);
+    dailyPace = (summary.total_budget - summary.total_spent) / daysLeft;
+  }
+
   return (
     <div className="flex h-screen overflow-hidden" style={{ background: "var(--bg)" }}>
       <Suspense>
-        <Sidebar userEmail={user.email} />
+        <Sidebar userEmail={user.email} userName={userName} dailyPace={dailyPace} />
       </Suspense>
 
       <div className="flex flex-1 flex-col overflow-hidden">
-        <header
-          className="flex h-14 items-center justify-between px-4 md:px-6"
-          style={{ borderBottom: "1px solid var(--border)", background: "var(--surface)" }}
-        >
-          <span
-            className="font-bold md:hidden"
-            style={{ color: "var(--text)", fontSize: 14, letterSpacing: "-0.02em" }}
-          >
-            🍞 ToastyBudget
-          </span>
-          <div className="ml-auto">
-            <Suspense>
-              <MonthSelector />
-            </Suspense>
-          </div>
-        </header>
+        <TopBar userName={userName} />
 
         <main
           className="flex-1 overflow-auto p-4 pb-20 md:p-6 md:pb-6"

@@ -10,9 +10,17 @@ import { getMonthParam } from "@/lib/month";
 
 interface Props {
   userEmail?: string;
+  userName?: string;
+  dailyPace?: number | null;
 }
 
-export default function Sidebar({ userEmail }: Props) {
+const paceFmt = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+  maximumFractionDigits: 0,
+});
+
+export default function Sidebar({ userEmail, userName, dailyPace }: Props) {
   const [collapsed, setCollapsed] = useState(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -31,7 +39,12 @@ export default function Sidebar({ userEmail }: Props) {
     router.push("/login");
   }
 
-  const initials = userEmail ? userEmail[0].toUpperCase() : "?";
+  const displayName = userName || userEmail?.split("@")[0] || "User";
+  const initials = userName
+    ? userName.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase()
+    : userEmail
+    ? userEmail[0].toUpperCase()
+    : "?";
 
   return (
     <aside
@@ -90,15 +103,40 @@ export default function Sidebar({ userEmail }: Props) {
         })}
       </nav>
 
+      {/* Daily Pace mini-card */}
+      {!collapsed && dailyPace != null && (
+        <div
+          className="rounded-card px-3 py-2.5 mb-3"
+          style={{ background: "var(--surface-2)", border: "1px solid var(--border)" }}
+        >
+          <p className="eyebrow mb-1">Daily Pace</p>
+          <p
+            className="mono font-bold leading-none"
+            style={{
+              fontSize: 18,
+              color: dailyPace >= 0 ? "var(--text)" : "var(--bad)",
+            }}
+          >
+            {paceFmt.format(Math.abs(dailyPace))}
+            <span style={{ fontSize: 11, fontWeight: 400, color: "var(--text-mute)" }}>
+              /day
+            </span>
+          </p>
+          <p style={{ fontSize: 10, color: "var(--text-mute)", marginTop: 3 }}>
+            {dailyPace >= 0 ? "remaining budget" : "over budget"}
+          </p>
+        </div>
+      )}
+
       {/* User row + sign out + collapse */}
       <div
         className="flex flex-col gap-1 mt-4 pt-4"
         style={{ borderTop: "1px solid var(--border)" }}
       >
-        {!collapsed && userEmail && (
+        {!collapsed && (
           <div className="flex items-center gap-2 px-1 mb-1">
             <div
-              className="flex items-center justify-center rounded-full shrink-0 text-xs font-semibold text-white"
+              className="flex items-center justify-center rounded-full shrink-0 font-semibold text-white shrink-0"
               style={{
                 width: 26,
                 height: 26,
@@ -108,12 +146,22 @@ export default function Sidebar({ userEmail }: Props) {
             >
               {initials}
             </div>
-            <p
-              className="truncate"
-              style={{ fontSize: 10, color: "var(--text-mute)", lineHeight: 1.3 }}
-            >
-              {userEmail}
-            </p>
+            <div className="min-w-0">
+              <p
+                className="truncate font-semibold"
+                style={{ fontSize: 11.5, color: "var(--text)", lineHeight: 1.2 }}
+              >
+                {displayName}
+              </p>
+              {userEmail && (
+                <p
+                  className="truncate"
+                  style={{ fontSize: 10, color: "var(--text-mute)", lineHeight: 1.3 }}
+                >
+                  {userEmail}
+                </p>
+              )}
+            </div>
           </div>
         )}
 
