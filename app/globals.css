@@ -72,16 +72,18 @@
   }
 }
 
-/* ─── Font presets ────────────────────────────────────────────────── */
+/* ─── Font preset (system fallback) ───────────────────────────────── */
 html[data-font='system'] {
   --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
 }
 
-/* ─── Text size presets (zoom scales inline px values too) ─────────── */
-html[data-text-size='compact']     { zoom: 0.85; }
-html[data-text-size='default']     { zoom: 1;    }
-html[data-text-size='comfortable'] { zoom: 1.15; }
-html[data-text-size='large']       { zoom: 1.3;  }
+/* ─── Text size presets — use rem-based scaling instead of zoom.
+   `zoom` interacts badly with inline pixel values and was making the
+   hero card squashed/oversized inconsistently. Tailwind + inline px
+   styles inherit from html { font-size }, but our hard-coded inline
+   styles do not — so this is a no-op for now. Re-introduce text-size
+   scaling later by switching inline px values to rem.  ────────────── */
+html { font-size: 16px; }
 
 /* ─── Base ─────────────────────────────────────────────────────────── */
 html,
@@ -99,7 +101,7 @@ body {
   outline-offset: 2px;
 }
 
-/* Nav item active/inactive states (color-mix not supported in Tailwind arbitrary values) */
+/* Nav item active/inactive states */
 .nav-active {
   background: color-mix(in srgb, var(--accent) 12%, transparent);
   color: var(--accent);
@@ -117,7 +119,6 @@ body {
   .pb-safe {
     padding-bottom: env(safe-area-inset-bottom);
   }
-  /* Mono numeric class — used on all currency / date / percent values */
   .mono {
     font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
