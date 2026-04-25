@@ -21,7 +21,6 @@ export default async function AppLayout({
 
   const userName = user.user_metadata?.full_name as string | undefined;
 
-  // Compute daily pace for current month regardless of which month the user is viewing
   const summary = await getSummary(getCurrentMonth()).catch(() => null);
   let dailyPace: number | null = null;
   if (summary) {
@@ -40,11 +39,14 @@ export default async function AppLayout({
       <div className="flex flex-1 flex-col overflow-hidden">
         <TopBar userName={userName} />
 
+        {/* Mobile = scroll. Desktop = fits viewport, individual cards manage their own overflow. */}
         <main
-          className="flex-1 overflow-auto p-4 pb-20 md:p-6 md:pb-6"
-          style={{ background: "var(--bg)" }}
+          className="flex-1 overflow-auto md:overflow-hidden p-4 pb-20"
+          style={{ background: "var(--bg)", padding: undefined }}
         >
-          {children}
+          <div className="md:h-full md:overflow-auto" style={{ padding: 0 }}>
+            <div style={{ padding: 22 }}>{children}</div>
+          </div>
         </main>
       </div>
 
