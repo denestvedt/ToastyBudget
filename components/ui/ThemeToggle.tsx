@@ -23,6 +23,7 @@ export default function ThemeToggle() {
   useEffect(() => {
     const stored = (localStorage.getItem("theme") as Theme | null) ?? "system";
     setTheme(stored);
+    applyTheme(stored);
   }, []);
 
   // Re-apply when system preference changes while "system" is selected

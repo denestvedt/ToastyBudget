@@ -25,6 +25,7 @@ export default function TextSizeToggle() {
   useEffect(() => {
     const stored = (localStorage.getItem("text-size") as TextSize | null) ?? "default";
     setSize(stored);
+    applyTextSize(stored);
   }, []);
 
   function select(next: TextSize) {

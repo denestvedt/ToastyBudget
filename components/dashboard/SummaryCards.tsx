@@ -99,7 +99,7 @@ export default function SummaryCards({ summary, accounts = [] }: Props) {
           <SpentCol spent={summary.total_spent} budget={summary.total_budget} pct={pct} />
         </div>
 
-        {/* Col 3: Net worth or Total Budget */}
+        {/* Col 3: Net worth */}
         <div
           className="sm:border-l"
           style={{
@@ -107,11 +107,7 @@ export default function SummaryCards({ summary, accounts = [] }: Props) {
             paddingLeft: 24,
           }}
         >
-          {hasAccounts ? (
-            <NetWorthCol netWorth={netWorth} />
-          ) : (
-            <BudgetCol budget={summary.total_budget} />
-          )}
+          <NetWorthCol netWorth={netWorth} hasAccounts={hasAccounts} />
         </div>
       </div>
     </div>
@@ -154,24 +150,7 @@ function SpentCol({ spent, budget, pct }: { spent: number; budget: number; pct: 
   );
 }
 
-function BudgetCol({ budget }: { budget: number }) {
-  return (
-    <>
-      <p className="eyebrow" style={{ color: "rgba(255,252,245,0.75)" }}>
-        Total Budget
-      </p>
-      <p
-        className="mono font-bold leading-none"
-        style={{ fontSize: 22, marginTop: 4 }}
-      >
-        {fmt.format(budget)}
-      </p>
-      <p style={{ fontSize: 10.5, opacity: 0.85, marginTop: 6 }}>monthly envelope</p>
-    </>
-  );
-}
-
-function NetWorthCol({ netWorth }: { netWorth: number }) {
+function NetWorthCol({ netWorth, hasAccounts }: { netWorth: number; hasAccounts: boolean }) {
   return (
     <>
       <p className="eyebrow" style={{ color: "rgba(255,252,245,0.75)" }}>
@@ -181,10 +160,10 @@ function NetWorthCol({ netWorth }: { netWorth: number }) {
         className="mono font-bold leading-none"
         style={{ fontSize: 22, marginTop: 4 }}
       >
-        {fmt.format(netWorth)}
+        {hasAccounts ? fmt.format(netWorth) : "—"}
       </p>
       <p style={{ fontSize: 10.5, opacity: 0.85, marginTop: 6 }}>
-        assets minus liabilities
+        {hasAccounts ? "assets minus liabilities" : "add accounts to track"}
       </p>
     </>
   );
