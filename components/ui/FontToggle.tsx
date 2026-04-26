@@ -10,8 +10,8 @@ const TILES: { value: Font; label: string; sub: string }[] = [
 ];
 
 function applyFont(font: Font) {
-  if (font === "system") {
-    document.documentElement.setAttribute("data-font", "system");
+  if (font === "toasty") {
+    document.documentElement.setAttribute("data-font", "toasty");
   } else {
     document.documentElement.removeAttribute("data-font");
   }
@@ -28,7 +28,7 @@ export default function FontToggle() {
 
   function select(next: Font) {
     setFont(next);
-    if (next === "toasty") {
+    if (next === "system") {
       localStorage.removeItem("font");
     } else {
       localStorage.setItem("font", next);

@@ -30,7 +30,7 @@ export default function RootLayout({
       {/* Runs before paint — restores theme, font, and text-size to prevent flash */}
       <script
         dangerouslySetInnerHTML={{
-          __html: `(function(){try{var h=document.documentElement;var t=localStorage.getItem('theme')||'system';h.setAttribute('data-theme',(t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme:dark)').matches))?'dark':'light');var f=localStorage.getItem('font');if(f)h.setAttribute('data-font',f);var s=localStorage.getItem('text-size');if(s)h.setAttribute('data-text-size',s);}catch(e){}})();`,
+          __html: `(function(){try{var h=document.documentElement;var t=localStorage.getItem('theme')||'system';h.setAttribute('data-theme',(t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme:dark)').matches))?'dark':'light');var f=localStorage.getItem('font');if(f==='toasty')h.setAttribute('data-font','toasty');var s=localStorage.getItem('text-size');if(s)h.setAttribute('data-text-size',s);}catch(e){}})();`,
         }}
       />
       <body className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}>

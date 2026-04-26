@@ -87,8 +87,10 @@
     Tahoma,
     sans-serif;
 
-  /* Working font vars used throughout the app (toggle-controlled) */
-  --font-sans: var(--tb-sans-humanist);
+  /* Working font vars used throughout the app (toggle-controlled).
+     Default = system font so both themes look identical out of the box.
+     Selecting "Toasty Warm" sets data-font="toasty" to enable humanist. */
+  --font-sans: var(--tb-sans-system);
   --font-mono: var(--tb-mono-numerals);
 
   /* ── Type scale (15px base, all in rem so text-size scaling works) ── */
@@ -157,13 +159,12 @@
   }
 }
 
-/* ─── Font: System override ────────────────────────────────────────
-   Uses :root[data-font='system'] (specificity [0,0,2,0]) to beat
-   :root[data-theme='light'] (also [0,0,2,0]) via cascade order.
-   The previous html[data-font='system'] selector had specificity
-   [0,0,1,1] which lost to :root[data-theme='light'] in light mode. */
-:root[data-font='system'] {
-  --font-sans: var(--tb-sans-system);
+/* ─── Font: Toasty Warm override ───────────────────────────────────
+   Default is system font (consistent across both themes). Selecting
+   "Toasty Warm" adds data-font="toasty" to enable the humanist stack.
+   Same specificity as :root[data-theme='light'] so cascade order wins. */
+:root[data-font='toasty'] {
+  --font-sans: var(--tb-sans-humanist);
 }
 
 /* ─── Text size: all inline styles use rem so they scale here ─────── */

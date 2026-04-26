@@ -73,7 +73,7 @@ export default function Sidebar({ userEmail, userName, dailyPace }: Props) {
         {!collapsed && (
           <p
             className="font-bold leading-none truncate"
-            style={{ fontSize: "1.077rem", letterSpacing: "-0.02em", color: "var(--text)" }}
+            style={{ fontSize: "1.692rem", letterSpacing: "-0.02em", color: "var(--text)" }}
           >
             ToastyBudget
           </p>

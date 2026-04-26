@@ -46,7 +46,7 @@ export default function TopBar({ userName }: Props) {
       <div>
         <span
           className="font-bold md:hidden"
-          style={{ color: "var(--text)", fontSize: "1.077rem", letterSpacing: "-0.02em" }}
+          style={{ color: "var(--text)", fontSize: "1.692rem", letterSpacing: "-0.02em" }}
         >
           ToastyBudget
         </span>
