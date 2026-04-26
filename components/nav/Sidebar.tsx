@@ -68,7 +68,7 @@ export default function Sidebar({ userEmail, userName, dailyPace }: Props) {
             background: "linear-gradient(135deg, var(--accent-2), var(--accent))",
           }}
         >
-          <ToastMark size={18} color="#FFFCF5" glow="#C94F1A" />
+          <ToastMark size={20} color="#FFFCF5" glow="#C94F1A" />
         </div>
         {!collapsed && (
           <p
@@ -118,7 +118,7 @@ export default function Sidebar({ userEmail, userName, dailyPace }: Props) {
               } ${isActive ? "nav-active" : "nav-inactive"}`}
               title={collapsed ? label : undefined}
             >
-              <Icon size={15} strokeWidth={1.75} className="shrink-0" />
+              <Icon size={18} strokeWidth={1.75} className="shrink-0" />
               {!collapsed && <span style={{ fontSize: "0.962rem" }}>{label}</span>}
             </Link>
           );
@@ -169,7 +169,7 @@ export default function Sidebar({ userEmail, userName, dailyPace }: Props) {
           }`}
           title={collapsed ? "Sign out" : undefined}
         >
-          <LogOut size={15} strokeWidth={1.75} className="shrink-0" />
+          <LogOut size={18} strokeWidth={1.75} className="shrink-0" />
           {!collapsed && <span style={{ fontSize: "0.962rem" }}>Sign Out</span>}
         </button>
 
@@ -181,10 +181,10 @@ export default function Sidebar({ userEmail, userName, dailyPace }: Props) {
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {collapsed ? (
-            <ChevronRight size={15} strokeWidth={1.75} />
+            <ChevronRight size={18} strokeWidth={1.75} />
           ) : (
             <>
-              <ChevronLeft size={15} strokeWidth={1.75} />
+              <ChevronLeft size={18} strokeWidth={1.75} />
               <span style={{ fontSize: "0.962rem" }}>Collapse</span>
             </>
           )}
