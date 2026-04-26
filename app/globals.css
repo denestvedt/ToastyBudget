@@ -2,26 +2,301 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ─────────────────────────────────────────────────────────────
+   ToastyBudget — Type System v1
+   Cross-platform safe: every stack works on Windows + macOS
+   with zero web-font loading. No @font-face required.
+   ───────────────────────────────────────────────────────────── */
+
+/* ─── Tokens: Light (default) ─────────────────────────────────────── */
+:root,
+:root[data-theme='light'] {
+  --bg:        #FDF6EC;
+  --surface:   #FFFCF5;
+  --surface-2: #F5ECDB;
+  --border:    #E8DAC0;
+
+  --text:      #2B1810;
+  --text-dim:  #6B5340;
+  --text-mute: #9A826A;
+
+  --accent:    #C94F1A;
+  --accent-2:  #E8853A;
+
+  --good:      #6B8E4E;
+  --warn:      #D97706;
+  --bad:       #A63A2A;
+
+  /* ── DISPLAY · Warm book serif ──────────────────────────────
+     Hero copy, brand moments, the "Left to spend" figure.
+     Iowan ships on Mac; Palatino ships on Windows; Georgia
+     is the universal safety net. */
+  --tb-serif-warm:
+    "Iowan Old Style",
+    "Palatino Linotype",
+    "Book Antiqua",
+    Palatino,
+    Georgia,
+    serif;
+
+  /* ── BODY · Bookish serif for long-form ─────────────────────
+     Monthly recap emails, blog posts, onboarding cards. */
+  --tb-serif-bookish:
+    Georgia,
+    "Cambria",
+    "Times New Roman",
+    serif;
+
+  /* ── UI · Humanist sans (default body face) ─────────────────
+     Buttons, tabs, list rows, descriptions.
+     Inter (web font) loads first if available; Trebuchet MS
+     is the warm system fallback. */
+  --tb-sans-humanist:
+    var(--font-inter),
+    "Trebuchet MS",
+    "Lucida Grande",
+    "Lucida Sans Unicode",
+    "Lucida Sans",
+    Tahoma,
+    sans-serif;
+
+  /* ── UI · Friendly small sans ───────────────────────────────
+     11–13px text: timestamps, captions, table cells, tooltips. */
+  --tb-sans-friendly:
+    Verdana,
+    Geneva,
+    Tahoma,
+    sans-serif;
+
+  /* ── NUMERALS · Tabular monospace ───────────────────────────
+     Every dollar, percentage, and date. */
+  --tb-mono-numerals:
+    "Consolas",
+    "Menlo",
+    "DejaVu Sans Mono",
+    var(--font-jetbrains-mono),
+    "Courier New",
+    monospace;
+
+  /* ── SYSTEM · Native OS UI ──────────────────────────────────
+     For platform-native chrome only. Use sparingly. */
+  --tb-sans-system:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Tahoma,
+    sans-serif;
+
+  /* Working font vars used throughout the app (toggle-controlled).
+     Default = system font so both themes look identical out of the box.
+     Selecting "Toasty Warm" sets data-font="toasty" to enable humanist. */
+  --font-sans: var(--tb-sans-system);
+  --font-mono: var(--tb-mono-numerals);
+
+  /* ── Type scale (15px base, all in rem so text-size scaling works) ── */
+  --tb-fs-display-xl: 6.4rem;    /* 96px */
+  --tb-fs-display-l:  3.733rem;  /* 56px */
+  --tb-fs-title:      2.133rem;  /* 32px */
+  --tb-fs-subtitle:   1.467rem;  /* 22px */
+  --tb-fs-body-l:     1.133rem;  /* 17px */
+  --tb-fs-body:       1rem;      /* 15px */
+  --tb-fs-caption:    0.8rem;    /* 12px */
+  --tb-fs-eyebrow:    0.667rem;  /* 10px */
+
+  --tb-lh-tight:  1.0;
+  --tb-lh-snug:   1.15;
+  --tb-lh-normal: 1.55;
+
+  --tb-ls-tight: -0.025em;
+  --tb-ls-snug:  -0.015em;
+  --tb-ls-wide:   0.16em;
+
+  --r-pill:   4px;
+  --r-input:  6px;
+  --r-button: 7px;
+  --r-card:   10px;
+  --r-hero:   14px;
+
+  --ease-soft: cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+/* ─── Tokens: Dark ────────────────────────────────────────────────── */
+:root[data-theme='dark'] {
+  --bg:        #1A1108;
+  --surface:   #241810;
+  --surface-2: #2E2015;
+  --border:    #3D2B1C;
+
+  --text:      #FDF6EC;
+  --text-dim:  #C4A888;
+  --text-mute: #8A7258;
+
+  --accent:    #E8853A;
+  --accent-2:  #F5B871;
+
+  --good:      #A3C579;
+  --warn:      #F5B871;
+  --bad:       #E8735C;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  :root:not([data-theme='light']) {
+    --bg:        #1A1108;
+    --surface:   #241810;
+    --surface-2: #2E2015;
+    --border:    #3D2B1C;
+
+    --text:      #FDF6EC;
+    --text-dim:  #C4A888;
+    --text-mute: #8A7258;
+
+    --accent:    #E8853A;
+    --accent-2:  #F5B871;
+
+    --good:      #A3C579;
+    --warn:      #F5B871;
+    --bad:       #E8735C;
   }
 }
 
+/* ─── Font: Toasty Warm override ───────────────────────────────────
+   Default is system font (consistent across both themes). Selecting
+   "Toasty Warm" adds data-font="toasty" to enable the humanist stack.
+   Same specificity as :root[data-theme='light'] so cascade order wins. */
+:root[data-font='toasty'] {
+  --font-sans: var(--tb-sans-humanist);
+}
+
+/* ─── Text size: all inline styles use rem so they scale here ─────── */
+html                                { font-size: 21.5px;  }
+html[data-text-size='compact']      { font-size: 18.3px;  }
+html[data-text-size='comfortable']  { font-size: 24.75px; }
+html[data-text-size='large']        { font-size: 28px;    }
+
+/* ─── Base ─────────────────────────────────────────────────────────── */
+html,
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  line-height: var(--tb-lh-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Headings → warm serif ─────────────────────────────────────────── */
+h1, h2, h3, .tb-display, .tb-title {
+  font-family: var(--tb-serif-warm);
+  letter-spacing: var(--tb-ls-snug);
+  text-wrap: pretty;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Nav item active/inactive states */
+.nav-active {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--accent);
+  font-weight: 600;
+}
+.nav-inactive {
+  color: var(--text-dim);
+  font-weight: 500;
+}
+.nav-inactive:hover {
+  background: color-mix(in srgb, var(--text) 5%, transparent);
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .mono {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+
+  .eyebrow {
+    font-size: var(--tb-fs-eyebrow);
+    font-weight: 600;
+    color: var(--text-mute);
+    text-transform: uppercase;
+    letter-spacing: var(--tb-ls-wide);
+  }
+
+  /* ── Display & Title utilities ──────────────────────────────────── */
+  .tb-display-xl {
+    font-family: var(--tb-serif-warm);
+    font-size: var(--tb-fs-display-xl);
+    line-height: 0.95;
+    letter-spacing: var(--tb-ls-tight);
+  }
+  .tb-display-l {
+    font-family: var(--tb-serif-warm);
+    font-size: var(--tb-fs-display-l);
+    line-height: var(--tb-lh-tight);
+    letter-spacing: -0.02em;
+  }
+  .tb-title {
+    font-family: var(--tb-serif-warm);
+    font-size: var(--tb-fs-title);
+    line-height: 1.1;
+    font-weight: 500;
+  }
+  .tb-subtitle {
+    font-family: var(--tb-serif-warm);
+    font-size: var(--tb-fs-subtitle);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  /* ── Body utilities ─────────────────────────────────────────────── */
+  .tb-body-l  { font-size: var(--tb-fs-body-l); line-height: 1.55; }
+  .tb-body    { font-size: var(--tb-fs-body);   line-height: 1.55; }
+  .tb-caption {
+    font-family: var(--tb-sans-friendly);
+    font-size: var(--tb-fs-caption);
+    line-height: 1.5;
+  }
+  .tb-eyebrow {
+    font-family: var(--tb-mono-numerals);
+    font-size: var(--tb-fs-eyebrow);
+    letter-spacing: var(--tb-ls-wide);
+    text-transform: uppercase;
+  }
+
+  /* ── Numerals · ALWAYS tabular ──────────────────────────────────── */
+  .tb-num,
+  .tb-amount,
+  [data-amount],
+  [data-num] {
+    font-family: var(--tb-mono-numerals);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+
+  .tb-amount-hero {
+    font-family: var(--tb-mono-numerals);
+    font-variant-numeric: tabular-nums;
+    font-size: var(--tb-fs-display-l);
+    letter-spacing: -0.02em;
+  }
+
+  /* ── System UI — native chrome only ────────────────────────────── */
+  .tb-system {
+    font-family: var(--tb-sans-system);
+  }
+
+  /* ── Bookish long-form ──────────────────────────────────────────── */
+  .tb-prose {
+    font-family: var(--tb-serif-bookish);
+    font-size: var(--tb-fs-body-l);
+    line-height: 1.65;
+    max-width: 60ch;
   }
 }

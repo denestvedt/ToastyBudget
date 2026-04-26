@@ -1,0 +1,189 @@
+/* ToastyBudget — Toasty Warm theme tokens
+ * Drop-in. Import once at your app root:
+ *   import './toasty-tokens.css';
+ * Then use var(--bg), var(--accent), etc. everywhere.
+ * Toggle dark mode by setting <html data-theme="dark"> (or "light" / unset for light).
+ */
+
+/* ─── Fonts ───────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+/* ─── Tokens: Light (default) ─────────────────────────────────────── */
+:root,
+:root[data-theme='light'] {
+  /* Surfaces */
+  --bg:          #FDF6EC;
+  --surface:     #FFFCF5;
+  --surface-2:   #F5ECDB;
+  --border:      #E8DAC0;
+
+  /* Text */
+  --text:        #2B1810;
+  --text-dim:    #6B5340;
+  --text-mute:   #9A826A;
+
+  /* Accents */
+  --accent:      #C94F1A;  /* deep crust — primary */
+  --accent-2:    #E8853A;  /* toast — secondary / hero gradient end */
+
+  /* Status */
+  --good:        #6B8E4E;
+  --warn:        #D97706;
+  --bad:         #A63A2A;
+
+  /* Type */
+  --font-sans:   'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-mono:   'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Radii */
+  --r-pill:      4px;
+  --r-input:     6px;
+  --r-button:    7px;
+  --r-card:      10px;
+  --r-hero:      14px;
+
+  /* Spacing */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 14px;
+  --sp-5: 16px;
+  --sp-6: 18px;
+  --sp-7: 20px;
+  --sp-8: 22px;
+  --sp-9: 24px;
+
+  /* Easing */
+  --ease-soft: cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+/* ─── Tokens: Dark ────────────────────────────────────────────────── */
+:root[data-theme='dark'] {
+  --bg:          #1A1108;
+  --surface:     #241810;
+  --surface-2:   #2E2015;
+  --border:      #3D2B1C;
+
+  --text:        #FDF6EC;
+  --text-dim:    #C4A888;
+  --text-mute:   #8A7258;
+
+  --accent:      #E8853A;  /* brighter on dark for legibility */
+  --accent-2:    #F5B871;
+
+  --good:        #A3C579;
+  --warn:        #F5B871;
+  --bad:         #E8735C;
+}
+
+/* ─── Base ─────────────────────────────────────────────────────────── */
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Always use tabular-nums + mono for numeric data */
+.num, .amount, .percent, .date, time, [data-numeric] {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* ─── Utility classes for common patterns ─────────────────────────── */
+
+/* Uppercase eyebrow label */
+.eyebrow {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-mute);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Card */
+.tb-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+  padding: var(--sp-5);
+}
+
+/* Primary button */
+.tb-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  font-family: inherit;
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  border-radius: var(--r-button);
+  cursor: pointer;
+  transition: filter 120ms var(--ease-soft);
+}
+.tb-btn-primary:hover { filter: brightness(0.94); }
+
+/* Secondary button */
+.tb-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  font-family: inherit;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--r-button);
+  cursor: pointer;
+  transition: background 120ms var(--ease-soft);
+}
+.tb-btn:hover { background: var(--surface-2); }
+
+/* Pill */
+.tb-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 99px;
+  background: var(--surface-2);
+  color: var(--text-dim);
+}
+.tb-pill--good { background: color-mix(in srgb, var(--good) 15%, transparent); color: var(--good); }
+.tb-pill--warn { background: color-mix(in srgb, var(--warn) 15%, transparent); color: var(--warn); }
+.tb-pill--bad  { background: color-mix(in srgb, var(--bad)  15%, transparent); color: var(--bad); }
+
+/* Hero gradient (for the "Left to spend" dashboard card) */
+.tb-hero {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+  color: #FFFCF5;
+  border-radius: var(--r-hero);
+}
+
+/* Focus ring — DO NOT remove */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Progress bar primitive */
+.tb-progress { height: 5px; background: var(--surface-2); border-radius: 99px; overflow: hidden; }
+.tb-progress > div {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 99px;
+  transition: width 400ms var(--ease-soft);
+}
+.tb-progress--over > div { background: var(--bad); }
+.tb-progress--warn > div { background: var(--warn); }

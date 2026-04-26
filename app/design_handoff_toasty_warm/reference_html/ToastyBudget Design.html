@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>ToastyBudget — Color & UI Direction</title>
+  <style>
+    html, body { margin: 0; height: 100%; background: #f0eee9; font-family: -apple-system, system-ui, sans-serif; }
+    #root { height: 100vh; }
+  </style>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel" src="design-canvas.jsx"></script>
+  <script type="text/babel" src="tokens.jsx"></script>
+  <script type="text/babel" src="primitives.jsx"></script>
+  <script type="text/babel" src="screens-dashboard.jsx"></script>
+  <script type="text/babel" src="screens-other.jsx"></script>
+  <script type="text/babel" src="screens-hero.jsx"></script>
+
+  <script type="text/babel" data-presets="react">
+    const { useState } = React;
+
+    // Each direction has its own light/dark theme + variant key for layout switches
+    const DIRS = [
+      { key: 'toasty',  variant: 'data',      Dashboard: DashboardV1 },
+      { key: 'hearth',  variant: 'editorial', Dashboard: DashboardV2 },
+      { key: 'kitchen', variant: 'envelope',  Dashboard: DashboardV3 },
+    ];
+    const MODES = ['light', 'dark'];
+
+    // Frame size for full-app screens
+    const APP_W = 1100, APP_H = 700;
+    const NARROW_W = 540, NARROW_H = 700; // for palette cards
+
+    function dirLabel(d) {
+      return PALETTES[d.key].name;
+    }
+
+    function App() {
+      return (
+        <DesignCanvas>
+          {/* ───────── HERO ───────── */}
+          <DCSection id="hero" title="🥪 ToastyBudget — design direction"
+            subtitle="A warm, calm, financial UI that actually has a personality. Three directions explored below — each shown across all the core screens, in both light & dark. The recommended direction (Toasty Warm) is shown polished here.">
+            <DCArtboard id="hero-polished" label="Recommended · Toasty Warm · Light · Polished" width={APP_W} height={APP_H}>
+              <HeroDashboard/>
+            </DCArtboard>
+          </DCSection>
+
+          {/* ───────── PALETTE CARDS ───────── */}
+          <DCSection id="palettes" title="The three directions"
+            subtitle="Same product, three personalities. Each commits to a clear vibe — pick one to take into code.">
+            {DIRS.map(d => (
+              <DCArtboard key={d.key} id={`pal-${d.key}`} label={`${dirLabel(d)} · tokens`} width={NARROW_W} height={NARROW_H}>
+                <PaletteCard dirKey={d.key}/>
+              </DCArtboard>
+            ))}
+          </DCSection>
+
+          {/* ───────── DASHBOARDS ───────── */}
+          <DCSection id="dash" title="Dashboard"
+            subtitle="The home screen. Note how each direction makes different layout choices, not just color choices.">
+            {DIRS.flatMap(d => MODES.map(mode => (
+              <DCArtboard key={`${d.key}-${mode}`} id={`dash-${d.key}-${mode}`}
+                label={`${dirLabel(d)} · ${mode}`} width={APP_W} height={APP_H}>
+                <d.Dashboard theme={PALETTES[d.key][mode]} dirKey={d.key}/>
+              </DCArtboard>
+            )))}
+          </DCSection>
+
+          {/* ───────── BUDGET ───────── */}
+          <DCSection id="budget" title="Budget / Categories">
+            {DIRS.flatMap(d => MODES.map(mode => (
+              <DCArtboard key={`b-${d.key}-${mode}`} id={`b-${d.key}-${mode}`}
+                label={`${dirLabel(d)} · ${mode}`} width={APP_W} height={APP_H}>
+                <BudgetView theme={PALETTES[d.key][mode]} variant={d.variant}/>
+              </DCArtboard>
+            )))}
+          </DCSection>
+
+          {/* ───────── TRANSACTIONS ───────── */}
+          <DCSection id="tx" title="Transactions">
+            {DIRS.flatMap(d => MODES.map(mode => (
+              <DCArtboard key={`tx-${d.key}-${mode}`} id={`tx-${d.key}-${mode}`}
+                label={`${dirLabel(d)} · ${mode}`} width={APP_W} height={APP_H}>
+                <TransactionsView theme={PALETTES[d.key][mode]} variant={d.variant}/>
+              </DCArtboard>
+            )))}
+          </DCSection>
+
+          {/* ───────── ADD TRANSACTION (modal) ───────── */}
+          <DCSection id="add" title="Add transaction"
+            subtitle="Modal for quick entry. Big amount up top, smart category picker.">
+            {DIRS.flatMap(d => MODES.map(mode => (
+              <DCArtboard key={`add-${d.key}-${mode}`} id={`add-${d.key}-${mode}`}
+                label={`${dirLabel(d)} · ${mode}`} width={APP_W} height={APP_H}>
+                <AddTxView theme={PALETTES[d.key][mode]} variant={d.variant}/>
+              </DCArtboard>
+            )))}
+          </DCSection>
+
+          {/* ───────── GOALS ───────── */}
+          <DCSection id="goals" title="Goals / Savings">
+            {DIRS.flatMap(d => MODES.map(mode => (
+              <DCArtboard key={`g-${d.key}-${mode}`} id={`g-${d.key}-${mode}`}
+                label={`${dirLabel(d)} · ${mode}`} width={APP_W} height={APP_H}>
+                <GoalsView theme={PALETTES[d.key][mode]} variant={d.variant}/>
+              </DCArtboard>
+            )))}
+          </DCSection>
+
+          {/* ───────── REPORTS ───────── */}
+          <DCSection id="reports" title="Monthly summary / Reports">
+            {DIRS.flatMap(d => MODES.map(mode => (
+              <DCArtboard key={`r-${d.key}-${mode}`} id={`r-${d.key}-${mode}`}
+                label={`${dirLabel(d)} · ${mode}`} width={APP_W} height={APP_H}>
+                <ReportsView theme={PALETTES[d.key][mode]} variant={d.variant}/>
+              </DCArtboard>
+            )))}
+          </DCSection>
+
+          {/* ───────── SETTINGS ───────── */}
+          <DCSection id="settings" title="Settings">
+            {DIRS.flatMap(d => MODES.map(mode => (
+              <DCArtboard key={`s-${d.key}-${mode}`} id={`s-${d.key}-${mode}`}
+                label={`${dirLabel(d)} · ${mode}`} width={APP_W} height={APP_H}>
+                <SettingsView theme={PALETTES[d.key][mode]} variant={d.variant}/>
+              </DCArtboard>
+            )))}
+          </DCSection>
+
+          {/* ───────── HANDOFF NOTES ───────── */}
+          <DCSection id="handoff" title="Handoff notes for Claude Code"
+            subtitle="What to lift into your codebase.">
+            <DCArtboard id="notes" label="Implementation notes" width={760} height={520}>
+              <div style={{
+                width: '100%', height: '100%', background: '#FFFCF5', color: '#2B1810',
+                padding: 28, fontFamily: 'Inter, system-ui, sans-serif', fontSize: 13, lineHeight: 1.55,
+                overflow: 'auto',
+              }}>
+                <div style={{ fontSize: 22, fontWeight: 700, letterSpacing: '-0.02em', marginBottom: 12 }}>What to ship first</div>
+
+                <p style={{ marginTop: 0 }}><b>1. Replace your current dark + harsh-orange palette</b> with the Toasty Warm tokens (light mode by default). The current app is one of dozens of indistinguishable dark dashboards — the cream + warm crust palette gives the brand somewhere to live.</p>
+
+                <p><b>2. Use the recommended palette as CSS variables:</b></p>
+                <pre style={{ background: '#F5ECDB', padding: 12, borderRadius: 6, fontSize: 11, fontFamily: 'JetBrains Mono, monospace', overflow: 'auto' }}>{`--bg:        #FDF6EC;  /* cream */
+--surface:   #FFFCF5;
+--surface-2: #F5ECDB;
+--border:    #E8DAC0;
+--text:      #2B1810;  /* pumpernickel */
+--text-dim:  #6B5340;
+--text-mute: #9A826A;
+--accent:    #C94F1A;  /* deep crust */
+--accent-2:  #E8853A;  /* toast */
+--good:      #6B8E4E;
+--warn:      #D97706;
+--bad:       #A63A2A;`}</pre>
+
+                <p><b>3. Type:</b> Inter for everything except numbers. JetBrains Mono with <code>font-variant-numeric: tabular-nums</code> for any dollar amount, percentage, or date. This single change is what makes a budget app feel like a budget app.</p>
+
+                <p><b>4. The hero "Left to spend" card</b> (top of dashboard) is the most important component. Big mono number, gradient warm fill, sub-stats separated by hairlines. Don't bury this behind 3 small KPI cards like the current build does.</p>
+
+                <p><b>5. Avoid:</b> pure black backgrounds, full-saturation greens for "good," tiny KPI numbers, empty centered "no data" states (replace with sample data + onboarding nudge).</p>
+
+                <p style={{ marginTop: 16, padding: 12, background: '#FDF6EC', borderRadius: 6, borderLeft: '3px solid #C94F1A' }}>
+                  <b>Toggle Tweaks (top toolbar)</b> if you want to swap directions live across the whole canvas.
+                </p>
+              </div>
+            </DCArtboard>
+          </DCSection>
+        </DesignCanvas>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+  </script>
+</body>
+</html>

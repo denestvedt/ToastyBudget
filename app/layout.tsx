@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
 });
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains-mono",
+  display: "swap",
+  weight: ["400", "500", "600"],
 });
 
 export const metadata: Metadata = {
@@ -24,10 +26,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    <html lang="en" suppressHydrationWarning>
+      {/* Runs before paint — restores theme, font, and text-size to prevent flash */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `(function(){try{var h=document.documentElement;var t=localStorage.getItem('theme')||'system';h.setAttribute('data-theme',(t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme:dark)').matches))?'dark':'light');var f=localStorage.getItem('font');if(f==='toasty')h.setAttribute('data-font','toasty');var s=localStorage.getItem('text-size');if(s)h.setAttribute('data-text-size',s);}catch(e){}})();`,
+        }}
+      />
+      <body className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}>
         {children}
       </body>
     </html>
