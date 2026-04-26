@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 type Font = "toasty" | "system";
 
 const TILES: { value: Font; label: string; sub: string }[] = [
-  { value: "toasty", label: "Toasty Warm", sub: "Inter" },
-  { value: "system", label: "System",      sub: "Default" },
+  { value: "toasty", label: "Toasty Warm", sub: "Trebuchet / Inter" },
+  { value: "system", label: "System",      sub: "OS default" },
 ];
 
 function applyFont(font: Font) {

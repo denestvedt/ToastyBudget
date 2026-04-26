@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─────────────────────────────────────────────────────────────
+   ToastyBudget — Type System v1
+   Cross-platform safe: every stack works on Windows + macOS
+   with zero web-font loading. No @font-face required.
+   ───────────────────────────────────────────────────────────── */
+
 /* ─── Tokens: Light (default) ─────────────────────────────────────── */
 :root,
 :root[data-theme='light'] {
@@ -21,8 +27,87 @@
   --warn:      #D97706;
   --bad:       #A63A2A;
 
-  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains-mono), ui-monospace, 'SF Mono', Menlo, monospace;
+  /* ── DISPLAY · Warm book serif ──────────────────────────────
+     Hero copy, brand moments, the "Left to spend" figure.
+     Iowan ships on Mac; Palatino ships on Windows; Georgia
+     is the universal safety net. */
+  --tb-serif-warm:
+    "Iowan Old Style",
+    "Palatino Linotype",
+    "Book Antiqua",
+    Palatino,
+    Georgia,
+    serif;
+
+  /* ── BODY · Bookish serif for long-form ─────────────────────
+     Monthly recap emails, blog posts, onboarding cards. */
+  --tb-serif-bookish:
+    Georgia,
+    "Cambria",
+    "Times New Roman",
+    serif;
+
+  /* ── UI · Humanist sans (default body face) ─────────────────
+     Buttons, tabs, list rows, descriptions.
+     Inter (web font) loads first if available; Trebuchet MS
+     is the warm system fallback. */
+  --tb-sans-humanist:
+    var(--font-inter),
+    "Trebuchet MS",
+    "Lucida Grande",
+    "Lucida Sans Unicode",
+    "Lucida Sans",
+    Tahoma,
+    sans-serif;
+
+  /* ── UI · Friendly small sans ───────────────────────────────
+     11–13px text: timestamps, captions, table cells, tooltips. */
+  --tb-sans-friendly:
+    Verdana,
+    Geneva,
+    Tahoma,
+    sans-serif;
+
+  /* ── NUMERALS · Tabular monospace ───────────────────────────
+     Every dollar, percentage, and date. */
+  --tb-mono-numerals:
+    "Consolas",
+    "Menlo",
+    "DejaVu Sans Mono",
+    var(--font-jetbrains-mono),
+    "Courier New",
+    monospace;
+
+  /* ── SYSTEM · Native OS UI ──────────────────────────────────
+     For platform-native chrome only. Use sparingly. */
+  --tb-sans-system:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Tahoma,
+    sans-serif;
+
+  /* Working font vars used throughout the app (toggle-controlled) */
+  --font-sans: var(--tb-sans-humanist);
+  --font-mono: var(--tb-mono-numerals);
+
+  /* ── Type scale (15px base, all in rem so text-size scaling works) ── */
+  --tb-fs-display-xl: 6.4rem;    /* 96px */
+  --tb-fs-display-l:  3.733rem;  /* 56px */
+  --tb-fs-title:      2.133rem;  /* 32px */
+  --tb-fs-subtitle:   1.467rem;  /* 22px */
+  --tb-fs-body-l:     1.133rem;  /* 17px */
+  --tb-fs-body:       1rem;      /* 15px */
+  --tb-fs-caption:    0.8rem;    /* 12px */
+  --tb-fs-eyebrow:    0.667rem;  /* 10px */
+
+  --tb-lh-tight:  1.0;
+  --tb-lh-snug:   1.15;
+  --tb-lh-normal: 1.55;
+
+  --tb-ls-tight: -0.025em;
+  --tb-ls-snug:  -0.015em;
+  --tb-ls-wide:   0.16em;
 
   --r-pill:   4px;
   --r-input:  6px;
@@ -72,16 +157,20 @@
   }
 }
 
-/* ─── Font preset (system fallback) ───────────────────────────────── */
-html[data-font='system'] {
-  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+/* ─── Font: System override ────────────────────────────────────────
+   Uses :root[data-font='system'] (specificity [0,0,2,0]) to beat
+   :root[data-theme='light'] (also [0,0,2,0]) via cascade order.
+   The previous html[data-font='system'] selector had specificity
+   [0,0,1,1] which lost to :root[data-theme='light'] in light mode. */
+:root[data-font='system'] {
+  --font-sans: var(--tb-sans-system);
 }
 
-/* ─── Text size: scales rem-based values; px values in inline styles won't scale ── */
-html                                { font-size: 13px; }
-html[data-text-size='compact']      { font-size: 11.05px; }
-html[data-text-size='comfortable']  { font-size: 14.95px; }
-html[data-text-size='large']        { font-size: 16.9px;  }
+/* ─── Text size: all inline styles use rem so they scale here ─────── */
+html                                { font-size: 15px;    }
+html[data-text-size='compact']      { font-size: 12.75px; }
+html[data-text-size='comfortable']  { font-size: 17.25px; }
+html[data-text-size='large']        { font-size: 19.5px;  }
 
 /* ─── Base ─────────────────────────────────────────────────────────── */
 html,
@@ -89,8 +178,16 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-sans);
-  line-height: 1.45;
+  line-height: var(--tb-lh-normal);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Headings → warm serif ─────────────────────────────────────────── */
+h1, h2, h3, .tb-display, .tb-title {
+  font-family: var(--tb-serif-warm);
+  letter-spacing: var(--tb-ls-snug);
+  text-wrap: pretty;
 }
 
 :focus-visible {
@@ -116,16 +213,89 @@ body {
   .pb-safe {
     padding-bottom: env(safe-area-inset-bottom);
   }
+
   .mono {
     font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.02em;
   }
+
   .eyebrow {
-    font-size: 0.769rem;
+    font-size: var(--tb-fs-eyebrow);
     font-weight: 600;
     color: var(--text-mute);
     text-transform: uppercase;
-    letter-spacing: 0.10em;
+    letter-spacing: var(--tb-ls-wide);
+  }
+
+  /* ── Display & Title utilities ──────────────────────────────────── */
+  .tb-display-xl {
+    font-family: var(--tb-serif-warm);
+    font-size: var(--tb-fs-display-xl);
+    line-height: 0.95;
+    letter-spacing: var(--tb-ls-tight);
+  }
+  .tb-display-l {
+    font-family: var(--tb-serif-warm);
+    font-size: var(--tb-fs-display-l);
+    line-height: var(--tb-lh-tight);
+    letter-spacing: -0.02em;
+  }
+  .tb-title {
+    font-family: var(--tb-serif-warm);
+    font-size: var(--tb-fs-title);
+    line-height: 1.1;
+    font-weight: 500;
+  }
+  .tb-subtitle {
+    font-family: var(--tb-serif-warm);
+    font-size: var(--tb-fs-subtitle);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  /* ── Body utilities ─────────────────────────────────────────────── */
+  .tb-body-l  { font-size: var(--tb-fs-body-l); line-height: 1.55; }
+  .tb-body    { font-size: var(--tb-fs-body);   line-height: 1.55; }
+  .tb-caption {
+    font-family: var(--tb-sans-friendly);
+    font-size: var(--tb-fs-caption);
+    line-height: 1.5;
+  }
+  .tb-eyebrow {
+    font-family: var(--tb-mono-numerals);
+    font-size: var(--tb-fs-eyebrow);
+    letter-spacing: var(--tb-ls-wide);
+    text-transform: uppercase;
+  }
+
+  /* ── Numerals · ALWAYS tabular ──────────────────────────────────── */
+  .tb-num,
+  .tb-amount,
+  [data-amount],
+  [data-num] {
+    font-family: var(--tb-mono-numerals);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+
+  .tb-amount-hero {
+    font-family: var(--tb-mono-numerals);
+    font-variant-numeric: tabular-nums;
+    font-size: var(--tb-fs-display-l);
+    letter-spacing: -0.02em;
+  }
+
+  /* ── System UI — native chrome only ────────────────────────────── */
+  .tb-system {
+    font-family: var(--tb-sans-system);
+  }
+
+  /* ── Bookish long-form ──────────────────────────────────────────── */
+  .tb-prose {
+    font-family: var(--tb-serif-bookish);
+    font-size: var(--tb-fs-body-l);
+    line-height: 1.65;
+    max-width: 60ch;
   }
 }
