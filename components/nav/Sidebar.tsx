@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { ChevronLeft, ChevronRight, LogOut } from "lucide-react";
@@ -21,8 +21,14 @@ const paceFmt = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 0,
 });
 
+const MIN_WIDTH = 150;
+const MAX_WIDTH = 400;
+const DEFAULT_WIDTH = 220;
+const COLLAPSED_WIDTH = 56;
+
 export default function Sidebar({ userEmail, userName, dailyPace }: Props) {
   const [collapsed, setCollapsed] = useState(false);
+  const [width, setWidth] = useState(DEFAULT_WIDTH);
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -40,6 +46,29 @@ export default function Sidebar({ userEmail, userName, dailyPace }: Props) {
     router.push("/login");
   }
 
+  function startResize(e: React.MouseEvent) {
+    e.preventDefault();
+    const startX = e.clientX;
+    const startWidth = width;
+
+    function onMove(e: MouseEvent) {
+      const newWidth = Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, startWidth + e.clientX - startX));
+      setWidth(newWidth);
+    }
+
+    function onUp() {
+      document.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mouseup", onUp);
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
+    }
+
+    document.body.style.cursor = "ew-resize";
+    document.body.style.userSelect = "none";
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onUp);
+  }
+
   const displayName = userName || userEmail?.split("@")[0] || "User";
   const initials = userName
     ? userName.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase()
@@ -49,9 +78,10 @@ export default function Sidebar({ userEmail, userName, dailyPace }: Props) {
 
   return (
     <aside
-      className="hidden md:flex flex-col transition-all duration-200"
+      className="hidden md:flex flex-col transition-[padding] duration-200 relative"
       style={{
-        width: collapsed ? 56 : 200,
+        width: collapsed ? COLLAPSED_WIDTH : width,
+        minWidth: collapsed ? COLLAPSED_WIDTH : MIN_WIDTH,
         background: "var(--surface)",
         borderRight: "1px solid var(--border)",
         padding: collapsed ? "20px 8px" : "20px 14px",
@@ -72,10 +102,17 @@ export default function Sidebar({ userEmail, userName, dailyPace }: Props) {
         </div>
         {!collapsed && (
           <p
-            className="font-bold leading-none truncate"
-            style={{ fontSize: "1.692rem", letterSpacing: "-0.02em", color: "var(--text)" }}
+            className="font-bold leading-tight"
+            style={{
+              fontSize: "1.692rem",
+              letterSpacing: "-0.02em",
+              color: "var(--text)",
+              overflowWrap: "break-word",
+              wordBreak: "break-word",
+              minWidth: 0,
+            }}
           >
-            ToastyBudget
+            Toasty<wbr />Budget
           </p>
         )}
       </div>
@@ -190,6 +227,16 @@ export default function Sidebar({ userEmail, userName, dailyPace }: Props) {
           )}
         </button>
       </div>
+
+      {/* Drag-to-resize handle */}
+      {!collapsed && (
+        <div
+          onMouseDown={startResize}
+          className="absolute top-0 right-0 h-full w-1 cursor-ew-resize opacity-0 hover:opacity-100 transition-opacity"
+          style={{ background: "var(--accent)", borderRadius: "0 4px 4px 0" }}
+          title="Drag to resize"
+        />
+      )}
     </aside>
   );
 }
